@@ -269,6 +269,24 @@ joelvarty.com/
 ### Process Documentation - Blog Posts
 **CRITICAL**: Agents MUST document the development process as they work.
 
+**COLLABORATIVE APPROACH**: These blog posts are **collaborative documents** where:
+- **AI agents** create initial content, document technical implementation, add code examples, and structure the narrative
+- **Human (Joel)** adds personal thoughts, reactions, design decisions, creative direction, and reflections
+- **Together** we create comprehensive blog posts that will be published as a series when development is complete
+- Posts should be written in a way that invites human commentary and additions
+
+**JOEL'S WRITING VOICE** (AI agents must match this style):
+- **Conversational and direct** - Write like you're talking to a colleague, not writing documentation
+- **First person** - Use "I" and "we" naturally
+- **Practical focus** - Explain what matters and why, not just what was done
+- **Real-world context** - Use analogies, examples, and relatable explanations
+- **Story-driven** - Tell the story of building, not just list features
+- **No jargon without explanation** - If you use technical terms, explain them in accessible ways
+- **Personal touches** - Include thoughts on decisions, what worked, what didn't
+- **Humor when appropriate** - Light, natural humor is fine
+- **Clear and straightforward** - Get to the point, but don't rush
+- **Reference examples**: See Joel's blog posts at https://agilitycms.com/blog/ai-is-stainless-steel and https://agilitycms.com/blog/i-taught-a-little-and-learned-a-lot-at-cms-connect-25 for voice reference
+
 **Requirements**:
 - ✅ Create or update markdown blog post files in `process-docs/` folder
 - ✅ Document significant features, decisions, and milestones
@@ -276,6 +294,8 @@ joelvarty.com/
 - ✅ Use descriptive filenames: `YYYY-MM-DD-feature-name.md`
 - ✅ Write in blog post style (narrative, not just technical notes)
 - ✅ Update existing posts when iterating on features
+- ✅ **Leave space for human commentary** - Use sections like "Joel's Thoughts" or "Reflections" where appropriate
+- ✅ **Acknowledge collaboration** - Note when AI created content vs. when human added thoughts
 
 **Process Documentation Structure**:
 ```
@@ -300,35 +320,52 @@ process-docs/
 - Design decisions
 - Integration steps
 
-**Blog Post Template**:
+**Blog Post Template** (Collaborative - in Joel's voice):
 ```markdown
 # [Feature Name] - [Date]
 
-## Overview
-Brief description of what was built/implemented.
+## How We Got Here / What Happened
+_[Conversational opening - tell the story, set the context. Use first person, be direct and practical]_
 
-## What We Built
-Detailed description of the feature.
+## What We Actually Built
+_[Explain what was built in conversational, practical terms. Focus on what matters and why. Use analogies or real-world context when helpful]_
 
-## Implementation Details
-- Technical approach
-- Components used
-- MCP operations (if applicable)
+### [Feature/Component Name]
+_[Explain in Joel's voice - direct, practical, story-driven. Example: "I installed X because Y. Here's what that means for us..." ]_
 
-## Screenshots
-![Description](images/YYYY-MM-DD-feature-name-1.png)
+## Decisions I Made
+_[Personal perspective on key decisions - why they were made, what trade-offs were considered]_
 
-## Challenges & Solutions
-Any issues encountered and how they were resolved.
+## What Went Wrong (And How We Fixed It)
+_[Honest discussion of challenges - conversational, practical solutions]_
 
-## Next Steps
-What comes next or what needs to be done.
+## What's Actually Ready
+_[Clear, straightforward list of what's done and ready to use]_
+
+## What's Next
+_[Practical next steps - what comes next and why it matters]_
+
+## Joel's Thoughts / Reflections
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
 
 ---
 **Agent**: [Agent Name]
 **Date**: YYYY-MM-DD
 **Phase**: [Phase Number]
+**Note**: This post is a collaborative document - AI created the initial content, Joel adds thoughts and reactions
 ```
+
+**Voice Guidelines for AI Agents**:
+- Write in first person ("I", "we") from Joel's perspective
+- Be conversational - like talking to a colleague over coffee
+- Focus on practical value - what matters and why
+- Tell the story of building, not just list technical details
+- Use analogies and real-world examples when helpful
+- Explain technical terms in accessible ways
+- Include personal perspective on decisions
+- Be honest about challenges and what didn't work
+- Keep it clear and straightforward - no unnecessary complexity
+- Reference Joel's existing blog posts for voice examples
 
 ### Prompt Documentation (`prompts/`)
 - **`current-agent.md`**: Which AI agent is currently being used
@@ -896,21 +933,21 @@ interface GalleryProps {
 ## 🚀 Development Phases
 
 ### Phase 1: Project Setup
-- [ ] Initialize Next.js 16 project
-- [ ] Set up TypeScript configuration
-- [ ] Configure Tailwind CSS v4
-- [ ] Install and configure ShadCN UI
-- [ ] Set up component libraries (abui.io, @smoothui, @reui)
-- [ ] Set up Agility CMS integration
-- [ ] Configure AgilityPic component
-- [ ] Set up performance monitoring tools
-- [ ] Configure bundle analyzer
-- [ ] Configure MCP servers
-- [ ] Create project structure
-- [ ] Set up AGENTS.md and agent-specific files
-- [ ] Initialize prompt documentation folder
-- [ ] **Create process-docs folder structure**
-- [ ] **Document Phase 1 setup in process-docs/ (with screenshots)**
+- [x] Initialize Next.js 16 project ✅ Completed (pre-existing)
+- [x] Set up TypeScript configuration ✅ Completed (pre-existing)
+- [x] Configure Tailwind CSS v4 ✅ Completed (pre-existing)
+- [x] Install and configure ShadCN UI ✅ Completed 2025-01-27
+- [ ] Set up component libraries (abui.io, @smoothui, @reui) - Will be added as needed
+- [x] Set up Agility CMS integration ✅ Completed (pre-existing)
+- [ ] Configure AgilityPic component - Will be configured when needed
+- [ ] Set up performance monitoring tools - To be done in Phase 8
+- [ ] Configure bundle analyzer - To be done in Phase 8
+- [x] Configure MCP servers ✅ Completed (pre-existing)
+- [x] Create project structure ✅ Completed 2025-01-27
+- [x] Set up AGENTS.md and agent-specific files ✅ Completed 2025-01-27
+- [x] Initialize prompt documentation folder ✅ Completed 2025-01-27
+- [x] **Create process-docs folder structure** ✅ Completed 2025-01-27
+- [ ] **Document Phase 1 setup in process-docs/ (with screenshots)** - To be done when Phase 1 is fully complete
 
 ### Phase 2: Core Infrastructure
 - [ ] Set up Agility CMS instance
