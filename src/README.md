@@ -68,6 +68,10 @@ Use workspace context:
 ```
 src/
 ├── app/
+│   ├── api/                      # API routes for Agility CMS
+│   │   ├── preview/             # Preview mode endpoints
+│   │   ├── revalidate/          # Webhook for cache revalidation
+│   │   └── dynamic-redirect/    # Dynamic page redirects
 │   └── [locale]/
 │       └── [...slug]/
 │           └── page.tsx          # All pages route through here
@@ -87,6 +91,22 @@ src/
     └── i18n/
         └── config.ts             # Locale configuration
 ```
+
+## 🔗 API Routes
+
+This project includes built-in API routes for Agility CMS:
+
+### Preview Mode
+- **`/api/preview`** - Enables preview/draft mode for viewing unpublished content
+- **`/api/preview/exit`** - Exits preview mode and returns to published content
+
+### Cache Revalidation
+- **`/api/revalidate`** - Webhook endpoint for on-demand cache revalidation when content changes in Agility CMS
+
+### Dynamic Redirects
+- **`/api/dynamic-redirect`** - Redirects to the correct URL for a dynamic page based on ContentID
+
+**Configure webhooks in Agility CMS:** Settings > Webhooks > Add Webhook → Point to `https://yourdomain.com/api/revalidate`
 
 ## 🔧 Environment Variables
 

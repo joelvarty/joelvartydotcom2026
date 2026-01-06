@@ -91,12 +91,33 @@ Try these prompts with any AI assistant:
 
 ```
 src/
-├── app/[locale]/[...slug]/page.tsx  # All pages route here
+├── app/
+│   ├── api/                         # API routes
+│   │   ├── preview/                 # Preview mode endpoints
+│   │   ├── revalidate/              # Webhook for cache revalidation
+│   │   └── dynamic-redirect/        # Dynamic page redirects
+│   └── [locale]/[...slug]/page.tsx  # All pages route here
 ├── components/
 │   ├── agility-components/          # CMS components (add here)
 │   └── agility-pages/               # Page templates
 └── lib/cms/                         # CMS helper functions
 ```
+
+## 🔗 API Routes
+
+This project includes API routes for Agility CMS integration:
+
+### Preview Mode
+- **`/api/preview`** - Enables preview/draft mode for viewing unpublished content
+- **`/api/preview/exit`** - Exits preview mode and returns to published content
+
+### Cache Revalidation
+- **`/api/revalidate`** - Webhook endpoint for on-demand cache revalidation when content changes in Agility CMS
+
+### Dynamic Redirects
+- **`/api/dynamic-redirect`** - Redirects to the correct URL for a dynamic page based on ContentID
+
+**Configure webhooks in Agility CMS:** Settings > Webhooks > Add Webhook → Point to `https://yourdomain.com/api/revalidate`
 
 ## 🔧 Development Commands
 

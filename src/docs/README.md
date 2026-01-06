@@ -135,7 +135,7 @@ This documentation enables AI tools to:
 - ✅ Create maintainable, type-safe code
 - ✅ Connect to Agility CMS via MCP server (optional)
 
-**AI-Specific Guide**: See [../.claude/agents.md](../.claude/agents.md)
+**AI-Specific Guide**: See [../../agents.md](../../agents.md)
 
 ## 📖 Documentation Philosophy
 
@@ -154,7 +154,7 @@ You know the docs are working when:
 
 ## 🔗 Related Documentation
 
-- **[../.claude/agents.md](../.claude/agents.md)** - Guide for AI coding assistants
+- **[../../agents.md](../../agents.md)** - Guide for AI coding assistants
 - **[../.claude/QUICK-START.md](../.claude/QUICK-START.md)** - 5-minute quick start
 - **[../DEVELOPMENT.md](../DEVELOPMENT.md)** - Development workflow
 - **[../README.md](../README.md)** - Project overview

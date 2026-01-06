@@ -310,22 +310,22 @@ const posts: any = await getContentList({ ... });
 ## When in Doubt
 
 1. **Read existing code**: Check similar components in `agility-components/`
-2. **Check documentation**: Read the relevant `.md` file in `.claude/docs/`
+2. **Check documentation**: Read the relevant `.md` file in `src/docs/`
 3. **Ask clarifying questions**: If requirements are unclear, ask the user
 4. **Keep it simple**: Don't over-engineer, follow existing patterns
 5. **Type everything**: Use TypeScript interfaces for all props
 
 ## Documentation Index
 
-- [01-agility-cms-overview.md](./01-agility-cms-overview.md) - CMS concepts
-- [02-page-routing.md](./02-page-routing.md) - Routing and URL structure
-- [03-creating-components.md](./03-creating-components.md) - Module components
-- [04-data-fetching.md](./04-data-fetching.md) - Fetching CMS data
-- [05-containers-and-lists.md](./05-containers-and-lists.md) - Content lists
-- [06-localization.md](./06-localization.md) - Multi-language
-- [07-caching-strategies.md](./07-caching-strategies.md) - Caching patterns
-- [08-common-components.md](./08-common-components.md) - Component examples
-- [11-linked-nested-content.md](./11-linked-nested-content.md) - Linked/nested content patterns
+- [01-agility-cms-overview.md](src/docs/01-agility-cms-overview.md) - CMS concepts
+- [02-page-routing.md](src/docs/02-page-routing.md) - Routing and URL structure
+- [03-creating-components.md](src/docs/03-creating-components.md) - Module components
+- [04-data-fetching.md](src/docs/04-data-fetching.md) - Fetching CMS data
+- [05-containers-and-lists.md](src/docs/05-containers-and-lists.md) - Content lists
+- [06-localization.md](src/docs/06-localization.md) - Multi-language
+- [07-caching-strategies.md](src/docs/07-caching-strategies.md) - Caching patterns
+- [08-common-components.md](src/docs/08-common-components.md) - Component examples
+- [11-linked-nested-content.md](src/docs/11-linked-nested-content.md) - Linked/nested content patterns
 
 ## Goal: Enable Vibe Coding
 
@@ -352,3 +352,4 @@ You're helping effectively when:
 6. ✅ Code is production-ready and maintainable
 
 Good luck building amazing websites! 🚀
+
