@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"Agility-CMS": {
+			"transport": "http",
+			"endpoint": "https://mcp.agilitycms.com/api/mcp"
+		}
+	}
+}
