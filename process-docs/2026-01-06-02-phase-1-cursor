@@ -4,11 +4,13 @@
 **Phase**: Phase 1 - Project Setup
 **Status**: Complete
 
+> **Note**: This post is written from Joel's perspective (first person "I" = Joel). Technical details sections are clearly marked as written by the AI agent (Cursor - Claude Code).
+
 ## How We Got Here
 
 I started by running `create-next-agility-app` to spin up a new Next.js project with Agility CMS integration. Then I copied my `DEVELOPMENT.md` file into the project folder and renamed it `DEVELOPMENT-PLAN.md`.
 
-Here's where it got interesting. I switched Cursor to planning mode and asked it to follow the development plan. It did something I'd never seen before – it created its own planning system, set up a new file called `AGENTS.md`, and created a `process-docs` folder structure.
+Here's where it got interesting. I switched Cursor to planning mode and asked it to follow the development plan. The AI agent did something I'd never seen before – it created its own planning system, set up a new file called `AGENTS.md`, and created a `process-docs` folder structure.
 
 ![Screenshot of the cursor plan](images/ss-2025-01-15-cursor-plan.png)
 
@@ -16,7 +18,7 @@ This was actually pretty cool. The AI was thinking ahead about how to document t
 
 ## What We Built
 
-Phase 1 is done. We've got ShadCN UI set up with the "new-york" style and "neutral" base color, base components installed (Button, Card, Dialog, Aspect Ratio), and the complete folder structure in place. I also created `AGENTS.md` as the single source of truth for all AI agents working on this project.
+Phase 1 is done. The AI agent set up ShadCN UI with the "new-york" style and "neutral" base color, installed base components (Button, Card, Dialog, Aspect Ratio), and created the complete folder structure. The agent also created `AGENTS.md` as the single source of truth for all AI agents working on this project.
 
 The foundation is solid. We can build on this.
 
@@ -29,9 +31,9 @@ The foundation is solid. We can build on this.
 
 ## What Went Wrong
 
-**ShadCN Init Prompts**: The initialization wanted interactive prompts. Fixed by using `echo` with newline-separated answers to automate it.
+**ShadCN Init Prompts**: The initialization wanted interactive prompts. The agent fixed this by using `echo` with newline-separated answers to automate it.
 
-**Pre-existing TypeScript Errors**: Found some in existing code. We'll fix them when we work on those specific features – no point in fixing everything at once.
+**Pre-existing TypeScript Errors**: The agent found some in existing code. We'll fix them when we work on those specific features – no point in fixing everything at once.
 
 ## What's Next
 

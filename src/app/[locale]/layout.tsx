@@ -1,5 +1,6 @@
 import type React from 'react'
 import { getAgilityContext } from '@/lib/cms/getAgilityContext'
+import { Header, Footer, PreviewBar } from '@/components/layout'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -14,9 +15,12 @@ export default async function LocaleLayout({
   const { isDevelopmentMode, isPreview } = await getAgilityContext(locale)
 
   return (
-    <>
-      {children}
-    </>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+      <PreviewBar isPreview={isPreview} isDevelopmentMode={isDevelopmentMode} />
+    </div>
   )
 }
 

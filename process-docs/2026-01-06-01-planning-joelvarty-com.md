@@ -4,6 +4,8 @@
 **Phase**: Pre-Development Planning
 **Status**: Planning Complete, Ready for Implementation
 
+> **Note**: This post is written from Joel's perspective (first person "I" = Joel). Technical details sections are clearly marked as written by the AI agent (Cursor).
+
 ## The Goal
 
 Build a personal website showcasing who I am, my career, and my blog. Inspired by Daring Fireball's clean design and Wes Bos's /uses page. Built with Next.js 16 and Agility CMS, targeting 100 Lighthouse scores.
@@ -12,7 +14,7 @@ Build a personal website showcasing who I am, my career, and my blog. Inspired b
 
 I worked with Cursor AI to create a comprehensive development plan. The philosophy: **AI does the heavy lifting, I provide the creative direction and vision**.
 
-Cursor helped structure the plan, research component libraries, document technical approaches, and organize everything into actionable phases. I provided the vision, requirements, and design direction. Together we created a plan that any AI agent can pick up and start implementing.
+The AI agent (Cursor) helped structure the plan, research component libraries, document technical approaches, and organize everything into actionable phases. I provided the vision, requirements, and design direction. Together we created a plan that any AI agent can pick up and start implementing.
 
 ## What We Decided
 
