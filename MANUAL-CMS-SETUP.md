@@ -115,9 +115,9 @@ Want to learn more about my professional journey? Check out my [career timeline]
 - [x] Create UsesItem content model with all required fields ✅ (Done via MCP)
 - [x] Create UsesItems container (List, Shared) ✅ (Done via MCP)
 - [x] Create 5-10 Uses Items in UsesItems container ✅ (10 items created via MCP)
-- [ ] Create /about page with Hero and Markdown components (with link to career page)
-- [ ] Create /career page with Hero and CareerTimeline components
-- [ ] Create /uses page with Hero and UsesSection components
+- [x] Create /about page with Hero and Markdown components (with link to career page)
+- [x] Create /career page with Hero and CareerTimeline components
+- [x] Create /uses page with Hero and UsesSection components
 - [ ] Publish all pages
 - [ ] Test all pages on the site
 

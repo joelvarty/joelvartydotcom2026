@@ -60,6 +60,26 @@ export async function proxy(request: NextRequest) {
 		}
 
 		/************************
+		 * LOCALE BASED ROUTING *
+		 ************************/
+		const baseUrl = request.nextUrl.origin
+		const isStaticFile = pathname.includes('.') || pathname.startsWith('/_next')
+		const hasLocalePrefix = locales.some(locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
+
+		// If the URL has the default locale prefix, redirect to remove it (cleaner URLs)
+		// This must happen BEFORE search params encoding to preserve query strings properly
+		// Check the ORIGINAL pathname (before search param encoding)
+		const originalPathname = request.nextUrl.pathname
+		if (originalPathname.startsWith(`/${defaultLocale}/`) || originalPathname === `/${defaultLocale}`) {
+			const pathWithoutLocale = originalPathname === `/${defaultLocale}`
+				? '/'
+				: originalPathname.replace(`/${defaultLocale}`, '') || '/'
+			const cleanUrl = new URL(pathWithoutLocale, baseUrl)
+			cleanUrl.search = request.nextUrl.search // Preserve query params
+			return NextResponse.redirect(cleanUrl)
+		}
+
+		/************************
 		 * HANDLE SEARCH PARAMS *
 		 ************************/
 		let searchParams = request.nextUrl.searchParams.toString()
@@ -74,15 +94,16 @@ export async function proxy(request: NextRequest) {
 		}
 
 		/************************
-		 * LOCALE BASED ROUTING *
+		 * CONTINUE LOCALE ROUTING *
 		 ************************/
-		const hasLocalePrefix = locales.some(locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
-		const isStaticFile = pathname.includes('.') || pathname.startsWith('/_next')
+		// Re-check hasLocalePrefix after search param encoding (pathname may have changed)
+		const hasLocalePrefixAfterEncoding = locales.some(locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
-		const baseUrl = request.nextUrl.origin
-
-		if (!hasLocalePrefix && !isStaticFile) {
-			const localeBasedUrl = new URL(`/${defaultLocale}${pathname}`, baseUrl)
+		if (!hasLocalePrefixAfterEncoding && !isStaticFile) {
+			// Ensure pathname has a leading slash and add default locale
+			// For root path, rewrite to /en-us/ (with trailing slash to match [...slug] route)
+			const normalizedPath = pathname === '/' ? '/' : pathname
+			const localeBasedUrl = new URL(`/${defaultLocale}${normalizedPath}`, baseUrl)
 			return NextResponse.rewrite(localeBasedUrl)
 		}
 
@@ -90,6 +111,9 @@ export async function proxy(request: NextRequest) {
 			const searchParamUrl = new URL(pathname, baseUrl)
 			return NextResponse.rewrite(searchParamUrl)
 		}
+
+		// Return undefined to continue with normal Next.js routing
+		return undefined
 	}
 }
 

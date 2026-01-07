@@ -6,6 +6,7 @@
  */
 
 import { getContentList } from "@/lib/cms/getContentList"
+import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
 import { processMarkdown } from "@/lib/markdown/processMarkdown"
 
@@ -46,7 +47,14 @@ interface CareerEntry {
  * @returns A section element with the career timeline
  */
 const CareerTimeline = async ({ module, languageCode }: UnloadedModuleProps) => {
-	const { title, containerReferenceName } = (module as any).fields as CareerTimelineFields
+	// Fetch the content item from Agility CMS
+	const {
+		fields: { title, containerReferenceName },
+		contentID,
+	} = await getContentItem<CareerTimelineFields>({
+		contentID: module.contentid,
+		languageCode,
+	})
 
 	const containerName = containerReferenceName || "CareerEntries"
 
@@ -58,7 +66,7 @@ const CareerTimeline = async ({ module, languageCode }: UnloadedModuleProps) => 
 	})
 
 	return (
-		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={module.contentid}>
+		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
 			<div className="mx-auto max-w-4xl">
 				{title && (
 					<h2 className="text-3xl font-bold text-foreground mb-12 text-center" data-agility-field="title">

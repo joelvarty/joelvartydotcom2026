@@ -6,6 +6,7 @@
  */
 
 import { getContentList } from "@/lib/cms/getContentList"
+import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
 
@@ -25,7 +26,7 @@ interface BlogPost {
 	contentID: number
 	fields: {
 		title: string
-		Slug: string
+		slug: string
 		excerpt?: string
 		publishedDate?: string
 		featuredImage?: {
@@ -45,7 +46,14 @@ interface BlogPost {
  * @returns A section element with the blog post listing
  */
 const BlogListing = async ({ module, languageCode }: UnloadedModuleProps) => {
-	const { title, numberOfPosts, containerReferenceName } = (module as any).fields as BlogListingFields
+	// Fetch the content item from Agility CMS
+	const {
+		fields: { title, numberOfPosts, containerReferenceName },
+		contentID,
+	} = await getContentItem<BlogListingFields>({
+		contentID: module.contentid,
+		languageCode,
+	})
 
 	const containerName = containerReferenceName || "Posts"
 	const limit = numberOfPosts ? parseInt(numberOfPosts, 10) : 10
@@ -59,7 +67,7 @@ const BlogListing = async ({ module, languageCode }: UnloadedModuleProps) => {
 	})
 
 	return (
-		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={module.contentid}>
+		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
 			<div className="mx-auto max-w-7xl">
 				{title && (
 					<h2 className="text-3xl font-bold text-foreground mb-8" data-agility-field="title">
@@ -74,11 +82,11 @@ const BlogListing = async ({ module, languageCode }: UnloadedModuleProps) => {
 							style={{ animationDelay: `${index * 50}ms` }}
 						>
 							{post.fields.featuredImage && (
-								<Link href={`/blog/${post.fields.Slug}`} className="block">
+								<Link href={`/blog/${post.fields.slug}`} className="block">
 									<div className="aspect-video w-full overflow-hidden bg-muted">
-									<AgilityPic
-										image={post.fields.featuredImage as any}
-										fallbackWidth={600}
+										<AgilityPic
+											image={post.fields.featuredImage as any}
+											fallbackWidth={600}
 											className="h-full w-full object-cover transition-transform hover:scale-105"
 											sources={[
 												{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 1600 },
@@ -93,7 +101,7 @@ const BlogListing = async ({ module, languageCode }: UnloadedModuleProps) => {
 								</Link>
 							)}
 							<div className="flex flex-1 flex-col p-6">
-								<Link href={`/blog/${post.fields.Slug}`}>
+								<Link href={`/blog/${post.fields.slug}`}>
 									<h3 className="text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
 										{post.fields.title}
 									</h3>

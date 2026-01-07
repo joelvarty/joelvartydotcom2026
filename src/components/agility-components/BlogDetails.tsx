@@ -51,7 +51,15 @@ type BlogPost = {
  * @returns A section element with the blog post content
  */
 const BlogDetails = async ({ module, languageCode, page }: UnloadedModuleProps) => {
-	const { containerReferenceName, contentID } = (module as any).fields as BlogDetailsFields
+	// Fetch the content item from Agility CMS
+	const {
+		fields: { containerReferenceName, contentID },
+		contentID: moduleContentID,
+	} = await getContentItem<BlogDetailsFields>({
+		contentID: module.contentid,
+		languageCode,
+	})
+
 	const containerName = containerReferenceName || "Posts"
 
 	let post: BlogPost | null = null
@@ -107,7 +115,7 @@ const BlogDetails = async ({ module, languageCode, page }: UnloadedModuleProps) 
 	}
 
 	return (
-		<article className="relative px-4 sm:px-6 lg:px-8 py-12 animate-fade-in" data-agility-component={module.contentid}>
+		<article className="relative px-4 sm:px-6 lg:px-8 py-12 animate-fade-in" data-agility-component={moduleContentID}>
 			<div className="mx-auto max-w-3xl">
 				{post.fields.featuredImage && (
 					<div className="mb-8 aspect-video w-full overflow-hidden rounded-lg bg-muted">

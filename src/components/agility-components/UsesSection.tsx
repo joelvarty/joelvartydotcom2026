@@ -6,6 +6,7 @@
  */
 
 import { getContentList } from "@/lib/cms/getContentList"
+import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
 
@@ -54,7 +55,14 @@ interface UsesItem {
  * @returns A section element with the uses items
  */
 const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
-	const { title, containerReferenceName, categoryFilter } = (module as any).fields as UsesSectionFields
+	// Fetch the content item from Agility CMS
+	const {
+		fields: { title, containerReferenceName, categoryFilter },
+		contentID,
+	} = await getContentItem<UsesSectionFields>({
+		contentID: module.contentid,
+		languageCode,
+	})
 
 	const containerName = containerReferenceName || "UsesItems"
 
@@ -81,7 +89,7 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 	}, {} as Record<string, UsesItem[]>)
 
 	return (
-		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={module.contentid}>
+		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
 			<div className="mx-auto max-w-7xl">
 				{title && (
 					<h2 className="text-3xl font-bold text-foreground mb-12 text-center" data-agility-field="title">

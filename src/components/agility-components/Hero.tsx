@@ -4,6 +4,7 @@
  * An Agility CMS module component that displays a hero section with title, subtitle, image, and optional CTA button.
  */
 
+import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps } from "@agility/nextjs"
 import { AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
@@ -36,12 +37,19 @@ export interface HeroFields {
  * @returns A section element with the hero content
  */
 const Hero = async ({ module, languageCode }: UnloadedModuleProps) => {
-	const { title, subtitle, image, ctaButton } = (module as any).fields as HeroFields
+	// Fetch the content item from Agility CMS
+	const {
+		fields: { title, subtitle, image, ctaButton },
+		contentID,
+	} = await getContentItem<HeroFields>({
+		contentID: module.contentid,
+		languageCode,
+	})
 
 	return (
 		<section
 			className="relative flex min-h-[60vh] items-center justify-center overflow-hidden"
-			data-agility-component={module.contentid}
+			data-agility-component={contentID}
 		>
 			{image && (
 				<div className="absolute inset-0 z-0">
