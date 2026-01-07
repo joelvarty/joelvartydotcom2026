@@ -71,7 +71,7 @@ Complete documentation for building websites with Agility CMS and Next.js. Optim
 │   │   └── ...
 │   └── agility-pages/             # Page templates
 │       ├── index.ts               # Template registry
-│       ├── MainTemplate.tsx
+│       ├── Main.tsx
 │       └── ...
 ├── lib/
 │   ├── cms/                       # CMS helper functions

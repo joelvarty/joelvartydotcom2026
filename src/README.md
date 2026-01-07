@@ -81,7 +81,7 @@ src/
 │   │   └── RichTextArea.tsx     # Example component
 │   └── agility-pages/            # Page templates
 │       ├── index.ts             # Template registry
-│       └── MainTemplate.tsx     # Main template
+│       └── Main.tsx     # Main template
 └── lib/
     ├── cms/                      # CMS helper functions
     │   ├── getAgilityPage.ts

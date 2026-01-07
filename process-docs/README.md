@@ -19,6 +19,8 @@ Examples:
 - `2026-01-06-01-planning-joelvarty-com.md`
 - `2026-01-06-02-phase-1-cursor`
 - `2026-01-06-03-blogpost-model-challenges.md`
+- `2026-01-06-04-phase-3-layout-components.md`
+- `2026-01-27-phase-4-blog-system.md`
 
 ## CRITICAL: Authorship and Voice Guidelines
 
@@ -96,10 +98,16 @@ Every blog post must start with a note clarifying authorship:
 - [2026-01-06-01-planning-joelvarty-com.md](2026-01-06-01-planning-joelvarty-com.md) - Planning phase documentation
 - [2026-01-06-02-phase-1-cursor](2026-01-06-02-phase-1-cursor) - Phase 1 setup completion
 - [2026-01-06-03-blogpost-model-challenges.md](2026-01-06-03-blogpost-model-challenges.md) - BlogPost model setup challenges and learnings
+- [2026-01-06-04-phase-3-layout-components.md](2026-01-06-04-phase-3-layout-components.md) - Phase 3 layout components implementation
+- [2026-01-06-05-phase-4-blog-system.md](2026-01-06-05-phase-4-blog-system.md) - Phase 4 blog system with gallery support
+- [2026-01-06-06-phase-6-uses-page.md](2026-01-06-06-phase-6-uses-page.md) - Phase 6 uses page
+- [2026-01-06-07-phase-7-content-cms.md](2026-01-06-07-phase-7-content-cms.md) - Phase 7 content and CMS integration
+- [2026-01-06-08-phase-8-styling-polish.md](2026-01-06-08-phase-8-styling-polish.md) - Phase 8 styling and polish
+- [2026-01-06-09-project-summary.md](2026-01-06-09-project-summary.md) - Complete project summary
 
 ---
 
 **Note**: These blog posts are collaborative documents. AI agents create initial content, and Joel adds personal thoughts, reactions, and creative direction. They will be published as a series when development is complete.
 
-**Last Updated**: 2026-01-06
+**Last Updated**: 2026-01-27
 

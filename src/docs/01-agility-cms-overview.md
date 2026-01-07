@@ -16,7 +16,7 @@ Agility CMS is a headless CMS that provides:
 ### 1. Pages
 Pages in Agility CMS are composed of:
 - **Title and SEO**: Meta title, description, keywords
-- **Template**: Defines the layout structure (e.g., MainTemplate, TwoColumnTemplate)
+- **Template**: Defines the layout structure (e.g., Main, TwoColumn)
 - **Zones**: Areas where components (modules) can be added (e.g., "main-content-zone", "sidebar")
 - **Path**: The URL path for the page (e.g., `/about`, `/blog/post-1`)
 
@@ -26,7 +26,7 @@ Templates define the layout structure of a page. Each template has:
 - **Layout Structure**: Header, footer, sidebars, etc.
 - **React Component**: A server component that renders the zones
 
-Example: `MainTemplate.tsx` has a single zone called "main-content-zone"
+Example: The "Main" page model uses `Main.tsx` component which has a single zone called "main-content-zone"
 
 ### 3. Components (Called "Modules" in CMS)
 **Components** (referred to as "modules" in the Agility CMS interface) are reusable building blocks that can be added to page zones:
@@ -73,7 +73,7 @@ src/
 ├── components/
 │   ├── agility-pages/            # Page templates
 │   │   ├── index.ts              # Template registry
-│   │   └── MainTemplate.tsx      # Main page template
+│   │   └── Main.tsx      # Main page template
 │   └── agility-components/       # CMS components (called "modules" in CMS)
 │       ├── index.ts              # Component registry
 │       └── RichTextArea.tsx      # Example component

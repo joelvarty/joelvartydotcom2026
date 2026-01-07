@@ -30,7 +30,7 @@ const pageData = await getAgilityPage({
 //   page: { pageID, title, seo, zones, ... },
 //   sitemap: [...],
 //   sitemapNode: { path, title, ... },
-//   pageTemplateName: "MainTemplate",
+//   pageTemplateName: "Main",
 //   globalData: { ... }
 // }
 ```

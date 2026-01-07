@@ -69,7 +69,7 @@ All in `src/lib/cms/`:
 ## Included Components
 
 ### Page Templates
-1. **MainTemplate** - Single zone template with main-content-zone
+1. **Main** - Single zone template with main-content-zone
 
 ### Module Components
 1. **RichTextArea** - Rich text content with Tailwind prose styling

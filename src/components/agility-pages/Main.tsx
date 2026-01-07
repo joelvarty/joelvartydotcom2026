@@ -1,5 +1,5 @@
 /**
- * MainTemplate Component
+ * Main Component
  *
  * The default page template for Agility CMS pages. This template defines
  * the main content zone where modules can be added and rendered.
@@ -14,7 +14,7 @@ import { ContentZone } from "@agility/nextjs"
 import { getModule } from "../agility-components"
 
 /**
- * MainTemplate Component
+ * Main Component
  *
  * Renders the main content zone for an Agility CMS page.
  *
@@ -22,15 +22,15 @@ import { getModule } from "../agility-components"
  * @returns A ContentZone component that renders all modules in the main-content-zone
  *
  * @remarks
- * - The ContentZone name "main-content-zone" must match the zone name in Agility CMS
+ * - The ContentZone name "main" must match the zone name in Agility CMS
  * - The getModule function is used to resolve module components by their reference name
  * - All props are spread to the ContentZone for proper context passing
  */
-const MainTemplate = (props: any) => {
+const Main = (props: any) => {
 	return (
-		<ContentZone name="main-content-zone" {...props} getModule={getModule} />
+		<ContentZone name="main" {...props} getModule={getModule} />
 	)
 }
 
-export default MainTemplate
+export default Main
 

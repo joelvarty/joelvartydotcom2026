@@ -71,7 +71,7 @@ export default async function Page({ params }: PageProps) {
   if (!agilityData.page) notFound();
 
   const AgilityPageTemplate = getPageTemplate(
-    agilityData.pageTemplateName || "MainTemplate"
+    agilityData.pageTemplateName || "Main"
   );
 
   return (
@@ -176,7 +176,7 @@ export const revalidate = 60  // Revalidate every 60 seconds
 ```
 Path: /about
 Locale: en-us
-Template: MainTemplate
+Template: Main
 Zones: [main-content-zone]
 ```
 
@@ -234,7 +234,7 @@ Template: HomeTemplate
 ```
 Path: /about
 Slug: ["about"]
-Template: MainTemplate
+Template: Main
 ```
 
 ### Pattern 3: Multi Level

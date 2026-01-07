@@ -12,6 +12,11 @@
  */
 
 import RichTextArea from "./RichTextArea"
+import BlogListing from "./BlogListing"
+import BlogDetails from "./BlogDetails"
+import CareerTimeline from "./CareerTimeline"
+import UsesSection from "./UsesSection"
+import Hero from "./Hero"
 
 /**
  * Returns the React component for a given Agility CMS module name.
@@ -23,6 +28,16 @@ export const getModule = (moduleName: string) => {
 	switch (moduleName) {
 		case "RichTextArea":
 			return RichTextArea
+		case "BlogListing":
+			return BlogListing
+		case "BlogDetails":
+			return BlogDetails
+		case "CareerTimeline":
+			return CareerTimeline
+		case "UsesSection":
+			return UsesSection
+		case "Hero":
+			return Hero
 		default:
 			return null
 	}

@@ -74,9 +74,10 @@ export async function generateMetadata(
 	if (!agilityData.page) return {};
 
 	// Basic metadata - can be enhanced with SEO fields from Agility
+	const seo = agilityData.page?.seo as { metaTitle?: string; metaDescription?: string } | undefined
 	return {
-		title: agilityData.page?.seo?.metaTitle || 'Page',
-		description: agilityData.page?.seo?.metaDescription || '',
+		title: seo?.metaTitle || agilityData.page?.title || 'Page',
+		description: seo?.metaDescription || '',
 	};
 }
 
@@ -84,7 +85,7 @@ export default async function Page({ params }: PageProps) {
 	const agilityData = await getAgilityPage({ params });
 	if (!agilityData.page) notFound();
 
-	const AgilityPageTemplate = getPageTemplate(agilityData.pageTemplateName || "MainTemplate");
+	const AgilityPageTemplate = getPageTemplate(agilityData.pageTemplateName || "Main");
 
 	//get the search params from global data (since they are added in getAgilityPage)
 	const globalSearchParams = agilityData.globalData?.["searchParams"] || {};

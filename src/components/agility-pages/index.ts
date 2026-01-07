@@ -1,11 +1,11 @@
-import MainTemplate from "./MainTemplate"
+import Main from "./Main"
 
 export const getPageTemplate = (templateName: string) => {
 	switch (templateName) {
-		case "MainTemplate":
-			return MainTemplate
+		case "Main":
+			return Main
 		default:
-			return MainTemplate
+			return Main
 	}
 }
 

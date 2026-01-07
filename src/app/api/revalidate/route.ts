@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
 			//content item change
 			const itemTag = `agility-content-${data.referenceName.toLowerCase()}-${data.languageCode}`
 			const listTag = `agility-content-${data.contentID}-${data.languageCode}`
-			revalidateTag(itemTag)
-			revalidateTag(listTag)
+			revalidateTag(itemTag, 'layout')
+			revalidateTag(listTag, 'layout')
 
 			console.info("Revalidating content tags:", itemTag, listTag)
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 				const sitemapNode = Object.values(sitemapFlat).find(s => s.contentID === data.contentID)
 				if (sitemapNode) {
 					const path = sitemapNode.path
-					revalidatePath(path)
+					revalidatePath(path, 'layout')
 					console.info("Revalidating path:", path)
 
 				}
@@ -78,14 +78,14 @@ export async function POST(req: NextRequest) {
 		} else if (data.pageID !== undefined && data.pageID > 0) {
 			//page change
 			const pageTag = `agility-page-${data.pageID}-${data.languageCode}`
-			revalidateTag(pageTag)
+			revalidateTag(pageTag, 'layout')
 
 
 			//also revalidate the sitemaps
 			const sitemapTagFlat = `agility-sitemap-flat-${data.languageCode}`
 			const sitemapTagNested = `agility-sitemap-nested-${data.languageCode}`
-			revalidateTag(sitemapTagFlat)
-			revalidateTag(sitemapTagNested)
+			revalidateTag(sitemapTagFlat, 'layout')
+			revalidateTag(sitemapTagNested, 'layout')
 
 			console.info("Revalidating page and sitemap tags:", pageTag, sitemapTagFlat, sitemapTagNested)
 
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
 				const sitemapNode = Object.values(sitemapFlat).find(s => s.pageID === data.pageID)
 				if (sitemapNode) {
 					const path = sitemapNode.path
-					revalidatePath(path)
+					revalidatePath(path, 'layout')
 					console.info("Revalidating path:", path)
 
 				}
