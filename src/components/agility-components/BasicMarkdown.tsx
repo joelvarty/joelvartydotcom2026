@@ -47,8 +47,8 @@ const BasicMarkdown = async ({ module, languageCode }: UnloadedModuleProps) => {
 	})
 
 	return (
-		<section id={`${contentID}`} className="relative px-8" data-agility-component={contentID}>
-			<div className="max-w-2xl mx-auto my-12 md:mt-18 lg:mt-20">
+		<section id={`${contentID}`} className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
+			<div className="mx-auto max-w-7xl">
 				{/*
 					Markdown content container with Agility CMS editing attributes.
 					The processMarkdown function processes markdown and converts gallery
@@ -56,7 +56,7 @@ const BasicMarkdown = async ({ module, languageCode }: UnloadedModuleProps) => {
 				*/}
 				<div
 					data-agility-field="markdown"
-					className="my-6 prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-full dark:prose-invert"
+					className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none dark:prose-invert"
 				>
 					{processMarkdown(markdown)}
 				</div>

@@ -12,7 +12,7 @@
  */
 
 import RichTextArea from "./RichTextArea"
-import BlogListing from "./BlogListing"
+import BlogListing from "./blog-listing/BlogListing"
 import BlogDetails from "./BlogDetails"
 import CareerTimeline from "./CareerTimeline"
 import UsesSection from "./UsesSection"

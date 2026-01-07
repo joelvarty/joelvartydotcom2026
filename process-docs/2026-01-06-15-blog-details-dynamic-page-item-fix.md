@@ -1,6 +1,6 @@
 # Blog Details Component: The dynamicPageItem Discovery
 
-**Date:** January 6, 2026  
+**Date:** January 6, 2026
 **Author:** Joel Varty (with technical details by Cursor AI Agent)
 
 ## The Problem
@@ -36,7 +36,7 @@ The fix was simple:
 // ✅ CORRECT - Use dynamicPageItem directly
 const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: UnloadedModuleProps) => {
   // ... fetch module config ...
-  
+
   let post: BlogPost | null = null
 
   // For dynamic pages, the blog post is available as dynamicPageItem
@@ -118,11 +118,11 @@ interface UnloadedModuleProps {
 ### Correct Implementation Pattern
 
 ```typescript
-const BlogDetails = async ({ 
-  module, 
-  languageCode, 
+const BlogDetails = async ({
+  module,
+  languageCode,
   dynamicPageItem,  // ← Available for dynamic pages
-  page 
+  page
 }: UnloadedModuleProps) => {
   // Fetch module configuration
   const { fields: { containerReferenceName } } = await getContentItem<BlogDetailsFields>({
