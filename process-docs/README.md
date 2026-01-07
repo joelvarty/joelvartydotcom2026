@@ -109,6 +109,7 @@ Every blog post must start with a note clarifying authorship:
 - [2026-01-06-12-phase-9-testing-setup.md](2026-01-06-12-phase-9-testing-setup.md) - Phase 9 testing infrastructure setup
 - [2026-01-06-13-sample-content-creation.md](2026-01-06-13-sample-content-creation.md) - Sample content creation for testing
 - [2026-01-06-14-agility-component-content-loading-mistake.md](2026-01-06-14-agility-component-content-loading-mistake.md) - The Agility component content loading mistake
+- [2026-01-06-15-blog-details-dynamic-page-item-fix.md](2026-01-06-15-blog-details-dynamic-page-item-fix.md) - Blog Details component: The dynamicPageItem discovery
 
 ---
 
