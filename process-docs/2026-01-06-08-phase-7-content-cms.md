@@ -1,6 +1,6 @@
 # Phase 7: Content & CMS Integration
 
-**Date**: January 27, 2026
+**Date**: January 6, 2026
 **Phase**: Phase 7 - Content & CMS Integration
 **Status**: Ready for Manual Completion
 
@@ -158,16 +158,29 @@ The revalidation route expects:
 
 ### Content Population Strategy
 
-**Blog Posts**:
-1. Create categories first (e.g., "Development", "Design", "Thoughts")
-2. Create tags (e.g., "Next.js", "React", "Agility CMS")
-3. Create blog posts with:
+**Categories** (Required for Testing):
+1. "3rd spaces" - Posts about third spaces (community gathering spots)
+2. "football" - Posts about football (the beautiful game)
+3. "work" - Posts about work and career
+
+**Tags** (Required for Testing):
+1. "sports" - Sports-related content
+2. "theatre" - Theatre-related content
+3. "coding" - Coding and development
+4. "leadership" - Leadership and management
+5. (5th tag TBD - user specified 5 tags but only listed 4)
+
+**Blog Posts** (Minimum for Testing):
+1. Create categories first (see above)
+2. Create tags (see above)
+3. Create 3-5 sample blog posts with:
    - Title, Slug, Excerpt
-   - Featured image
-   - Markdown content (can include gallery syntax)
-   - Link to category (dropdown)
-   - Link to tags (search list box)
+   - Featured image (optional for testing)
+   - Markdown content (can include gallery syntax for testing)
+   - Link to one category (dropdown)
+   - Link to 1-3 tags (search list box)
    - Published date
+   - **Sample topics**: Mix of the three categories to test filtering
 
 **Career Entries**:
 1. Create career entries with:

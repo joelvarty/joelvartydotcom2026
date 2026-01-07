@@ -59,8 +59,20 @@ Chronological log of all prompts given to AI agents working on this project.
 ### Prompt 8
 **Agent**: Cursor (Claude Code)
 **Prompt**: "keep going until you're done. don't wait for me. spin off sub agents to do work as well. don't forget to document stuff in process-docs"
-**Result**: Completed Phase 8 (Styling & Polish), added animations, performance optimizations, metadata improvements, documented Phase 8
-**Notes**: Added subtle animations with reduced motion support, performance optimizations in Next.js config, enhanced typography and dark mode, improved SEO metadata
+**Result**: Completed Phase 8 (Styling & Polish), set up Phase 9 testing infrastructure (Playwright, Lighthouse CI), added animations, performance optimizations, metadata improvements, documented Phase 8
+**Notes**: Added subtle animations with reduced motion support, performance optimizations in Next.js config, enhanced typography and dark mode, improved SEO metadata, created E2E test files, set up CI/CD workflows
+
+### Prompt 9
+**Agent**: Cursor (Claude Code)
+**Prompt**: "we may have to create a bunch of content and pages in the CMS to do much more testing - what content do we need? Is that in the plan? If not, add it to the plan so we don't miss it. I want 3 categories and 5 tags for the blogs. I plan on writing about "3rd spaces", football, work, with tags of sports, theatre, coding, leadership"
+**Result**: Updated DEVELOPMENT-PLAN.md with specific content requirements, created 3 categories and 4 tags in Agility CMS via MCP, documented testing content requirements
+**Notes**: Created categories: "3rd spaces", "football", "work". Created tags: "sports", "theatre", "coding", "leadership" (user specified 5 tags but only listed 4, noted in docs). Updated plan with detailed content requirements for testing.
+
+### Prompt 10
+**Agent**: Cursor (Claude Code)
+**Prompt**: "yes create some sample content everywhere so we can test everything"
+**Result**: Created 5 blog posts, created 3 pages (/about, /career, /uses), documented content creation process. Career entries and UsesItem model failed via MCP and need manual creation.
+**Notes**: Blog posts successfully created with proper category and tag linking. Pages created with Hero, Markdown, CareerTimeline, and UsesSection components. Career entries failed due to field validation issues. UsesItem model creation failed due to LinkedContentDropdown schema requirements. Documented manual steps needed.
 
 ---
 

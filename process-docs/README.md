@@ -20,7 +20,7 @@ Examples:
 - `2026-01-06-02-phase-1-cursor`
 - `2026-01-06-03-blogpost-model-challenges.md`
 - `2026-01-06-04-phase-3-layout-components.md`
-- `2026-01-27-phase-4-blog-system.md`
+- `2026-01-06-05-phase-4-blog-system.md`
 
 ## CRITICAL: Authorship and Voice Guidelines
 
@@ -100,14 +100,18 @@ Every blog post must start with a note clarifying authorship:
 - [2026-01-06-03-blogpost-model-challenges.md](2026-01-06-03-blogpost-model-challenges.md) - BlogPost model setup challenges and learnings
 - [2026-01-06-04-phase-3-layout-components.md](2026-01-06-04-phase-3-layout-components.md) - Phase 3 layout components implementation
 - [2026-01-06-05-phase-4-blog-system.md](2026-01-06-05-phase-4-blog-system.md) - Phase 4 blog system with gallery support
-- [2026-01-06-06-phase-6-uses-page.md](2026-01-06-06-phase-6-uses-page.md) - Phase 6 uses page
-- [2026-01-06-07-phase-7-content-cms.md](2026-01-06-07-phase-7-content-cms.md) - Phase 7 content and CMS integration
-- [2026-01-06-08-phase-8-styling-polish.md](2026-01-06-08-phase-8-styling-polish.md) - Phase 8 styling and polish
-- [2026-01-06-09-project-summary.md](2026-01-06-09-project-summary.md) - Complete project summary
+- [2026-01-06-06-phase-5-about-career.md](2026-01-06-06-phase-5-about-career.md) - Phase 5 about and career pages
+- [2026-01-06-07-phase-6-uses-page.md](2026-01-06-07-phase-6-uses-page.md) - Phase 6 uses page
+- [2026-01-06-08-phase-7-content-cms.md](2026-01-06-08-phase-7-content-cms.md) - Phase 7 content and CMS integration
+- [2026-01-06-09-phase-8-styling-polish.md](2026-01-06-09-phase-8-styling-polish.md) - Phase 8 styling and polish
+- [2026-01-06-10-project-summary.md](2026-01-06-10-project-summary.md) - Complete project summary
+- [2026-01-06-11-testing-content-requirements.md](2026-01-06-11-testing-content-requirements.md) - Testing content requirements
+- [2026-01-06-12-phase-9-testing-setup.md](2026-01-06-12-phase-9-testing-setup.md) - Phase 9 testing infrastructure setup
+- [2026-01-06-13-sample-content-creation.md](2026-01-06-13-sample-content-creation.md) - Sample content creation for testing
 
 ---
 
 **Note**: These blog posts are collaborative documents. AI agents create initial content, and Joel adds personal thoughts, reactions, and creative direction. They will be published as a series when development is complete.
 
-**Last Updated**: 2026-01-27
+**Last Updated**: 2026-01-06
 

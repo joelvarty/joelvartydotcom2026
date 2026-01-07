@@ -548,20 +548,36 @@ BLOCKED - Needs manual creation in Agility CMS UI
 
 #### 1. Blog Post (`BlogPost`)
 - `title` (Text, required)
-- `slug` (Text, required, unique)
+- `Slug` (Text, custom field, required, unique)
 - `excerpt` (LongText)
-- `content` (Html) - Markdown content with embedded gallery syntax
+- `Content` (Text, custom field) - Markdown content with embedded gallery syntax
 - `publishedDate` (Date)
 - `featuredImage` (ImageAttachment)
-- `tags` (Text, comma-separated or LinkedContent)
-- `author` (LinkedContent → Author model)
-- `galleryData` (LongText, optional) - JSON string for gallery images (alternative to inline syntax)
+- `category` (LinkedContentDropdown → Category model)
+- `tags` (LinkedContentSearchListBox → Tag model)
+- **Note**: Uses custom fields for Slug and Content (Markdown). No author field (single author site).
+
+#### 1a. Category (`Category`)
+- `name` (Text) - Category name
+- `slug` (Text) - URL-friendly slug
+- `description` (LongText) - Category description
+- **Required Categories** (Created):
+  - "3rd spaces" (slug: "3rd-spaces") - Posts about third spaces
+  - "football" (slug: "football") - Posts about football
+  - "work" (slug: "work") - Posts about work and career
+
+#### 1b. Tag (`Tag`)
+- `name` (Text) - Tag name
+- `slug` (Text) - URL-friendly slug
+- **Required Tags** (Created):
+  - "sports" (slug: "sports") - Sports-related content
+  - "theatre" (slug: "theatre") - Theatre-related content
+  - "coding" (slug: "coding") - Coding and development
+  - "leadership" (slug: "leadership") - Leadership and management
+  - (5th tag TBD - user specified 5 tags but only listed 4)
 
 #### 2. Author (`Author`)
-- `name` (Text)
-- `bio` (LongText)
-- `avatar` (ImageAttachment)
-- `socialLinks` (LinkedContent → SocialLink model)
+- **Not used** - Single author site, no author model needed
 
 #### 3. Career Entry (`CareerEntry`)
 - `company` (Text)
@@ -573,26 +589,23 @@ BLOCKED - Needs manual creation in Agility CMS UI
 - `currentRole` (Boolean)
 
 #### 4. Uses Item (`UsesItem`)
-- `category` (DropdownList: Software, Hardware, Tools, etc.)
-- `name` (Text)
-- `description` (LongText)
+- `name` (Text, required)
+- `description` (LongText, optional)
 - `link` (Link, optional)
 - `affiliateLink` (Link, optional)
 - `image` (ImageAttachment, optional)
-
-#### 5. Page Content (`PageContent`)
-- Generic page content model for flexible pages
-- `title` (Text)
-- `content` (Html)
-- `seoMetaDescription` (Text)
-- `seoMetaKeywords` (Text)
+- `category` (LinkedContentDropdown → Category model)
+- `categoryID` (Integer, hidden) - Stores category ID
+- `categoryName` (Text, hidden) - Stores category name
+- **Note**: Category should be its own model, linked via LinkedContentDropdown
 
 ### Containers
-- `BlogPosts` (List, shared)
-- `Authors` (List, shared)
-- `CareerEntries` (List, shared)
-- `UsesItems` (List, shared)
-- `PageContent` (Single item, per page)
+- `Posts` (List, shared) - Blog posts container
+- `Categories` (List, shared) - Blog categories container
+- `Tags` (List, shared) - Blog tags container
+- `CareerEntries` (List, shared) - Career entries container
+- `UsesItems` (List, shared) - Uses items container (to be created)
+- `PageContent` (Single item, per page) - Not used (removed)
 
 ### Components (Agility Modules)
 - `RichTextArea` - Rich text content
@@ -1001,7 +1014,16 @@ interface GalleryProps {
 
 ### Phase 7: Content & CMS Integration
 - [ ] Populate initial content (**USE MCP SERVER - `save_content_items`**)
+  - [ ] Create 3 blog categories: "3rd spaces", "football", "work"
+  - [ ] Create 5 blog tags: "sports", "theatre", "coding", "leadership" (4th tag TBD)
+  - [ ] Create sample blog posts (minimum 3-5 for testing)
+  - [ ] Create career entries (minimum 2-3 for testing)
+  - [ ] Create uses items (minimum 5-10 for testing, organized by categories)
 - [ ] Create pages (**USE MCP SERVER - `save_page`**)
+  - [ ] Create /about page
+  - [ ] Create /career page
+  - [ ] Create /uses page
+  - [ ] Verify /blog and /blog/blog-details pages exist
 - [ ] Set up content workflows
 - [ ] Configure webhooks
 - [ ] Test content updates
@@ -1020,8 +1042,8 @@ interface GalleryProps {
 - [ ] Lighthouse performance audit and fixes
 
 ### Phase 9: Testing & QA
-- [ ] Write Playwright E2E tests
-- [ ] Test CMS content rendering
+- [x] Write Playwright E2E tests ✅ Completed
+- [ ] Test CMS content rendering (requires content - see Phase 7)
 - [ ] Cross-browser testing
 - [ ] Accessibility audit (target: 100)
 - [ ] Performance testing (target: 100 Lighthouse score)
@@ -1029,6 +1051,7 @@ interface GalleryProps {
 - [ ] Image loading performance testing
 - [ ] Core Web Vitals optimization
 - [ ] Bundle size analysis
+- **Note**: Full testing requires content from Phase 7 (blog posts, career entries, uses items)
 
 ### Phase 10: Deployment
 - [ ] Set up production environment

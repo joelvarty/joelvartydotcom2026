@@ -1,0 +1,44 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          AGILITY_GUID: ${{ secrets.AGILITY_GUID }}
+          AGILITY_API_FETCH_KEY: ${{ secrets.AGILITY_API_FETCH_KEY }}
+          AGILITY_API_PREVIEW_KEY: ${{ secrets.AGILITY_API_PREVIEW_KEY }}
+          AGILITY_SECURITY_KEY: ${{ secrets.AGILITY_SECURITY_KEY }}
+          AGILITY_LOCALES: en-us
+          AGILITY_SITEMAP: website
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/blog
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+

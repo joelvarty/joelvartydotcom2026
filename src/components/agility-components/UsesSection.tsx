@@ -40,8 +40,7 @@ interface UsesItem {
 			url: string
 			label: string
 		}
-		categoryID?: number
-		categoryName?: string
+		category?: string
 	}
 }
 
@@ -66,14 +65,14 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 		sort: "name",
 	})
 
-	// Filter by category if specified (client-side filtering)
+	// Filter by category if specified
 	const items = categoryFilter
-		? { ...allItems, items: allItems.items.filter((item: UsesItem) => item.fields.categoryID === parseInt(categoryFilter, 10)) }
+		? { ...allItems, items: allItems.items.filter((item: UsesItem) => item.fields.category === categoryFilter) }
 		: allItems
 
 	// Group items by category
 	const groupedByCategory = items.items.reduce((acc: Record<string, UsesItem[]>, item: UsesItem) => {
-		const category = item.fields.categoryName || "Other"
+		const category = item.fields.category || "Other"
 		if (!acc[category]) {
 			acc[category] = []
 		}
