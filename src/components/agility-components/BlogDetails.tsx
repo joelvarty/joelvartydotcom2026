@@ -42,15 +42,16 @@ type BlogPost = {
  * BlogDetails Component
  *
  * Fetches and renders a single blog post.
- * For dynamic pages, the page's sitemapNode.contentID will reference the blog post.
+ * For dynamic pages, the blog post is available as dynamicPageItem.
  * For static pages, can fetch by contentID field or slug.
  *
  * @param module - The Agility CMS module object
  * @param languageCode - The language code for localized content
+ * @param dynamicPageItem - The blog post content item (for dynamic pages)
  * @param page - The page object (may contain sitemapNode with contentID for dynamic pages)
  * @returns A section element with the blog post content
  */
-const BlogDetails = async ({ module, languageCode, page }: UnloadedModuleProps) => {
+const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { containerReferenceName, contentID },
@@ -64,20 +65,9 @@ const BlogDetails = async ({ module, languageCode, page }: UnloadedModuleProps) 
 
 	let post: BlogPost | null = null
 
-	// Try to get contentID from dynamic page reference first
-	const dynamicContentID = (page as any)?.sitemapNode?.contentID
-
-		if (dynamicContentID) {
-		// This is a dynamic page referencing a blog post
-		try {
-			const contentItem = await getContentItem({
-				contentID: dynamicContentID,
-				languageCode,
-			})
-			post = contentItem as unknown as BlogPost
-		} catch (error) {
-			// Fall through to other methods
-		}
+	// For dynamic pages, the blog post is available as dynamicPageItem
+	if (dynamicPageItem) {
+		post = dynamicPageItem as unknown as BlogPost
 	}
 
 	// If not found, try contentID from module fields
@@ -93,22 +83,31 @@ const BlogDetails = async ({ module, languageCode, page }: UnloadedModuleProps) 
 		}
 	}
 
-		// If still not found, try to get from slug
-		if (!post) {
-			const slug = (page as any)?.sitemapNode?.path?.split("/").pop() || ""
-			if (slug) {
-				// Fetch all posts and filter client-side by slug
-				const allPosts = await getContentList({
-					referenceName: containerName,
-					languageCode,
-					take: 100, // Get enough to find the post
-				})
-				const matchingPost = allPosts.items.find((p: any) => p.fields?.Slug === slug)
-				if (matchingPost) {
-					post = matchingPost as unknown as BlogPost
-				}
+	// If still not found, try to get from slug
+	if (!post) {
+		// Get slug from sitemapNode path or from the page path
+		const sitemapNode = (page as any)?.sitemapNode
+		const pagePath = sitemapNode?.path || ""
+		// Extract the last segment of the path (e.g., "why-i-love-football" from "/blog/why-i-love-football")
+		const slug = pagePath.split("/").filter(Boolean).pop() || ""
+
+		if (slug) {
+			// Fetch all posts and filter client-side by slug
+			const allPosts = await getContentList({
+				referenceName: containerName,
+				languageCode,
+				take: 100, // Get enough to find the post
+			})
+			// Match by Slug field (case-insensitive comparison)
+			const matchingPost = allPosts.items.find((p: any) => {
+				const postSlug = p.fields?.Slug || p.fields?.slug
+				return postSlug?.toLowerCase() === slug.toLowerCase()
+			})
+			if (matchingPost) {
+				post = matchingPost as unknown as BlogPost
 			}
 		}
+	}
 
 	if (!post) {
 		notFound()
