@@ -28,7 +28,9 @@ The plan covers everything from project structure to content models to performan
 
 ## Joel's Thoughts / Reflections
 
-_[Space for Joel to add personal thoughts, reactions, or reflections on the planning process]_
+My goal here is to see how easy it is to create a fully functional site that has some advanced features in it, primarily with AI. Not only will we be using AI to write the code, but also to create the models and initial content in Agility CMS to validate everything. Long term, I will be creating an updating content in the CMS only - not in this codebase.
+
+I'm starting with Cursor, but I plan to switch to Claude. Cursor is cheaper for now, but in my previous testing, Claude Code is WAY better at tool calling (like I will need for interacting with Agility CMS)
 
 ---
 
@@ -42,11 +44,13 @@ _[Space for Joel to add personal thoughts, reactions, or reflections on the plan
 This development plan was created with significant help from Cursor AI. The process exemplifies the philosophy: **AI does the heavy lifting, I provide the creative direction and vision**.
 
 **How Cursor AI Helped**:
+
 - **Initial Planning**: Structured the comprehensive development plan, researched component libraries from ShadCN directory, identified performance optimization strategies, organized project structure
 - **Technical Decisions**: Suggested @smoothui and @reui as component libraries that mesh well with Spotlight styling, researched and documented AgilityPic syntax and responsive image strategies, structured gallery system with multiple format options, created troubleshooting workflow for MCP operations
 - **Documentation**: Formatted and organized the extensive development plan, created code examples and syntax documentation, structured checklist-style development phases
 
 **Key Collaboration Points**:
+
 1. **Joel provided**: Vision, design inspiration, specific requirements (like 100 Lighthouse scores, AgilityPic usage)
 2. **Cursor AI provided**: Technical structure, research on component libraries, code examples, documentation formatting
 3. **Together we created**: A comprehensive, actionable development plan
@@ -54,12 +58,14 @@ This development plan was created with significant help from Cursor AI. The proc
 ### Technical Stack Decisions
 
 **Core Framework**:
+
 - Next.js 16 (App Router, React Server Components, Server Actions)
 - React 19
 - TypeScript (strict mode)
 - Agility CMS (headless CMS)
 
 **Styling & UI**:
+
 - Tailwind CSS v4 (inspired by Tailwind Plus Spotlight template)
 - ShadCN UI as base component library
 - **abui.io** components (primary preferred from ShadCN directory)
@@ -68,6 +74,7 @@ This development plan was created with significant help from Cursor AI. The proc
 - Tailwind Plus Spotlight styling patterns for design inspiration
 
 **Development Tools**:
+
 - AI Agents: Cursor (primary), GitHub Copilot, Gravity, Claude Code
 - MCP Servers:
   - Agility CMS MCP Server (PRIMARY method for all CMS work)
@@ -96,6 +103,7 @@ This development plan was created with significant help from Cursor AI. The proc
 Flexible gallery system for blog posts supporting:
 
 **Gallery Formats**:
+
 1. **Carousel** - Image slideshow with navigation
 2. **Masonry Layout** - Pinterest-style grid with lightbox
 3. **Grid Gallery** - Uniform grid layout
@@ -105,6 +113,7 @@ Flexible gallery system for blog posts supporting:
 7. **Tabs Gallery** - Images organized by categories/tabs
 
 **Markdown Syntax**:
+
 ```markdown
 ![gallery:carousel](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
 ![gallery:masonry](image1.jpg "Caption 1", image2.jpg "Caption 2")
@@ -118,6 +127,7 @@ All galleries use `<AgilityPic>` component with responsive image sizing (mobile 
 **Target: 100 Lighthouse Scores** across all categories.
 
 **Key Performance Strategies**:
+
 - All images use `<AgilityPic>` component (Agility CMS optimized)
 - Mobile fallback versions (small) as default
 - High-res versions via `sources` array with media queries
@@ -132,34 +142,37 @@ All galleries use `<AgilityPic>` component with responsive image sizing (mobile 
   - FCP < 1.8s
 
 **AgilityPic Implementation**:
+
 ```typescript
 <AgilityPic
-  image={image}
-  className="w-full h-full object-cover"
-  fallbackWidth={400}
-  sources={[
-    // Desktop - high DPI first (more specific)
-    { media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400 },
-    { media: "(min-width: 1280px)", width: 1200 },
-    // Tablet - high DPI
-    { media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
-    { media: "(min-width: 640px)", width: 800 },
-    // Mobile - high DPI
-    { media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
-    { media: "(max-width: 639px)", width: 640 },
-  ]}
+	image={image}
+	className="w-full h-full object-cover"
+	fallbackWidth={400}
+	sources={[
+		// Desktop - high DPI first (more specific)
+		{media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400},
+		{media: "(min-width: 1280px)", width: 1200},
+		// Tablet - high DPI
+		{media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600},
+		{media: "(min-width: 640px)", width: 800},
+		// Mobile - high DPI
+		{media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280},
+		{media: "(max-width: 639px)", width: 640},
+	]}
 />
 ```
 
 ### AI Agent Workflow
 
 **Critical Requirements**:
+
 1. **Agility CMS MCP Server is PRIMARY** - Use MCP for ALL CMS operations
 2. **Update plan in checklist style** - Mark off completed items as work progresses
 3. **Document process as blog posts** - Create posts in `process-docs/` folder with screenshots
 4. **Troubleshooting workflow** - If MCP operations fail, document everything in `prompts/troubleshooting/` so a human can complete the work manually
 
 **Process Documentation**:
+
 - Each agent creates/updates blog posts in `process-docs/` folder
 - Screenshots stored in `process-docs/images/` subfolder
 - Write in narrative blog post style (not just technical notes)
@@ -194,6 +207,7 @@ joelvarty.com/
 ### Agility CMS Configuration
 
 **Content Models Planned**:
+
 1. **BlogPost** - Blog post content with markdown and gallery support
 2. **Author** - Author information
 3. **CareerEntry** - Career timeline entries
@@ -201,6 +215,7 @@ joelvarty.com/
 5. **PageContent** - Generic page content
 
 **Containers**:
+
 - BlogPosts (List, shared)
 - Authors (List, shared)
 - CareerEntries (List, shared)
@@ -208,6 +223,7 @@ joelvarty.com/
 - PageContent (Single item, per page)
 
 **Components (Agility Modules)**:
+
 - RichTextArea, Image, Hero
 - BlogPostList, BlogPostGallery
 - CareerTimeline, UsesSection
@@ -240,15 +256,18 @@ Broken down into 10 phases:
 ### Resources & References
 
 **Design Inspiration**:
+
 - Wes Bos /uses: https://wesbos.com/uses
 - Daring Fireball: https://daringfireball.net
 - Tailwind Plus Spotlight: https://spotlight.tailwindui.com
 
 **Code References**:
+
 - Agility Next.js Demo: https://github.com/agility/nextjs-demo-site-2025
 - Local Spotlight Template: `/Users/joelvarty/Downloads/tailwind-plus-spotlight/spotlight-ts/src`
 
 **Component Libraries**:
+
 - ShadCN UI: https://ui.shadcn.com
 - ShadCN Directory: https://ui.shadcn.com/docs/directory
 - abui.io: https://www.abui.io

@@ -385,7 +385,7 @@ _[Practical next steps - what comes next and why it matters]_
 
 ## Joel's Thoughts / Reflections
 
-_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+My goal here is to see how easy it is to create a fully functional site that has some advanced features in it, primarily with AI. Not only will we be using AI to write the code, but also to create the models and initial content in Agility CMS to validate everything. Long term, I will be creating an updating content in the CMS only - not in this codebase.
 
 ---
 

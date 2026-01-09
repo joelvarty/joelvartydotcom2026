@@ -15,21 +15,25 @@ When setting up the BlogPost content model in Agility CMS, the AI agent (Cursor)
 The agent attempted to create the BlogPost model with these assumptions:
 
 ### Assumption 1: Content Field Type
+
 - **What the agent tried**: Used `Html` field type for the blog post content
 - **Why**: Assumed rich text content would need HTML formatting
 - **Reality**: I wanted a `Text` field configured as a custom "Markdown" field, matching the pattern I'd already established with my Basic Markdown component model
 
 ### Assumption 2: Author Field
+
 - **What the agent tried**: Added a `LinkedContentSharedLink` field for Author
 - **Why**: The development plan mentioned an Author model, and the agent assumed blog posts would need to reference authors
 - **Reality**: Since it's my personal blog with only one author (me), the Author field wasn't needed at all
 
 ### Assumption 3: Category and Tags as Simple Fields
+
 - **What the agent tried**: Initially tried to use `Text` field for tags (comma-separated) and `DropdownList` for category
 - **Why**: Assumed these could be simple field types
 - **Reality**: I wanted Category and Tags to be their own content models with proper linked content relationships
 
 ### Assumption 4: LinkedContent Field Configuration
+
 - **What the agent tried**: Struggled to configure `LinkedContentDropdown` and `LinkedContentSearchListBox` fields properly
 - **Why**: The MCP schema requires specific properties that weren't immediately clear:
   - `contentModel` (string) - reference name of the linked model
@@ -39,6 +43,7 @@ The agent attempted to create the BlogPost model with these assumptions:
 - **Reality**: These fields need hidden helper fields (`categoryID`, `tagIDs`) to store the actual values, and the LinkedContent fields reference those
 
 ### Assumption 5: Field Naming
+
 - **What the agent tried**: Used lowercase field names like `slug` and `content`
 - **Why**: Standard naming convention
 - **Reality**: I used capitalized field names ("Slug", "Content") as custom fields in Agility CMS, which is a specific configuration choice
@@ -61,14 +66,17 @@ I manually configured the BlogPost model in Agility CMS with the correct setup:
 Here's what the final BlogPost model looks like in Agility CMS:
 
 ### Blog Post Content Model
+
 ![Blog Post Model](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blogpost-model.png)
 
 The model includes all the necessary fields organized into tabs (Main, Media, Content) for a clean editing experience.
 
 ### Category Field Configuration (Linked Content)
+
 ![Category Field Details](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blogpost-category-field-details.png)
 
 This shows the detailed configuration of the Category linked content field, demonstrating:
+
 - **Link Type**: Specific Item(s) from a List
 - **Render UI**: Dropdown List (Select One)
 - **Content Reference**: Categories container
@@ -76,11 +84,13 @@ This shows the detailed configuration of the Category linked content field, demo
 - **Save Value To Field**: CategoryID (hidden field)
 
 ### Blog Post Editing Experience
+
 ![Blog Post with Category and Tags](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blog-post-category-tags.png)
 
 The actual content editing interface showing how the Category dropdown and Tags selection work in practice, along with the featured image upload and other fields.
 
 ### Sample Content
+
 ![Posts Content List](https://cdn.agilitycms.com/j0i5uycg/posts/agility-posts-content-list.png)
 
 The Posts container showing all the sample blog posts created for testing.
@@ -98,6 +108,7 @@ The Posts container showing all the sample blog posts created for testing.
 ### For LinkedContent Fields:
 
 The proper structure for LinkedContent fields requires:
+
 - **Hidden value fields**: Create hidden fields first (e.g., `categoryID: Integer`, `tagIDs: Text`)
 - **LinkedContent field**: References the content model and points to the hidden field via `saveValueToField`
 - **Display configuration**: Use `displayColumn` to specify which field from the linked model to show
@@ -127,6 +138,7 @@ The proper structure for LinkedContent fields requires:
 ## What This Means Going Forward
 
 When creating content models via MCP Server:
+
 1. **Ask first** - If the structure isn't clear, ask about existing patterns
 2. **Check existing models** - Use `get_content_model_details` to see how similar models are configured
 3. **Document assumptions** - When making assumptions, document them so they can be corrected
@@ -134,9 +146,9 @@ When creating content models via MCP Server:
 
 ## Joel's Thoughts / Reflections
 
-_[Space for Joel to add thoughts on the model structure, why certain choices were made, or any insights about the Agility CMS configuration]_
+I ended up having to do a bunch of manual work on the Blog Post content model. Not happy with that, but I THINK this is because Cursor just isn't great with MCP calls. I'll have to do future testing to see how Claude Code does with a blank slate like this.
 
----
+## Basically, it got the Linked Content all wrong for Categories and Tags. Eesh.
 
 ## Technical Details (Written by Cursor - Claude Code)
 
@@ -148,6 +160,7 @@ _[Space for Joel to add thoughts on the model structure, why certain choices wer
 The BlogPost model (ID: 8) was manually configured with:
 
 **Fields**:
+
 - `title` (Text, required)
 - `Slug` (Text, custom field, required, unique)
 - `excerpt` (LongText)
@@ -167,6 +180,7 @@ The BlogPost model (ID: 8) was manually configured with:
 ### Category Model Structure
 
 Created as a separate content model (ID: 12):
+
 - `name` (Text, required)
 - `slug` (Text, required, unique)
 - `description` (LongText)
@@ -176,6 +190,7 @@ Created as a separate content model (ID: 12):
 ### Tag Model Structure
 
 Created as a separate content model (ID: 13):
+
 - `name` (Text, required, unique)
 - `slug` (Text, required, unique)
 
@@ -184,6 +199,7 @@ Created as a separate content model (ID: 13):
 ### LinkedContent Field Configuration Details
 
 **LinkedContentDropdown** (for Category):
+
 - `contentModel`: "Category" (reference name)
 - `renderAs`: "dropdown"
 - `saveValueToField`: "categoryID"
@@ -192,6 +208,7 @@ Created as a separate content model (ID: 13):
 - `contentView`: "Categories" (container reference name)
 
 **LinkedContentSearchListBox** (for Tags):
+
 - `contentModel`: "Tag" (reference name)
 - `renderAs`: "searchlistbox"
 - `saveValueToField`: "tagIDs"
@@ -202,6 +219,7 @@ Created as a separate content model (ID: 13):
 ### MCP Server Limitations Encountered
 
 While the MCP Server is the primary method for CMS operations, some configurations are easier to do manually in the Agility CMS UI:
+
 - Custom field types (like Markdown) may need UI configuration
 - Tab organization is clearer in the UI
 - Field validation and relationships are easier to verify visually
@@ -209,6 +227,7 @@ While the MCP Server is the primary method for CMS operations, some configuratio
 ### Next Steps
 
 When implementing BlogPost in code:
+
 - Access fields using their exact names (case-sensitive): "Slug", "Content"
 - Read linked content values from hidden fields: `categoryID`, `tagIDs`
 - Resolve linked content by fetching Category/Tag items using the stored IDs
@@ -220,4 +239,3 @@ When implementing BlogPost in code:
 **Date**: 2026-01-06
 **Phase**: Phase 2 - Core Infrastructure
 **Note**: This post documents the learning process and assumptions made during content model setup, and how manual configuration corrected the approach.
-
