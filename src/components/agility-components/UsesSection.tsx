@@ -15,7 +15,6 @@ import Link from "next/link"
  */
 export interface UsesSectionFields {
 	title?: string
-	containerReferenceName?: string
 	categoryFilter?: string
 }
 
@@ -57,14 +56,14 @@ interface UsesItem {
 const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
-		fields: { title, containerReferenceName, categoryFilter },
+		fields: { title, categoryFilter },
 		contentID,
 	} = await getContentItem<UsesSectionFields>({
 		contentID: module.contentid,
 		languageCode,
 	})
 
-	const containerName = containerReferenceName || "UsesItems"
+	const containerName = "UsesItems"
 
 	// Fetch uses items from the container
 	const allItems = await getContentList<UsesItem>({
@@ -106,54 +105,54 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 								</h3>
 								<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 									{items.map((item: UsesItem, index: number) => (
-									<div
-										key={item.contentID}
-										className="rounded-lg border border-border bg-card p-6 shadow-sm transition-optimized hover:shadow-md animate-scale-in"
-										style={{ animationDelay: `${index * 30}ms` }}
-									>
-										<div className="flex items-start gap-4">
-											{item.fields.image && (
-												<AgilityPic
-													image={item.fields.image as any}
-													fallbackWidth={48}
-													className="h-12 w-12 shrink-0 rounded object-cover"
-													sources={[
-														{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 96 },
-														{ media: "(min-width: 640px)", width: 48 },
-													]}
-												/>
-											)}
-											<div className="flex-1">
-												<h4 className="font-semibold text-foreground mb-2">
-													{item.fields.link ? (
-														<Link
-															href={item.fields.link.href}
-															target={item.fields.link.target}
-															className="hover:text-primary transition-colors"
-														>
-															{item.fields.name}
-														</Link>
-													) : (
-														item.fields.name
+										<div
+											key={item.contentID}
+											className="rounded-lg border border-border bg-card p-6 shadow-sm transition-optimized hover:shadow-md animate-scale-in"
+											style={{ animationDelay: `${index * 30}ms` }}
+										>
+											<div className="flex items-start gap-4">
+												{item.fields.image && (
+													<AgilityPic
+														image={item.fields.image as any}
+														fallbackWidth={48}
+														className="h-12 w-12 shrink-0 rounded object-cover"
+														sources={[
+															{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 96 },
+															{ media: "(min-width: 640px)", width: 48 },
+														]}
+													/>
+												)}
+												<div className="flex-1">
+													<h4 className="font-semibold text-foreground mb-2">
+														{item.fields.link ? (
+															<Link
+																href={item.fields.link.href}
+																target={item.fields.link.target}
+																className="hover:text-primary transition-colors"
+															>
+																{item.fields.name}
+															</Link>
+														) : (
+															item.fields.name
+														)}
+													</h4>
+													{item.fields.description && (
+														<p className="text-sm text-muted-foreground mb-3">
+															{item.fields.description}
+														</p>
 													)}
-												</h4>
-												{item.fields.description && (
-													<p className="text-sm text-muted-foreground mb-3">
-														{item.fields.description}
-													</p>
-												)}
-												{item.fields.affiliateLink && (
-													<Link
-														href={item.fields.affiliateLink.href}
-														target={item.fields.affiliateLink.target}
-														className="text-sm text-primary hover:underline"
-													>
-														{item.fields.affiliateLink.text || "View"}
-													</Link>
-												)}
+													{item.fields.affiliateLink && (
+														<Link
+															href={item.fields.affiliateLink.href}
+															target={item.fields.affiliateLink.target}
+															className="text-sm text-primary hover:underline"
+														>
+															{item.fields.affiliateLink.text || "View"}
+														</Link>
+													)}
+												</div>
 											</div>
 										</div>
-									</div>
 									))}
 								</div>
 							</div>
