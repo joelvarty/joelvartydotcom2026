@@ -46,6 +46,10 @@ The career timeline displays beautifully with company logos, job titles, and dat
 
 The About page uses a combination of Hero and markdown components to create a clean, readable introduction.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

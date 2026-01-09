@@ -71,6 +71,10 @@ Here's what a blog post looks like in the Agility CMS editor, showing the markdo
 
 This screenshot shows how the markdown content field supports rich formatting and custom gallery syntax. The post includes examples of all gallery types (carousel, grid, masonry, thumbnail, stacked, comparison, and tabs), which are processed by the markdown processor when the blog post is rendered.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor AI Agent)

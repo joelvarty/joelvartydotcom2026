@@ -121,6 +121,10 @@ The about page combines hero sections and markdown content for a polished introd
 
 ![About Page](https://cdn.agilitycms.com/j0i5uycg/posts/about-page-full.png)
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

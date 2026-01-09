@@ -41,6 +41,10 @@ The /uses page component is ready to use. I'll create the UsesItem content model
 
 The /uses page displays items organized by category in a clean, responsive grid. Each item shows an image (when available), name, description, and relevant links. The page scales beautifully from mobile to desktop, and the category grouping makes it easy to find specific types of tools and gear.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

@@ -24,6 +24,7 @@
 import React from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import remarkBreaks from "remark-breaks"
 import remarkUnwrapImages from "remark-unwrap-images"
 import rehypeRaw from "rehype-raw"
 import { remarkGallery } from "./remark-gallery"
@@ -242,7 +243,7 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 
 	const content = (
 		<ReactMarkdown
-			remarkPlugins={[remarkGfm, remarkUnwrapImages, remarkGallery]}
+			remarkPlugins={[remarkGfm, remarkBreaks, remarkUnwrapImages, remarkGallery]}
 			rehypePlugins={[rehypeRaw]}
 			components={{
 				// Custom pre component to intercept gallery code blocks before they get dark background

@@ -4,9 +4,9 @@
 **Author:** Joel Varty (with Claude Code)
 **Phase:** 9 → 10 (Polish & Optimization)
 
-## [YOUR OVERVIEW GOES HERE - Joel to write]
+## Joel's Thoughts / Reflections
 
-[Add your personal introduction and context about why you wanted to tackle the markdown gallery processing. What was the pain point? What inspired this refactor?]
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
 
 ---
 

@@ -34,6 +34,10 @@ Since pages are managed in Agility CMS, I'll create the About page there and add
 
 The career timeline now uses the same optimized image system as the rest of the site, and I can use markdown with galleries in career entries if I want to show project screenshots or other images. The About page will be simple to set up once I add the content in Agility CMS.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

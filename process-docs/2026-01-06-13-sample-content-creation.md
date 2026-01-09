@@ -56,6 +56,10 @@ Pages need to be created manually:
    - Run E2E tests
    - Run Lighthouse audit
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

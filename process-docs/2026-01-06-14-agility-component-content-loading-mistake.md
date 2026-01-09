@@ -109,6 +109,10 @@ When working with Agility CMS components:
 3. **Pay attention to type names** - `UnloadedModuleProps` literally means the module isn't loaded yet!
 4. **Test early** - This would have been caught immediately if I'd tested the components
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor AI Agent)

@@ -4,9 +4,9 @@
 **Agent:** Claude Code (Sonnet 4.5)
 **User Prompt:** "I'm adding a new feature to this site called Series so I can show a series of blogs with their own landing page and a special blurb. This is separate from Categories, but works very similarly to it. Get all the details about how I've setup Series in the instance and then write an Agility Component I can put on the /blog/series page (with the Series content item as the dynamicPageObject) - again, similar to how Category landing pages work, but with the additional markdown field. I also updated the Post model to include the series id. I created a container for the series with an example item, and a blog post that links to it, so we should be able to test it when you're done coding. As we add this feature, document it in process-docs."
 
-## [YOUR THOUGHTS HERE - Joel to write]
+## Joel's Thoughts / Reflections
 
-[Add your personal perspective: Why did you want a Series feature? What inspired this? How do you plan to use it for "Building This Site" and future series? What makes it different from categories in your mind?]
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
 
 ---
 

@@ -40,6 +40,10 @@ Updated the root layout with proper metadata, Open Graph tags, and Twitter card 
 
 The site now feels much more polished and performant. Animations are subtle and smooth, everything loads efficiently, and the overall experience is just better. The performance optimizations should help us hit that 100 Lighthouse score goal.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

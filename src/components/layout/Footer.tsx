@@ -17,11 +17,6 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="hover:text-foreground transition-colors">
-                    Blog
-                  </Link>
-                </li>
-                <li>
                   <Link href="/career" className="hover:text-foreground transition-colors">
                     Career
                   </Link>
@@ -36,16 +31,6 @@ export function Footer() {
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-foreground">Connect</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a
-                    href="https://twitter.com/joelvarty"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Twitter
-                  </a>
-                </li>
                 <li>
                   <a
                     href="https://github.com/joelvarty"
@@ -79,8 +64,8 @@ export function Footer() {
               </ul>
             </div>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Built with Next.js, Agility CMS, and AI assistance.
+              <p className="text-sm text-muted-foreground prose">
+                Built with <a href="https://nextjs.org">Next.js</a>, <a href="https://agilitycms.com">Agility CMS</a>, and AI assistance from <a href="https://cursor.com/">Cursor</a>, <a href="https://claude.ai">Claude</a>, and <a href="https://github.com/features/copilot">GitHub Copilot</a>.
               </p>
             </div>
           </div>

@@ -56,6 +56,10 @@ The agent created the categories and tags in Agility CMS using the MCP server. N
 
 Next steps are to create sample blog posts, career entries, and uses items so we can properly test everything.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

@@ -39,6 +39,10 @@ We need content in Agility CMS to properly test:
 
 The categories and tags are created, so we're ready to add blog posts. Once we have content, we can run the full test suite and Lighthouse audits.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

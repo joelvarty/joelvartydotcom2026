@@ -50,6 +50,10 @@ Here's what the homepage looks like in the Agility CMS interface, showing how co
 
 This screenshot shows the homepage page editor in Agility CMS, displaying the "MainContent" zone with the BlogListing component. This is how pages are assembled in the CMS - you select a page model, then add and configure components in the defined content zones. Each component can be configured with its specific settings and content.
 
+## Joel's Thoughts / Reflections
+
+_[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)
