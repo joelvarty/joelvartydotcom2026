@@ -76,6 +76,51 @@ We've made incredible progress on the site. All the core development work is don
 
 The site is technically complete. All components work, styling is polished, performance is optimized, and everything is ready for content. Once I add content and create the pages in Agility CMS, the site will be fully functional.
 
+## Visual Tour of the Site
+
+Here's what we've built across all the major pages:
+
+### Homepage
+The homepage showcases recent blog posts with a clean, modern design that works in both light and dark modes.
+
+![Homepage Light Mode](https://cdn.agilitycms.com/j0i5uycg/posts/homepage-light-mode.png)
+
+![Homepage Dark Mode](https://cdn.agilitycms.com/j0i5uycg/posts/homepage-dark-mode.png)
+
+### Blog Listing
+The blog listing page displays all posts in a responsive grid with featured images, titles, excerpts, and dates.
+
+![Blog Listing](https://cdn.agilitycms.com/j0i5uycg/posts/blog-listing-dark-mode.png)
+
+### Blog Post Detail
+Individual blog posts render beautifully with optimized images, proper typography, and full markdown support.
+
+![Blog Post Example](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-third-spaces-full.png)
+
+:::gallery{type="stacked"}
+![Blog Post Football Part 1](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-1.jpg)
+![Blog Post Football Part 2](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-2.jpg)
+![Blog Post Football Part 3](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-3.jpg)
+![Blog Post Football Part 4](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-4.jpg)
+![Blog Post Football Part 5](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-5.jpg)
+![Blog Post Football Part 6](https://cdn.agilitycms.com/j0i5uycg/posts/blog-post-football-6.jpg)
+:::
+
+### Career Page
+The career timeline displays work history in an engaging timeline format with company logos and alternating layouts.
+
+![Career Page](https://cdn.agilitycms.com/j0i5uycg/posts/career-page-full.png)
+
+### Uses Page
+The /uses page organizes tools and gear by category in a clean, scannable grid.
+
+![Uses Page](https://cdn.agilitycms.com/j0i5uycg/posts/uses-page-full.png)
+
+### About Page
+The about page combines hero sections and markdown content for a polished introduction.
+
+![About Page](https://cdn.agilitycms.com/j0i5uycg/posts/about-page-full.png)
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

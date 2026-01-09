@@ -49,7 +49,8 @@ export function GalleryTabs({ images }: GalleryTabsProps) {
 	}
 
 	return (
-		<div className="my-8">
+		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<Tabs defaultValue={categoryNames[0]} className="w-full">
 				<TabsList className="mb-4">
 					{categoryNames.map((category) => (
@@ -64,6 +65,7 @@ export function GalleryTabs({ images }: GalleryTabsProps) {
 					</TabsContent>
 				))}
 			</Tabs>
+			</div>
 		</div>
 	)
 }

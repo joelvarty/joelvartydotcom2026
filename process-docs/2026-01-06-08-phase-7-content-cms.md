@@ -42,6 +42,14 @@ The revalidation API route is already set up at `/api/revalidate`, so webhooks j
 
 Once content is populated and pages are created, the site will be fully functional. All the technical infrastructure is ready - it's just a matter of adding content and creating pages in the CMS.
 
+## Visual Reference: Page Structure in Agility CMS
+
+Here's what the homepage looks like in the Agility CMS interface, showing how components are organized in the page structure:
+
+![Homepage Page Structure](https://cdn.agilitycms.com/j0i5uycg/posts/agility-homepage-structure.png)
+
+This screenshot shows the homepage page editor in Agility CMS, displaying the "MainContent" zone with the BlogListing component. This is how pages are assembled in the CMS - you select a page model, then add and configure components in the defined content zones. Each component can be configured with its specific settings and content.
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

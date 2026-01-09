@@ -1,18 +1,33 @@
 /**
  * Markdown Processor with Gallery Support
  *
- * Processes markdown content and converts gallery syntax into React components.
- * Supports multiple gallery types: carousel, masonry, grid, thumbnail, stacked, comparison, tabs.
+ * Processes markdown content using ReactMarkdown and converts gallery syntax
+ * into React components. Supports multiple gallery types: carousel, masonry,
+ * grid, thumbnail, stacked, comparison, tabs.
  *
- * Gallery Syntax:
- * - ![gallery:carousel](url1.jpg "Caption 1", url2.jpg "Caption 2")
- * - ![gallery:masonry:columns-3](url1.jpg "Caption 1", url2.jpg "Caption 2")
- * - ![gallery:grid:columns-4](url1.jpg "Caption 1", url2.jpg "Caption 2")
- * - ![gallery:comparison](before.jpg "Before", after.jpg "After")
+ * Gallery Syntax (using fenced code blocks):
+ * ```gallery:carousel
+ * https://url1.jpg "Caption 1"
+ * https://url2.jpg "Caption 2"
+ * https://url3.jpg "Caption 3"
+ * ```
+ *
+ * With options:
+ * ```gallery:grid:columns-3
+ * https://url1.jpg "Caption 1"
+ * https://url2.jpg "Caption 2"
+ * ```
+ *
+ * Supported types: carousel, masonry, grid, thumbnail, stacked, comparison, tabs
  */
 
-import { marked } from "marked"
 import React from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import remarkUnwrapImages from "remark-unwrap-images"
+import rehypeRaw from "rehype-raw"
+import { remarkGallery } from "./remark-gallery"
+import { AgilityPic } from "@agility/nextjs"
 import { GalleryCarousel } from "@/components/galleries/GalleryCarousel"
 import { GalleryMasonry } from "@/components/galleries/GalleryMasonry"
 import { GalleryGrid } from "@/components/galleries/GalleryGrid"
@@ -20,6 +35,7 @@ import { GalleryThumbnail } from "@/components/galleries/GalleryThumbnail"
 import { GalleryStacked } from "@/components/galleries/GalleryStacked"
 import { GalleryComparison } from "@/components/galleries/GalleryComparison"
 import { GalleryTabs } from "@/components/galleries/GalleryTabs"
+import { isAgilityImage, createImageFieldFromUrl } from "@/lib/agility/image-utils"
 
 /**
  * Gallery image interface
@@ -43,10 +59,17 @@ export interface GalleryConfig {
 /**
  * Parse gallery syntax from markdown image syntax
  * Syntax: ![gallery:type:options](url1 "caption1", url2 "caption2")
+ *
+ * Note: ReactMarkdown parses the first URL as `src` and the rest as `title`.
+ * We need to combine both to get all gallery images.
  */
-function parseGallerySyntax(alt: string, title: string): GalleryConfig | null {
+function parseGallerySyntax(
+	alt: string | null | undefined,
+	title: string | null,
+	src: string | null
+): GalleryConfig | null {
 	// Check if this is a gallery
-	if (!alt.startsWith("gallery:")) {
+	if (!alt || typeof alt !== "string" || !alt.startsWith("gallery:")) {
 		return null
 	}
 
@@ -64,15 +87,55 @@ function parseGallerySyntax(alt: string, title: string): GalleryConfig | null {
 		}
 	}
 
-	// Parse images from title (comma-separated: url "caption", url "caption")
+	// Parse images from src and title
+	// ReactMarkdown puts the first URL in src, and the rest in title
+	// Title format: "Caption 1", https://url2 "Caption 2", https://url3 "Caption 3"
 	const images: GalleryImage[] = []
-	if (title) {
-		// Split by comma, but respect quoted captions
-		const imageMatches = title.matchAll(/([^,"]+)(?:\s+"([^"]+)")?/g)
-		for (const match of imageMatches) {
-			const url = match[1].trim()
+
+	// Add the first image from src if it exists
+	if (src && typeof src === "string") {
+		// Extract first caption from title
+		// ReactMarkdown may parse as: "Caption" or Caption" (missing opening quote)
+		let firstCaption: string | undefined = undefined
+		if (title) {
+			// Try to match quoted caption (with or without opening quote)
+			const quotedMatch = title.match(/^"?([^"]+)"(?:\s*,|\s+http)/)
+			if (quotedMatch) {
+				firstCaption = quotedMatch[1]
+			} else if (!title.includes("http")) {
+				// Title is just a caption (no URLs) - remove quotes if present
+				firstCaption = title.trim().replace(/^"?|"?$/g, "")
+			}
+		}
+		images.push({
+			url: src.trim(),
+			caption: firstCaption,
+			alt: firstCaption || "",
+		})
+	}
+
+	// Parse additional images from title (format: ", https://url "caption", https://url "caption")
+	if (title && title.includes("http")) {
+		// Remove the first caption if it was already extracted
+		let remainingTitle = title
+		// Match quoted caption (with or without opening quote) followed by comma/space and URL
+		const firstCaptionPattern = /^"?[^"]+"?(?:\s*,?\s*)(?=https?:\/\/)/
+		if (firstCaptionPattern.test(remainingTitle)) {
+			// Remove first caption and the comma/space after it
+			remainingTitle = remainingTitle.replace(/^"?[^"]+"?,?\s*/, "")
+		}
+
+		// Split by URLs and parse each segment
+		// Pattern: https://url "caption", https://url "caption"
+		// Match URL (everything from http:// or https:// until space/comma/quote), then optional caption
+		const urlPattern = /(https?:\/\/[^\s",]+)(?:\s+"([^"]+)")?(?:\s*,)?/g
+		let match
+		while ((match = urlPattern.exec(remainingTitle)) !== null) {
+			const url = match[1]?.trim()
 			const caption = match[2]?.trim()
-			if (url) {
+
+			// Only add if URL is valid and different from src (avoid duplicates)
+			if (url && url !== src && url.startsWith("http")) {
 				images.push({
 					url,
 					caption,
@@ -92,89 +155,6 @@ function parseGallerySyntax(alt: string, title: string): GalleryConfig | null {
 	}
 }
 
-/**
- * Custom renderer for marked that handles gallery syntax
- */
-function createMarkdownRenderer() {
-	const renderer = new marked.Renderer()
-
-	// Override image renderer to detect gallery syntax
-	const originalImage = renderer.image
-	;(renderer as any).image = (href: string, title: string | null, text: string) => {
-		const galleryConfig = parseGallerySyntax(text, title || "")
-		if (galleryConfig) {
-			// Return a placeholder that we'll replace with React components
-			return `<!-- GALLERY:${JSON.stringify(galleryConfig)} -->`
-		}
-		// Regular image
-		return (originalImage as any).call(renderer, href, title, text)
-	}
-
-	return renderer
-}
-
-/**
- * Process markdown content and return JSX with gallery components
- */
-export function processMarkdown(markdown: string): React.ReactElement {
-	// Configure marked
-	marked.setOptions({
-		breaks: true,
-		gfm: true,
-	})
-
-	const renderer = createMarkdownRenderer()
-	const html = marked.parse(markdown, { renderer }) as string
-
-	// Split HTML by gallery placeholders and convert to React elements
-	const parts: (string | React.ReactElement)[] = []
-	let lastIndex = 0
-	// Match gallery comments with JSON content (handles nested objects)
-	const galleryRegex = /<!-- GALLERY:(\{[^]*?\}) -->/g
-	let match
-
-	while ((match = galleryRegex.exec(html)) !== null) {
-		// Add text before gallery
-		if (match.index > lastIndex) {
-			parts.push(html.substring(lastIndex, match.index))
-		}
-
-		// Parse and render gallery
-		try {
-			const config: GalleryConfig = JSON.parse(match[1])
-			const galleryComponent = renderGallery(config)
-			if (galleryComponent) {
-				parts.push(galleryComponent)
-			}
-		} catch (error) {
-			console.error("Error parsing gallery config:", error)
-		}
-
-		lastIndex = match.index + match[0].length
-	}
-
-	// Add remaining HTML
-	if (lastIndex < html.length) {
-		parts.push(html.substring(lastIndex))
-	}
-
-	// Return a fragment with all parts
-	return (
-		<>
-			{parts.map((part, index) => {
-				if (React.isValidElement(part)) {
-					return <React.Fragment key={index}>{part}</React.Fragment>
-				}
-				return (
-					<div
-						key={index}
-						dangerouslySetInnerHTML={{ __html: part }}
-					/>
-				)
-			})}
-		</>
-	)
-}
 
 /**
  * Render the appropriate gallery component based on type
@@ -200,3 +180,244 @@ function renderGallery(config: GalleryConfig): React.ReactElement | null {
 	}
 }
 
+/**
+ * Preprocess markdown to convert image-style gallery syntax into fenced code blocks.
+ * Converts: ![gallery:type:options](url1 "caption1", url2 "caption2")
+ * Into: ```gallery:type:options
+ *       url1 "caption1"
+ *       url2 "caption2"
+ *       ```
+ */
+function preprocessMarkdown(markdown: string): string {
+	// Match gallery image syntax: ![gallery:type:options](urls and captions)
+	const galleryImageRegex = /!\[gallery:([a-z]+)(?::([a-z0-9-]+))?\]\(([^)]+)\)/g
+
+	return markdown.replace(galleryImageRegex, (match, type, options, content) => {
+		// Parse the content to extract URLs and captions
+		// Format: url1 "caption1", url2 "caption2", url3 "caption3"
+		const lines: string[] = []
+
+		// Split by commas, but be careful with commas inside quotes
+		const parts = content.split(/,\s*(?=https?:\/\/)/)
+
+		for (const part of parts) {
+			const trimmed = part.trim()
+			if (trimmed) {
+				// Extract URL and caption
+				// Format: url "caption" or just url
+				const urlMatch = trimmed.match(/^(https?:\/\/[^\s"]+)(?:\s+"([^"]+)")?$/)
+				if (urlMatch) {
+					const url = urlMatch[1]
+					const caption = urlMatch[2]
+					if (caption) {
+						lines.push(`${url} "${caption}"`)
+					} else {
+						lines.push(url)
+					}
+				}
+			}
+		}
+
+		// Build the fenced code block
+		const galleryType = options ? `gallery:${type}:${options}` : `gallery:${type}`
+		return `\`\`\`${galleryType}\n${lines.join('\n')}\n\`\`\``
+	})
+}
+
+/**
+ * Process markdown content and return JSX with gallery components
+ * Uses ReactMarkdown for better React integration and inline gallery rendering
+ */
+export function processMarkdown(markdown: string): React.ReactElement {
+	// Preprocess to handle gallery syntax
+	const processedMarkdown = preprocessMarkdown(markdown)
+
+	return (
+		<ReactMarkdown
+			remarkPlugins={[remarkGfm, remarkUnwrapImages, remarkGallery]}
+			rehypePlugins={[rehypeRaw]}
+			components={{
+				// Custom pre component to intercept gallery code blocks before they get dark background
+				pre({ node, children, ...props }: any) {
+					// Check if the child is a code element with gallery syntax
+					const child = React.Children.only(children) as any
+					if (child?.props?.className) {
+						const match = child.props.className.match(/^language-gallery[-:]([a-z]+)(?:[-:]([a-z0-9-]+))?$/)
+						if (match) {
+							// This is a gallery - don't render the <pre>, just pass through to code component
+							return <>{children}</>
+						}
+					}
+					// Default pre rendering
+					return <pre {...props}>{children}</pre>
+				},
+				// Custom code component to handle gallery syntax
+				code({ node, inline, className, children, ...props }: any) {
+					// Check if this is a gallery code block
+					// ReactMarkdown may parse `gallery:carousel` as `language-gallery:carousel` or `language-gallery-carousel`
+					if (!inline && className) {
+						// Try to match both formats: gallery:type:options or gallery-type-options
+						const match = className.match(/^language-gallery[-:]([a-z]+)(?:[-:]([a-z0-9-]+))?$/)
+						if (match) {
+							const [, type, options] = match
+							// Parse the code content (image URLs and captions)
+							const content = String(children).trim()
+							const lines = content.split('\n')
+							const images: GalleryImage[] = []
+
+							for (const line of lines) {
+								const trimmed = line.trim()
+								if (!trimmed) continue
+
+								// Match: url "caption" or just url
+								const lineMatch = trimmed.match(/^([^\s"]+)(?:\s+"([^"]+)")?$/)
+								if (lineMatch) {
+									images.push({
+										url: lineMatch[1],
+										caption: lineMatch[2] || "",
+										alt: lineMatch[2] || "",
+									})
+								}
+							}
+
+							if (images.length > 0) {
+								// Parse options (e.g., "columns-3")
+								const parsedOptions: Record<string, string> = {}
+								let columns: number | undefined = undefined
+
+								if (options) {
+									const optionParts = options.split("-")
+									if (optionParts.length === 2) {
+										parsedOptions[optionParts[0]] = optionParts[1]
+										if (optionParts[0] === "columns") {
+											columns = parseInt(optionParts[1], 10)
+										}
+									}
+								}
+
+								const galleryConfig: GalleryConfig = {
+									type: type as GalleryConfig["type"],
+									images,
+									columns,
+									options: parsedOptions,
+								}
+
+								const gallery = renderGallery(galleryConfig)
+								if (gallery) {
+									return (
+										<div className="not-prose my-8">
+											{gallery}
+										</div>
+									)
+								}
+							}
+						}
+					}
+
+					// Default code rendering
+					return (
+						<code className={className} {...props}>
+							{children}
+						</code>
+					)
+				},
+				// Custom image component that handles galleries and AgilityPic
+				img({ src, alt, title, ...props }) {
+					// Handle src as string (ReactMarkdown can pass Blob, but we only handle strings)
+					const srcString = typeof src === "string" ? src : null
+					if (!srcString) return null
+
+					// Normalize alt to string | null
+					const altString = alt ? String(alt) : null
+					const titleString = title ? String(title) : null
+
+					// Check if this is a gallery
+					if (altString?.startsWith("gallery:")) {
+						// Try to parse gallery data from title (JSON format from preprocessing)
+						let galleryConfig: GalleryConfig | null = null
+
+						if (titleString) {
+							try {
+								const galleryData = JSON.parse(titleString)
+								if (galleryData && galleryData.images && Array.isArray(galleryData.images)) {
+									galleryConfig = {
+										type: galleryData.type,
+										images: galleryData.images.map((img: any) => ({
+											url: img.url,
+											caption: img.caption || "",
+											alt: img.caption || "",
+										})),
+										columns: galleryData.options?.columns ? parseInt(galleryData.options.columns, 10) : undefined,
+										options: galleryData.options || {},
+									}
+								}
+							} catch (e) {
+								// If JSON parsing fails, fall back to original parsing method
+								galleryConfig = parseGallerySyntax(altString, titleString, srcString)
+							}
+						} else {
+							// No title, try original parsing
+							galleryConfig = parseGallerySyntax(altString, titleString, srcString)
+						}
+
+						if (galleryConfig) {
+							// Render gallery component inline
+							const gallery = renderGallery(galleryConfig)
+							if (gallery) {
+								return (
+									<div className="not-prose my-8">
+										{gallery}
+									</div>
+								)
+							}
+						}
+					}
+
+					// Regular image - use AgilityPic for Agility CMS images
+					if (isAgilityImage(srcString)) {
+						const imageField = createImageFieldFromUrl(srcString, altString || "", titleString)
+						return (
+							<div className="not-prose my-6">
+								<AgilityPic
+									image={imageField}
+									fallbackWidth={800}
+									className="w-full h-auto rounded-lg"
+									alt={altString || titleString || ""}
+									sources={[
+										{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400 },
+										{ media: "(min-width: 1280px)", width: 1200 },
+										{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
+										{ media: "(min-width: 640px)", width: 800 },
+										{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
+										{ media: "(max-width: 639px)", width: 640 },
+									]}
+								/>
+								{titleString && (
+									<p className="mt-2 text-sm text-center text-muted-foreground">{titleString}</p>
+								)}
+							</div>
+						)
+					}
+
+					// Fallback to regular img for non-Agility images
+					return (
+						<div className="not-prose my-6">
+							<img
+								src={srcString}
+								alt={altString || titleString || ""}
+								className="w-full h-auto rounded-lg"
+								loading="lazy"
+								{...props}
+							/>
+							{titleString && (
+								<p className="mt-2 text-sm text-center text-muted-foreground">{titleString}</p>
+							)}
+						</div>
+					)
+				},
+			}}
+		>
+			{processedMarkdown}
+		</ReactMarkdown>
+	)
+}

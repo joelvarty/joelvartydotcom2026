@@ -34,6 +34,13 @@ The component already had:
 
 The /uses page component is ready to use. I'll create the UsesItem content model in Agility CMS and populate it with my gear, software, and tools. The page will automatically organize everything by category and display it in a clean, responsive grid.
 
+## Visual Results
+
+### Uses Page
+![Uses Page](https://cdn.agilitycms.com/j0i5uycg/posts/uses-page-full.png)
+
+The /uses page displays items organized by category in a clean, responsive grid. Each item shows an image (when available), name, description, and relevant links. The page scales beautifully from mobile to desktop, and the category grouping makes it easy to find specific types of tools and gear.
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

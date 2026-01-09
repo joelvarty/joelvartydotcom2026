@@ -11,6 +11,7 @@ import React, { useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
 import { AgilityPic } from "@agility/nextjs"
+import { isAgilityImage, createImageField } from "@/lib/agility/image-utils"
 
 interface GalleryComparisonProps {
 	images: GalleryImage[]
@@ -31,8 +32,9 @@ export function GalleryComparison({ images }: GalleryComparisonProps) {
 	const percentage = sliderValue[0]
 
 	return (
-		<div className="my-8">
-			<div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div className="relative aspect-video w-full overflow-hidden rounded-lg">
 				{/* Before Image (Background) */}
 				<div className="absolute inset-0">
 					{isAgilityImage(before.url) ? (
@@ -111,22 +113,9 @@ export function GalleryComparison({ images }: GalleryComparisonProps) {
 				<div>{before.caption || "Before"}</div>
 				<div>{after.caption || "After"}</div>
 			</div>
+			</div>
 		</div>
 	)
 }
 
-function isAgilityImage(url: string): boolean {
-	return url.includes("agilitycms.com") || url.includes("cdn.agilitycms.com")
-}
-
-function createImageField(image: GalleryImage) {
-	return {
-		url: image.url,
-		label: image.caption || image.alt || "",
-		width: 0,
-		height: 0,
-		target: "",
-		filesize: 0,
-	} as any
-}
 

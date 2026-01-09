@@ -63,6 +63,14 @@ When working with Agility CMS dynamic pages:
 - **Field names are case-sensitive** - Match exactly what's in Agility CMS
 - **Keep it simple** - Agility CMS provides what you need, don't overcomplicate it
 
+## Visual Reference: Blog Post in Agility CMS
+
+Here's what a blog post looks like in the Agility CMS editor, showing the markdown content with all seven gallery types:
+
+![Blog Post with Gallery Examples](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blog-post-with-gallery-examples.png)
+
+This screenshot shows how the markdown content field supports rich formatting and custom gallery syntax. The post includes examples of all gallery types (carousel, grid, masonry, thumbnail, stacked, comparison, and tabs), which are processed by the markdown processor when the blog post is rendered.
+
 ---
 
 ## Technical Details (Written by Cursor AI Agent)

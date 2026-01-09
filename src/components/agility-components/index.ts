@@ -18,6 +18,7 @@ import CareerTimeline from "./CareerTimeline"
 import UsesSection from "./UsesSection"
 import Hero from "./Hero"
 import BasicMarkdown from "./BasicMarkdown"
+import SeriesLanding from "./SeriesLanding"
 
 /**
  * Returns the React component for a given Agility CMS module name.
@@ -41,6 +42,8 @@ export const getModule = (moduleName: string) => {
 			return Hero
 		case "BasicMarkdown":
 			return BasicMarkdown
+		case "SeriesLanding":
+			return SeriesLanding
 		default:
 			return null
 	}

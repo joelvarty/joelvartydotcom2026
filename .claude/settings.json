@@ -4,5 +4,17 @@
 			"transport": "http",
 			"endpoint": "https://mcp.agilitycms.com/api/mcp"
 		}
+	},
+	"defaultMode": "acceptEdits",
+	"permissions": {
+		"allow": [
+			"mcp__Agility-CMS__*",
+			"mcp__chrome-devtools__*",
+			"mcp__playwright__*",
+			"Bash",
+			"Edit",
+			"Read",
+			"Write"
+		]
 	}
 }

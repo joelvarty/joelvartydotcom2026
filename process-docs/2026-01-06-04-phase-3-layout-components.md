@@ -99,6 +99,18 @@ I manually created the blog pages in Agility CMS:
 
 The BlogDetails component is set up to work with dynamic pages that reference blog posts via `sitemapNode.contentID`. When individual blog post pages are created as dynamic pages in Agility CMS, they'll automatically display the correct content from the referenced blog post.
 
+## Visual Results
+
+Here's what the homepage looks like with all the layout components in place:
+
+### Homepage - Light Mode
+![Homepage Light Mode](https://cdn.agilitycms.com/j0i5uycg/posts/homepage-light-mode.png)
+
+### Homepage - Dark Mode
+![Homepage Dark Mode](https://cdn.agilitycms.com/j0i5uycg/posts/homepage-dark-mode.png)
+
+The layout components work seamlessly together, providing a clean, professional foundation for the site. The dark mode toggle switches smoothly between themes, and the responsive design adapts beautifully across device sizes.
+
 ## What's Next
 
 The layout foundation and component models are complete. The blog system is set up and ready to use. Next steps would be to:

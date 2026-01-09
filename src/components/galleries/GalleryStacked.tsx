@@ -10,6 +10,7 @@
 import React from "react"
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
 import { AgilityPic } from "@agility/nextjs"
+import { isAgilityImage, createImageField } from "@/lib/agility/image-utils"
 
 interface GalleryStackedProps {
 	images: GalleryImage[]
@@ -17,10 +18,11 @@ interface GalleryStackedProps {
 
 export function GalleryStacked({ images }: GalleryStackedProps) {
 	return (
-		<div className="my-8 space-y-6">
+		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
 			{images.map((image, index) => (
 				<div key={index} className="w-full">
-					<div className="relative w-full overflow-hidden rounded-lg bg-muted">
+					<div className="relative w-full overflow-hidden rounded-lg">
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
 								image={createImageField(image)}
@@ -49,22 +51,9 @@ export function GalleryStacked({ images }: GalleryStackedProps) {
 					)}
 				</div>
 			))}
+			</div>
 		</div>
 	)
 }
 
-function isAgilityImage(url: string): boolean {
-	return url.includes("agilitycms.com") || url.includes("cdn.agilitycms.com")
-}
-
-function createImageField(image: GalleryImage) {
-	return {
-		url: image.url,
-		label: image.caption || image.alt || "",
-		width: 0,
-		height: 0,
-		target: "",
-		filesize: 0,
-	} as any
-}
 

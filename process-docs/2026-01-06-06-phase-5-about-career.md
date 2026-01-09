@@ -34,6 +34,18 @@ Since pages are managed in Agility CMS, I'll create the About page there and add
 
 The career timeline now uses the same optimized image system as the rest of the site, and I can use markdown with galleries in career entries if I want to show project screenshots or other images. The About page will be simple to set up once I add the content in Agility CMS.
 
+## Visual Results
+
+### Career Page
+![Career Page with Timeline](https://cdn.agilitycms.com/j0i5uycg/posts/career-page-full.png)
+
+The career timeline displays beautifully with company logos, job titles, and date ranges. The alternating left/right layout on desktop creates an engaging visual flow, while the single-column layout works perfectly on mobile devices.
+
+### About Page
+![About Page](https://cdn.agilitycms.com/j0i5uycg/posts/about-page-full.png)
+
+The About page uses a combination of Hero and markdown components to create a clean, readable introduction.
+
 ---
 
 ## Technical Details (Written by Cursor - Claude Code)

@@ -8,8 +8,40 @@ This folder contains blog-style documentation of the development process for Joe
 ## Structure
 
 - **Markdown blog posts** - Document features, decisions, and milestones
-- **images/** - Screenshots and diagrams for process posts
+- **images/** - Screenshots and diagrams for process posts (enhanced with comprehensive screenshots on January 8, 2026)
 - **README.md** - This index file
+
+## Screenshots Documentation (Updated January 8, 2026)
+
+The documentation has been significantly enhanced with screenshots captured using Chrome DevTools MCP, showing:
+
+**Application Screenshots:**
+- Homepage (light and dark modes)
+- Blog listing page
+- Blog post detail pages
+- Career timeline page
+- Uses page
+- About page
+
+**Agility CMS Screenshots:**
+- Blog Post content model with field configuration
+- Linked content field details (Category field)
+- Basic Markdown component model (using Power Fields)
+- Posts content list with sample content
+- Blog post editor with gallery markdown examples
+- Blog post with category and tag selection
+- Homepage page structure with components
+
+**Documentation Enhanced with Screenshots:**
+- Phase 3 (Layout Components) - Homepage light/dark modes
+- Phase 5 (About & Career) - Career and About pages
+- Phase 6 (Uses Page) - Uses page interface
+- Phase 7 (Content & CMS) - Homepage page structure in CMS
+- Project Summary - Complete visual tour of all major pages
+- Phase 2/3 (BlogPost Model) - Agility CMS configuration screenshots
+- Blog Details Fix - Gallery examples in markdown editor
+
+All screenshots are stored in `images/` folder and embedded in the relevant documentation files.
 
 ## Post Naming Convention
 
@@ -111,10 +143,18 @@ Every blog post must start with a note clarifying authorship:
 - [2026-01-06-14-agility-component-content-loading-mistake.md](2026-01-06-14-agility-component-content-loading-mistake.md) - The Agility component content loading mistake
 - [2026-01-06-15-blog-details-dynamic-page-item-fix.md](2026-01-06-15-blog-details-dynamic-page-item-fix.md) - Blog Details component: The dynamicPageItem discovery
 - [2026-01-06-16-career-timeline-8starlabs-upgrade.md](2026-01-06-16-career-timeline-8starlabs-upgrade.md) - Upgrading the Career Timeline with 8star Labs
+- [2026-01-08-01-switching-to-claude-code.md](2026-01-08-01-switching-to-claude-code.md) - Switching from Cursor to Claude Code: A New Development Partner
+- [2026-01-08-02-markdown-gallery-refactoring.md](2026-01-08-02-markdown-gallery-refactoring.md) - Markdown Gallery Refactoring: From Regex to Remark Plugin
+- [2026-01-08-03-series-feature.md](2026-01-08-03-series-feature.md) - Series Feature: Grouping Blog Posts with Context
+
+### Key Reference Documents
+- [AI-DEVELOPMENT-WORKFLOW.md](AI-DEVELOPMENT-WORKFLOW.md) - **📚 ESSENTIAL READING: Comprehensive guide explaining the human-AI collaboration model, what MCP changes, real-world examples, and lessons learned**
+- [WHERE-TO-ADD-YOUR-THOUGHTS.md](WHERE-TO-ADD-YOUR-THOUGHTS.md) - **✍️ Quick reference showing where Joel can add personal perspective to each document**
+- [SCREENSHOTS-INVENTORY.md](SCREENSHOTS-INVENTORY.md) - Inventory of all 21 screenshots captured for documentation
 
 ---
 
 **Note**: These blog posts are collaborative documents. AI agents create initial content, and Joel adds personal thoughts, reactions, and creative direction. They will be published as a series when development is complete.
 
-**Last Updated**: 2026-01-06
+**Last Updated**: 2026-01-08
 

@@ -56,6 +56,35 @@ I manually configured the BlogPost model in Agility CMS with the correct setup:
 4. **Used custom fields** - "Slug" and "Content" (Markdown) as custom field types
 5. **Organized with tabs** - Used tab fields to organize the form interface
 
+## Visual Reference: Agility CMS Configuration
+
+Here's what the final BlogPost model looks like in Agility CMS:
+
+### Blog Post Content Model
+![Blog Post Model](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blogpost-model.png)
+
+The model includes all the necessary fields organized into tabs (Main, Media, Content) for a clean editing experience.
+
+### Category Field Configuration (Linked Content)
+![Category Field Details](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blogpost-category-field-details.png)
+
+This shows the detailed configuration of the Category linked content field, demonstrating:
+- **Link Type**: Specific Item(s) from a List
+- **Render UI**: Dropdown List (Select One)
+- **Content Reference**: Categories container
+- **Visible Column**: Name
+- **Save Value To Field**: CategoryID (hidden field)
+
+### Blog Post Editing Experience
+![Blog Post with Category and Tags](https://cdn.agilitycms.com/j0i5uycg/posts/agility-blog-post-category-tags.png)
+
+The actual content editing interface showing how the Category dropdown and Tags selection work in practice, along with the featured image upload and other fields.
+
+### Sample Content
+![Posts Content List](https://cdn.agilitycms.com/j0i5uycg/posts/agility-posts-content-list.png)
+
+The Posts container showing all the sample blog posts created for testing.
+
 ## Key Learnings
 
 ### For Future Content Model Creation:

@@ -9,10 +9,11 @@
 import { getContentItem } from "@/lib/cms/getContentItem"
 import { getAgilityContext } from "@/lib/cms/getAgilityContext"
 import { getBlogListing } from "@/lib/cms-content/getBlogListing"
-import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
-import Link from "next/link"
+import { type UnloadedModuleProps } from "@agility/nextjs"
 import { BlogPagination } from "./BlogPagination"
 import { BlogCategories } from "./BlogCategories"
+import { BlogSeries } from "./BlogSeries"
+import { BlogPostItem } from "./BlogPostItem"
 
 /**
  * Interface defining the structure of the BlogListing module fields.
@@ -96,55 +97,16 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 						) : (
 							<>
 								{postsResult.posts.map((post, index: number) => (
-									<Link
+									<BlogPostItem
 										key={post.contentID}
-										href={post.url}
-										className="group flex flex-col sm:flex-row gap-6 pb-8 border-b border-border animate-fade-in transition-all hover:border-primary/50 hover:translate-x-1"
-										style={{ animationDelay: `${index * 50}ms` }}
-									>
-										{post.featuredImage && (
-											<div className="shrink-0 sm:w-48 overflow-hidden rounded-lg bg-muted">
-												<div className="aspect-video sm:aspect-square w-full sm:w-48 overflow-hidden">
-													<AgilityPic
-														image={post.featuredImage as any}
-														fallbackWidth={400}
-														className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-														sources={[
-															{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 800 },
-															{ media: "(min-width: 1280px)", width: 400 },
-															{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
-															{ media: "(min-width: 640px)", width: 300 },
-															{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
-															{ media: "(max-width: 639px)", width: 400 },
-														]}
-													/>
-												</div>
-											</div>
-										)}
-										<div className="flex-1">
-											<h3 className="text-2xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-												{post.title}
-											</h3>
-											{post.publishedDate && (
-												<time className="text-sm text-muted-foreground block mb-3">
-													{new Date(post.publishedDate).toLocaleDateString("en-US", {
-														year: "numeric",
-														month: "long",
-														day: "numeric",
-													})}
-												</time>
-											)}
-											{post.excerpt && (
-												<p className="text-muted-foreground mb-4 line-clamp-3 group-hover:text-foreground/80 transition-colors">
-													{post.excerpt}
-												</p>
-											)}
-											<span className="text-primary group-hover:underline text-sm font-medium inline-flex items-center gap-1">
-												Read more
-												<span className="transition-transform group-hover:translate-x-1">→</span>
-											</span>
-										</div>
-									</Link>
+										contentID={post.contentID}
+										title={post.title}
+										url={post.url}
+										publishedDate={post.publishedDate}
+										excerpt={post.excerpt}
+										featuredImage={post.featuredImage}
+										index={index}
+									/>
 								))}
 								<BlogPagination
 									page={page}
@@ -157,13 +119,14 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 						)}
 					</div>
 
-					{/* Categories sidebar */}
+					{/* Categories and Series sidebar */}
 					<aside className="lg:col-span-1">
-						<div className="sticky top-24">
+						<div className="sticky top-24 space-y-8">
 							<BlogCategories
 								languageCode={languageCode}
 								selectedCategoryID={categoryID}
 							/>
+							<BlogSeries languageCode={languageCode} />
 						</div>
 					</aside>
 				</div>

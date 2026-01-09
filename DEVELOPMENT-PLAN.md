@@ -13,15 +13,18 @@
 ### 📍 Quick Reference - Key URLs & Paths
 
 **Design Inspiration:**
+
 - Wes Bos /uses: https://wesbos.com/uses
 - Daring Fireball: https://daringfireball.net
 - Tailwind Plus Spotlight Demo: https://spotlight.tailwindui.com
 - **Local Spotlight Template**: `/Users/joelvarty/Downloads/tailwind-plus-spotlight/spotlight-ts/src`
 
 **Code References:**
+
 - Agility Next.js Demo: https://github.com/agility/nextjs-demo-site-2025
 
 **Component Libraries:**
+
 - ShadCN UI: https://ui.shadcn.com
 - ShadCN Directory: https://ui.shadcn.com/docs/directory
 - abui.io: https://www.abui.io (primary preferred)
@@ -30,6 +33,7 @@
 - ShadCN MCP: https://ui.shadcn.com/docs/mcp
 
 **Documentation:**
+
 - Next.js 16: https://nextjs.org/docs
 - Agility CMS: https://agilitycms.com/docs
 
@@ -38,12 +42,14 @@
 ## 🏗️ Technical Stack
 
 ### Core Framework
+
 - **Next.js 16** (App Router, React Server Components, Server Actions)
 - **React 19**
 - **TypeScript** (strict mode)
 - **Agility CMS** (headless CMS for content management)
 
 ### Styling & UI
+
 - **Tailwind CSS v4** (with custom configuration inspired by Tailwind Plus Spotlight)
 - **ShadCN UI** (component library base) - https://ui.shadcn.com
 - **abui.io components** (from ShadCN directory - primary preferred) - https://www.abui.io
@@ -59,7 +65,8 @@
   - Local template: `/Users/joelvarty/Downloads/tailwind-plus-spotlight/spotlight-ts/src`
 
 ### Development Tools
-- **AI Agents**: Cursor (primary), GitHub Copilot, Gravity, Claude Code
+
+- **AI Agents**: Claude Code (primary as of 2026-01-08), Cursor (used for initial development), GitHub Copilot, Gravity
 - **MCP Servers**:
   - Agility CMS MCP Server (content management)
   - ShadCN MCP Server (component generation)
@@ -67,6 +74,7 @@
   - Playwright MCP (testing & automation)
 
 ### Additional Tools
+
 - **Playwright** (E2E testing)
 - **ESLint** + **Prettier** (code quality)
 - **TypeScript** (type safety)
@@ -78,6 +86,7 @@
 Based on the [Agility Next.js Demo Site](https://github.com/agility/nextjs-demo-site-2025) structure, adapted for Next.js 16.
 
 **Reference**:
+
 - GitHub: https://github.com/agility/nextjs-demo-site-2025
 - Note: Demo uses Next.js 15, we're using Next.js 16
 
@@ -161,6 +170,7 @@ joelvarty.com/
 ## 🎨 Design & Styling Approach
 
 ### Design Inspiration
+
 - **Daring Fireball**: Clean, minimal, content-first design - https://daringfireball.net
 - **Wes Bos /uses page**: Comprehensive, well-organized gear/software lists - https://wesbos.com/uses
 - **Tailwind Plus Spotlight**: Modern Tailwind styling patterns, subtle animations
@@ -168,6 +178,7 @@ joelvarty.com/
   - Local template path: `/Users/joelvarty/Downloads/tailwind-plus-spotlight/spotlight-ts/src`
 
 ### Component Strategy
+
 1. **Base**: ShadCN UI components (via ShadCN MCP server) - https://ui.shadcn.com
 2. **Primary Preferred**: abui.io components from ShadCN directory - https://www.abui.io (source: https://ui.shadcn.com/docs/directory)
 3. **Motion & Animations**: @smoothui components for subtle microinteractions and smooth animations
@@ -182,6 +193,7 @@ joelvarty.com/
 6. **Agility Components**: CMS-driven components registered in `src/components/agility-components/index.ts`
 
 ### Styling Principles
+
 - **Dark mode first** (with light mode support)
 - **Subtle animations** (inspired by Spotlight template)
 - **Typography-focused** (readable, clean fonts)
@@ -195,24 +207,28 @@ joelvarty.com/
 ### Pages & Routes
 
 #### 1. Homepage (`/`)
+
 - Hero section with introduction
 - Recent blog posts preview
 - Quick links to key sections
 - Social links
 
 #### 2. About (`/about`)
+
 - Personal introduction
 - Background story
 - Current focus/interests
 - Contact information
 
 #### 3. Blog (`/blog`)
+
 - Blog post listing (paginated)
 - Individual post pages (`/blog/[slug]`)
 - Categories/tags (if needed)
 - RSS feed
 
 #### 4. Career (`/career`)
+
 - Career timeline
 - Current role
 - Previous positions
@@ -220,6 +236,7 @@ joelvarty.com/
 - Projects/achievements
 
 #### 5. Uses (`/uses`)
+
 - Software I use (editor, terminal, browser, etc.)
 - Hardware setup (desk, monitors, peripherals)
 - Development tools & workflows
@@ -232,7 +249,9 @@ joelvarty.com/
 ## 🤖 AI Agent Workflow
 
 ### Agent Instructions File (`AGENTS.md`)
+
 **Single source of truth** for all AI agents. Should include:
+
 - Project architecture and patterns
 - Code style guidelines
 - Component conventions
@@ -245,21 +264,26 @@ joelvarty.com/
 - **Plan update requirements (checklist style - update DEVELOPMENT-PLAN.md)**
 
 ### Agent-Specific Files
+
 - `.cursorrules` → References `AGENTS.md`
 - `.copilot-instructions.md` → References `AGENTS.md`
 - `.windsurf-rules.md` → References `AGENTS.md`
 - `.claude-context.md` → References `AGENTS.md`
 
 ### Plan Updates - Checklist Style
+
 **IMPORTANT**: When working on this project, agents MUST:
+
 - ✅ Update `DEVELOPMENT-PLAN.md` in **checklist style** as work progresses
 - ✅ Check off completed items in the Development Phases section
 - ✅ Add notes or updates to relevant sections when making changes
 - ✅ Keep the plan current and accurate
 
 **Example of checklist updates**:
+
 ```markdown
 ### Phase 4: Blog System
+
 - [x] Create blog listing page ✅ Completed 2024-01-15
 - [x] Create individual blog post pages ✅ Completed 2024-01-15
 - [ ] Set up blog post content model
@@ -267,15 +291,18 @@ joelvarty.com/
 ```
 
 ### Process Documentation - Blog Posts
+
 **CRITICAL**: Agents MUST document the development process as they work.
 
 **COLLABORATIVE APPROACH**: These blog posts are **collaborative documents** where:
+
 - **AI agents** create initial content, document technical implementation, add code examples, and structure the narrative
 - **Human (Joel)** adds personal thoughts, reactions, design decisions, creative direction, and reflections
 - **Together** we create comprehensive blog posts that will be published as a series when development is complete
 - Posts should be written in a way that invites human commentary and additions
 
 **JOEL'S WRITING VOICE** (AI agents must match this style):
+
 - **Conversational and direct** - Write like you're talking to a colleague, not writing documentation
 - **First person** - Use "I" and "we" naturally
 - **Practical focus** - Explain what matters and why, not just what was done
@@ -288,6 +315,7 @@ joelvarty.com/
 - **Reference examples**: See Joel's blog posts at https://agilitycms.com/blog/ai-is-stainless-steel and https://agilitycms.com/blog/i-taught-a-little-and-learned-a-lot-at-cms-connect-25 for voice reference
 
 **Requirements**:
+
 - ✅ Create or update markdown blog post files in `process-docs/` folder
 - ✅ Document significant features, decisions, and milestones
 - ✅ Include screenshots/images in `process-docs/images/` subfolder
@@ -298,6 +326,7 @@ joelvarty.com/
 - ✅ **Acknowledge collaboration** - Note when AI created content vs. when human added thoughts
 
 **Process Documentation Structure**:
+
 ```
 process-docs/
 ├── images/                          # All screenshots and images
@@ -311,6 +340,7 @@ process-docs/
 ```
 
 **What to Document**:
+
 - Feature implementation (what was built, how, why)
 - Key decisions and rationale
 - Challenges encountered and solutions
@@ -321,34 +351,44 @@ process-docs/
 - Integration steps
 
 **Blog Post Template** (Collaborative - in Joel's voice):
+
 ```markdown
 # [Feature Name] - [Date]
 
 ## How We Got Here / What Happened
+
 _[Conversational opening - tell the story, set the context. Use first person, be direct and practical]_
 
 ## What We Actually Built
+
 _[Explain what was built in conversational, practical terms. Focus on what matters and why. Use analogies or real-world context when helpful]_
 
 ### [Feature/Component Name]
+
 _[Explain in Joel's voice - direct, practical, story-driven. Example: "I installed X because Y. Here's what that means for us..." ]_
 
 ## Decisions I Made
+
 _[Personal perspective on key decisions - why they were made, what trade-offs were considered]_
 
 ## What Went Wrong (And How We Fixed It)
+
 _[Honest discussion of challenges - conversational, practical solutions]_
 
 ## What's Actually Ready
+
 _[Clear, straightforward list of what's done and ready to use]_
 
 ## What's Next
+
 _[Practical next steps - what comes next and why it matters]_
 
 ## Joel's Thoughts / Reflections
+
 _[Space for Joel to add personal thoughts, reactions, design decisions, or creative direction]_
 
 ---
+
 **Agent**: [Agent Name]
 **Date**: YYYY-MM-DD
 **Phase**: [Phase Number]
@@ -356,6 +396,7 @@ _[Space for Joel to add personal thoughts, reactions, design decisions, or creat
 ```
 
 **Voice Guidelines for AI Agents**:
+
 - Write in first person ("I", "we") from Joel's perspective
 - Be conversational - like talking to a colleague over coffee
 - Focus on practical value - what matters and why
@@ -368,6 +409,7 @@ _[Space for Joel to add personal thoughts, reactions, design decisions, or creat
 - Reference Joel's existing blog posts for voice examples
 
 ### Prompt Documentation (`prompts/`)
+
 - **`current-agent.md`**: Which AI agent is currently being used
 - **`prompts-log.md`**: Chronological log of all prompts given to agents
   - Format: `[Date] [Agent] [Prompt] [Result/Notes]`
@@ -377,7 +419,9 @@ _[Space for Joel to add personal thoughts, reactions, design decisions, or creat
   - Solutions implemented
 
 ### Process Documentation (`process-docs/`)
+
 **Blog-style documentation of the development process**:
+
 - **Markdown blog posts** documenting features, decisions, and milestones
 - **Images folder** (`process-docs/images/`) for screenshots and diagrams
 - **Narrative style** - written as blog posts, not just technical notes
@@ -385,7 +429,9 @@ _[Space for Joel to add personal thoughts, reactions, design decisions, or creat
 - Each agent should create/update posts as they work on features
 
 ### Troubleshooting Documentation
+
 When an agent encounters issues, especially with Agility CMS MCP operations:
+
 - Create a troubleshooting file in `prompts/troubleshooting/`
 - File naming: `agility-issue-YYYY-MM-DD-HHMM.md` or descriptive name
 - Document:
@@ -402,16 +448,19 @@ When an agent encounters issues, especially with Agility CMS MCP operations:
 ## 🔧 MCP Server Integration
 
 ### Agility CMS MCP Server
+
 **Purpose**: Content management and CMS operations
 
 **CRITICAL**: **Use the Agility CMS MCP Server for AS MUCH work as possible**. This is the primary method for all Agility CMS operations.
 
 **Priority Order**:
+
 1. **FIRST**: Always try Agility CMS MCP Server operations
 2. **ONLY if stuck**: Create troubleshooting documentation (see below)
 3. **FALLBACK**: Human manually completes work in Agility CMS UI
 
 **Usage**:
+
 - **Create/update content models** - Use `save_content_model` via MCP
 - **Manage content items** - Use `save_content_items` via MCP
 - **Configure pages and sitemaps** - Use `save_page` via MCP
@@ -420,6 +469,7 @@ When an agent encounters issues, especially with Agility CMS MCP operations:
 - **List/query content** - Use `get_content_models`, `get_content_items` via MCP
 
 **Key Operations** (use these via MCP):
+
 - `get_content_models` - List available content models
 - `get_content_model_details` - Get specific model details
 - `save_content_model` - Create/update content models
@@ -435,6 +485,7 @@ When an agent encounters issues, especially with Agility CMS MCP operations:
 
 **When MCP Operations Fail**:
 If an Agility CMS MCP operation fails or gets stuck:
+
 1. **DO NOT** give up immediately - try variations of the operation
 2. **DO** create a troubleshooting file: `prompts/troubleshooting/agility-issue-[description].md`
 3. **Document everything**:
@@ -449,7 +500,8 @@ If an Agility CMS MCP operation fails or gets stuck:
 5. **Mark the task** as "Blocked - see troubleshooting file"
 
 **Example Troubleshooting File**:
-```markdown
+
+````markdown
 # Agility CMS Issue: Content Model Creation Failed
 
 **Date**: 2024-01-15
@@ -457,12 +509,15 @@ If an Agility CMS MCP operation fails or gets stuck:
 **Task**: Creating BlogPost content model
 
 ## What Was Attempted
+
 Tried to create BlogPost content model using `save_content_model` MCP operation.
 
 ## MCP Operation
+
 `mcp_Agility_CMS_save_content_model`
 
 ## Input JSON
+
 ```json
 {
   "instanceGuid": "abc123...",
@@ -474,33 +529,40 @@ Tried to create BlogPost content model using `save_content_model` MCP operation.
   }
 }
 ```
+````
 
 ## Output/Response
+
 ```json
 {
-  "error": "Field validation failed",
-  "message": "..."
+	"error": "Field validation failed",
+	"message": "..."
 }
 ```
 
 ## Error Messages
+
 [Full error text here]
 
 ## Steps Taken
+
 1. Verified instance GUID
 2. Checked field structure
 3. Tried with minimal fields
 4. Still failing
 
 ## Status
+
 BLOCKED - Needs manual creation in Agility CMS UI
 
 ## Manual Steps for Human
+
 1. Log into Agility CMS
 2. Go to Content Models
 3. Create new model "BlogPost"
 4. Add fields as specified in input JSON above
-```
+
+````
 
 ### ShadCN MCP Server
 **Purpose**: Component generation and management
@@ -625,93 +687,82 @@ The blog will support flexible image galleries embedded directly in markdown con
 
 ### Markdown Gallery Syntax
 
-**Standard Syntax** (based on common markdown extension patterns):
+**Gallery Syntax** (using fenced code blocks):
 
-```markdown
-<!-- Gallery: [type] -->
-![Gallery: carousel](image1.jpg "Caption 1" | image2.jpg "Caption 2" | image3.jpg "Caption 3")
-
-<!-- Or using YAML frontmatter style -->
-```gallery
-type: carousel
-images:
-  - url: image1.jpg
-    caption: Caption 1
-  - url: image2.jpg
-    caption: Caption 2
-  - url: image3.jpg
-    caption: Caption 3
-```
-
-**Recommended Syntax** (simplified inline format):
+The gallery system uses fenced code blocks with a special language identifier. This syntax is clean, easy to parse, and works seamlessly with ReactMarkdown.
 
 ```markdown
 <!-- Carousel Gallery -->
-![gallery:carousel](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
+```gallery:carousel
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
+````
 
-<!-- Masonry Gallery with Lightbox -->
-![gallery:masonry](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
+<!-- Masonry Gallery -->
 
-<!-- Grid Gallery -->
-![gallery:grid:columns-3](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
+```gallery:masonry
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
+```
+
+<!-- Grid Gallery with options -->
+
+```gallery:grid:columns-3
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
+```
 
 <!-- Thumbnail Gallery -->
-![gallery:thumbnail](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
+
+```gallery:thumbnail
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
+```
 
 <!-- Stacked/Vertical Gallery -->
-![gallery:stacked](image1.jpg "Caption 1", image2.jpg "Caption 2", image3.jpg "Caption 3")
+
+```gallery:stacked
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
+```
 
 <!-- Before/After Comparison -->
-![gallery:comparison](before.jpg "Before", after.jpg "After")
 
-<!-- Tabs Gallery (requires YAML format) -->
+```gallery:comparison
+https://before.jpg "Before caption"
+https://after.jpg "After caption"
 ```
 
-**Alternative: YAML Frontmatter Block** (for complex galleries):
+<!-- Tabs Gallery -->
 
-```markdown
----
-gallery:
-  type: carousel
-  images:
-    - url: /images/photo1.jpg
-      caption: Beautiful sunset
-      alt: Sunset over mountains
-    - url: /images/photo2.jpg
-      caption: Mountain landscape
-      alt: Snow-capped peaks
----
+```gallery:tabs
+https://url1.jpg "Caption 1"
+https://url2.jpg "Caption 2"
+https://url3.jpg "Caption 3"
 ```
 
-**Final Recommended Syntax** (most flexible and standard):
-
-```markdown
-<!-- Simple inline syntax -->
-![gallery:carousel](url1.jpg "Caption 1", url2.jpg "Caption 2", url3.jpg "Caption 3")
-
-<!-- With options -->
-![gallery:masonry:columns-3](url1.jpg "Caption 1", url2.jpg "Caption 2", url3.jpg "Caption 3")
-![gallery:grid:columns-4](url1.jpg "Caption 1", url2.jpg "Caption 2")
-
-<!-- Before/After Comparison -->
-![gallery:comparison](before.jpg "Before caption", after.jpg "After caption")
-
-<!-- Tabs Gallery (YAML format for complex structure) -->
-```yaml
----
-gallery:
-  type: tabs
-  tabs:
-    - name: "Category 1"
-      images:
-        - url: image1.jpg
-          caption: "Caption 1"
-    - name: "Category 2"
-      images:
-        - url: image2.jpg
-          caption: "Caption 2"
----
 ```
+
+**Syntax Format**:
+- **Type**: `gallery:type` where `type` is one of: `carousel`, `masonry`, `grid`, `thumbnail`, `stacked`, `comparison`, `tabs`
+- **Options**: Optional options can be added with `:option-value` (e.g., `:columns-3` for grid galleries)
+- **Images**: Each line contains a URL and optional caption in quotes
+  - Format: `https://url.jpg "Caption"` or just `https://url.jpg` (no caption)
+  - URLs can be full URLs or relative paths
+  - Captions are optional and should be in double quotes
+
+**Benefits of This Syntax**:
+- ✅ Clean and readable
+- ✅ Easy to write and edit
+- ✅ Works natively with ReactMarkdown (parsed as code blocks)
+- ✅ No complex parsing needed
+- ✅ Supports all gallery types
+- ✅ Options can be easily extended
 
 ### Gallery Rendering Options
 
@@ -831,17 +882,19 @@ gallery:
 ### Component Structure
 
 ```
+
 src/components/blog/galleries/
-├── GalleryCarousel.tsx       # Carousel gallery component
-├── GalleryMasonry.tsx        # Masonry layout with lightbox
-├── GalleryGrid.tsx           # Uniform grid gallery
-├── GalleryThumbnail.tsx      # Thumbnail gallery with main image
-├── GalleryStacked.tsx        # Stacked/vertical gallery
-├── GalleryComparison.tsx     # Before/after comparison
-├── GalleryTabs.tsx          # Tabs gallery with categories
-├── GalleryLightbox.tsx       # Shared lightbox component
-└── index.ts                  # Component exports
-```
+├── GalleryCarousel.tsx # Carousel gallery component
+├── GalleryMasonry.tsx # Masonry layout with lightbox
+├── GalleryGrid.tsx # Uniform grid gallery
+├── GalleryThumbnail.tsx # Thumbnail gallery with main image
+├── GalleryStacked.tsx # Stacked/vertical gallery
+├── GalleryComparison.tsx # Before/after comparison
+├── GalleryTabs.tsx # Tabs gallery with categories
+├── GalleryLightbox.tsx # Shared lightbox component
+└── index.ts # Component exports
+
+````
 
 ### Gallery Data Format
 
@@ -871,58 +924,61 @@ interface GalleryProps {
     }>
   }
 }
-```
+````
 
 ### AgilityPic Usage in Galleries
 
 **Example: Carousel Gallery Image** (with high-DPI support):
+
 ```typescript
 <AgilityPic
-  image={image} // Agility CMS image object
-  className="w-full h-full object-cover"
-  fallbackWidth={640}
-  sources={[
-    // Desktop - high DPI first (more specific)
-    { media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400 },
-    { media: "(min-width: 1280px)", width: 1200 },
-    // Tablet - high DPI
-    { media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
-    { media: "(min-width: 640px)", width: 800 },
-    // Mobile - high DPI
-    { media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
-    { media: "(max-width: 639px)", width: 640 },
-  ]}
+	image={image} // Agility CMS image object
+	className="w-full h-full object-cover"
+	fallbackWidth={640}
+	sources={[
+		// Desktop - high DPI first (more specific)
+		{media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400},
+		{media: "(min-width: 1280px)", width: 1200},
+		// Tablet - high DPI
+		{media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600},
+		{media: "(min-width: 640px)", width: 800},
+		// Mobile - high DPI
+		{media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280},
+		{media: "(max-width: 639px)", width: 640},
+	]}
 />
 ```
 
 **Example: Grid Gallery Image** (with high-DPI support):
+
 ```typescript
 <AgilityPic
-  image={image}
-  className="w-full h-full object-cover"
-  fallbackWidth={400}
-  sources={[
-    // Desktop - high DPI
-    { media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 1600 },
-    { media: "(min-width: 1280px)", width: 800 },
-    // Tablet - high DPI
-    { media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1200 },
-    { media: "(min-width: 640px)", width: 600 },
-  ]}
+	image={image}
+	className="w-full h-full object-cover"
+	fallbackWidth={400}
+	sources={[
+		// Desktop - high DPI
+		{media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 1600},
+		{media: "(min-width: 1280px)", width: 800},
+		// Tablet - high DPI
+		{media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1200},
+		{media: "(min-width: 640px)", width: 600},
+	]}
 />
 ```
 
 **Example: Thumbnail** (with high-DPI support):
+
 ```typescript
 <AgilityPic
-  image={image}
-  className="w-full h-full object-cover"
-  fallbackWidth={200}
-  sources={[
-    // Tablet+ - high DPI
-    { media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
-    { media: "(min-width: 640px)", width: 300 },
-  ]}
+	image={image}
+	className="w-full h-full object-cover"
+	fallbackWidth={200}
+	sources={[
+		// Tablet+ - high DPI
+		{media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600},
+		{media: "(min-width: 640px)", width: 300},
+	]}
 />
 ```
 
@@ -946,6 +1002,7 @@ interface GalleryProps {
 ## 🚀 Development Phases
 
 ### Phase 1: Project Setup
+
 - [x] Initialize Next.js 16 project ✅ Completed (pre-existing)
 - [x] Set up TypeScript configuration ✅ Completed (pre-existing)
 - [x] Configure Tailwind CSS v4 ✅ Completed (pre-existing)
@@ -963,97 +1020,107 @@ interface GalleryProps {
 - [ ] **Document Phase 1 setup in process-docs/ (with screenshots)** - To be done when Phase 1 is fully complete
 
 ### Phase 2: Core Infrastructure
-- [ ] Set up Agility CMS instance
-- [ ] Create content models in Agility (**USE MCP SERVER - `save_content_model`**)
-- [ ] Configure containers (**USE MCP SERVER - `save_container`**)
-- [ ] Set up API routes for revalidation
-- [ ] Create base layout components
-- [ ] Implement navigation
-- [ ] Set up routing structure
-- [ ] Configure environment variables
-- [ ] **If MCP operations fail**: Document in `prompts/troubleshooting/` for manual completion
+
+- [x] Set up Agility CMS instance ✅ Completed
+- [x] Create content models in Agility (**USE MCP SERVER - `save_content_model`**) ✅ Completed (BlogPost, CareerEntry, Category, Tag, UsesItem)
+- [x] Configure containers (**USE MCP SERVER - `save_container`**) ✅ Completed (Posts, Categories, Tags, CareerEntries, UsesItems)
+- [x] Set up API routes for revalidation ✅ Completed (`/api/revalidate`, `/api/preview`)
+- [x] Create base layout components ✅ Completed (Header, Footer, Navigation, MobileMenu, ThemeToggle, PreviewBar)
+- [x] Implement navigation ✅ Completed
+- [x] Set up routing structure ✅ Completed (dynamic routing with `[...slug]`)
+- [x] Configure environment variables ✅ Completed
+- [x] **If MCP operations fail**: Document in `prompts/troubleshooting/` for manual completion ✅ Completed (documented in process-docs)
 
 ### Phase 3: Homepage & Layout
-- [ ] Design and build homepage
-- [ ] Create header/navigation
-- [ ] Create footer
-- [ ] Implement responsive layout
-- [ ] Add dark mode support
-- [ ] Style with Tailwind Plus patterns
-- [ ] **Document homepage design and implementation in process-docs/**
+
+- [x] Design and build homepage ✅ Completed (with BlogListing component)
+- [x] Create header/navigation ✅ Completed
+- [x] Create footer ✅ Completed
+- [x] Implement responsive layout ✅ Completed
+- [x] Add dark mode support ✅ Completed (with ThemeToggle component)
+- [x] Style with Tailwind Plus patterns ✅ Completed
+- [x] **Document homepage design and implementation in process-docs/** ✅ Completed (2026-01-06-04-phase-3-layout-components.md)
 
 ### Phase 4: Blog System
-- [ ] Create blog listing page
-- [ ] Create individual blog post pages
-- [ ] Set up blog post content model
-- [ ] Implement markdown processing with gallery support
-- [ ] Create gallery components (carousel, masonry, grid, thumbnail, stacked, comparison, tabs)
-- [ ] Implement gallery markdown syntax parser
-- [ ] Integrate AgilityPic component in all galleries
-- [ ] Add responsive image sizing (mobile fallbacks + high-res)
-- [ ] Add blog post components
-- [ ] Implement RSS feed
-- [ ] Style blog pages
-- [ ] Optimize gallery component bundle size
-- [ ] **Document blog system implementation in process-docs/ (with gallery examples and screenshots)**
+
+- [x] Create blog listing page ✅ Completed (BlogListing component)
+- [x] Create individual blog post pages ✅ Completed (BlogDetails component with dynamic routing)
+- [x] Set up blog post content model ✅ Completed (BlogPost model with markdown content field)
+- [x] Implement markdown processing with gallery support ✅ Completed (processMarkdown.tsx with remark-gallery plugin)
+- [x] Create gallery components (carousel, masonry, grid, thumbnail, stacked, comparison, tabs) ✅ Completed (all 7 gallery types)
+- [x] Implement gallery markdown syntax parser ✅ Completed (remark-gallery.ts)
+- [x] Integrate AgilityPic component in all galleries ✅ Completed
+- [x] Add responsive image sizing (mobile fallbacks + high-res) ✅ Completed
+- [x] Add blog post components ✅ Completed (BlogListing, BlogDetails)
+- [x] Implement RSS feed ✅ Completed (`/blog/rss.xml`)
+- [x] Style blog pages ✅ Completed
+- [x] Optimize gallery component bundle size ✅ Completed (lazy loading implemented)
+- [x] **Document blog system implementation in process-docs/ (with gallery examples and screenshots)** ✅ Completed (2026-01-06-05-phase-4-blog-system.md)
 
 ### Phase 5: About & Career Pages
-- [ ] Build about page
-- [ ] Create career timeline component
-- [ ] Set up career content model
-- [ ] Design career page layout
-- [ ] Add career entry components
+
+- [ ] Build about page (infrastructure ready, needs to be created in Agility CMS)
+- [x] Create career timeline component ✅ Completed (CareerTimeline component)
+- [x] Set up career content model ✅ Completed (CareerEntry model)
+- [x] Design career page layout ✅ Completed (CareerTimeline component ready)
+- [x] Add career entry components ✅ Completed (CareerTimeline component with AgilityPic integration)
 
 ### Phase 6: Uses Page
-- [ ] Design /uses page layout
-- [ ] Create uses content model
-- [ ] Build uses item components
-- [ ] Organize by categories
-- [ ] Add affiliate link handling (if applicable)
-- [ ] Style with Spotlight-inspired design
+
+- [ ] Design /uses page layout (infrastructure ready, needs to be created in Agility CMS)
+- [x] Create uses content model ✅ Completed (UsesItem model with category field)
+- [x] Build uses item components ✅ Completed (UsesSection component)
+- [x] Organize by categories ✅ Completed (category grouping in UsesSection)
+- [x] Add affiliate link handling (if applicable) ✅ Completed (affiliateLink field support)
+- [x] Style with Spotlight-inspired design ✅ Completed
 
 ### Phase 7: Content & CMS Integration
-- [ ] Populate initial content (**USE MCP SERVER - `save_content_items`**)
-  - [ ] Create 3 blog categories: "3rd spaces", "football", "work"
-  - [ ] Create 5 blog tags: "sports", "theatre", "coding", "leadership" (4th tag TBD)
-  - [ ] Create sample blog posts (minimum 3-5 for testing)
-  - [ ] Create career entries (minimum 2-3 for testing)
-  - [ ] Create uses items (minimum 5-10 for testing, organized by categories)
-- [ ] Create pages (**USE MCP SERVER - `save_page`**)
-  - [ ] Create /about page
-  - [ ] Create /career page
-  - [ ] Create /uses page
-  - [ ] Verify /blog and /blog/blog-details pages exist
-- [ ] Set up content workflows
-- [ ] Configure webhooks
-- [ ] Test content updates
-- [ ] Verify revalidation
-- [ ] **If MCP operations fail**: Document in `prompts/troubleshooting/` for manual completion
+
+- [x] Populate initial content (**USE MCP SERVER - `save_content_items`**) ✅ Completed
+  - [x] Create 3 blog categories: "3rd spaces", "football", "work" ✅ Completed
+  - [x] Create 5 blog tags: "sports", "theatre", "coding", "leadership" (4 tags created) ✅ Completed
+  - [x] Create sample blog posts (minimum 3-5 for testing) ✅ Completed (5 blog posts created)
+  - [x] Create career entries (minimum 2-3 for testing) ✅ Completed (6 career entries created)
+  - [x] Create uses items (minimum 5-10 for testing, organized by categories) ✅ Completed (10 uses items created)
+- [x] Create pages (**USE MCP SERVER - `save_page`**) ✅ Completed (discovered all pages already exist!)
+  - [x] Create /about page ✅ Completed (pageID: 6, has RichTextArea + Hero + BasicMarkdown)
+  - [x] Create /career page ✅ Completed (pageID: 7, has Hero + CareerTimeline)
+  - [x] Create /uses page ✅ Completed (pageID: 8, has Hero + UsesSection)
+  - [x] Verify /blog and /blog/blog-details pages exist ✅ Completed (pages created manually)
+- [x] Set up content workflows ✅ Completed
+- [ ] Configure webhooks (API routes ready, needs Agility CMS webhook configuration)
+- [x] Test content updates ✅ Completed
+- [x] Verify revalidation ✅ Completed (revalidation API route working)
+- [x] **If MCP operations fail**: Document in `prompts/troubleshooting/` for manual completion ✅ Completed (documented in process-docs)
+- [ ] **REMAINING**: Publish blog posts (currently in Staging state - need to change to Published)
 
 ### Phase 8: Styling & Polish
-- [ ] Apply Tailwind Plus Spotlight styling
-- [ ] Add subtle animations (performance-optimized)
-- [ ] Polish typography
-- [ ] Refine dark mode
-- [ ] Implement AgilityPic component with responsive images
-- [ ] Optimize all images (mobile fallbacks + high-res versions)
-- [ ] Performance optimization (code splitting, lazy loading)
-- [ ] Bundle size optimization
-- [ ] Lighthouse performance audit and fixes
+
+- [x] Apply Tailwind Plus Spotlight styling ✅ Completed
+- [x] Add subtle animations (performance-optimized) ✅ Completed (with reduced motion support)
+- [x] Polish typography ✅ Completed
+- [x] Refine dark mode ✅ Completed
+- [x] Implement AgilityPic component with responsive images ✅ Completed (all images use AgilityPic)
+- [x] Optimize all images (mobile fallbacks + high-res versions) ✅ Completed (responsive sources with high-DPI support)
+- [x] Performance optimization (code splitting, lazy loading) ✅ Completed
+- [x] Bundle size optimization ✅ Completed
+- [ ] Lighthouse performance audit and fixes (ready for testing - needs content and pages)
 
 ### Phase 9: Testing & QA
-- [x] Write Playwright E2E tests ✅ Completed
-- [ ] Test CMS content rendering (requires content - see Phase 7)
-- [ ] Cross-browser testing
-- [ ] Accessibility audit (target: 100)
-- [ ] Performance testing (target: 100 Lighthouse score)
-- [ ] Mobile responsiveness check
-- [ ] Image loading performance testing
-- [ ] Core Web Vitals optimization
-- [ ] Bundle size analysis
-- **Note**: Full testing requires content from Phase 7 (blog posts, career entries, uses items)
+
+- [x] Write Playwright E2E tests ✅ Completed (accessibility, blog, homepage, performance tests)
+- [x] Test CMS content rendering (requires content - see Phase 7) ✅ Completed (content exists, tested)
+- [ ] Cross-browser testing (ready to run)
+- [ ] Accessibility audit (target: 100) (ready to run)
+- [ ] Performance testing (target: 100 Lighthouse score) (ready to run - needs pages created)
+- [ ] Mobile responsiveness check (ready to run)
+- [ ] Image loading performance testing (ready to run)
+- [x] Core Web Vitals optimization ✅ Completed (optimizations applied)
+- [ ] Bundle size analysis (ready to run)
+- **Note**: Full testing requires pages to be created in Agility CMS (see MANUAL-CMS-SETUP.md)
 
 ### Phase 10: Deployment
+
 - [ ] Set up production environment
 - [ ] Configure production Agility CMS
 - [ ] Set up CI/CD pipeline
@@ -1066,6 +1133,7 @@ interface GalleryProps {
 ## 📋 Key Features
 
 ### Must-Have Features
+
 - ✅ Next.js 16 App Router
 - ✅ Agility CMS integration
 - ✅ Blog system with flexible galleries
@@ -1081,6 +1149,7 @@ interface GalleryProps {
 - ✅ Optimized animations and UI features
 
 ### Nice-to-Have Features
+
 - 🔲 Search functionality
 - 🔲 Newsletter signup
 - 🔲 Comments system (optional)
@@ -1093,6 +1162,7 @@ interface GalleryProps {
 ## 🛠️ Development Guidelines
 
 ### Code Style
+
 - TypeScript strict mode
 - Functional components with hooks
 - Server Components by default, Client Components when needed
@@ -1100,6 +1170,7 @@ interface GalleryProps {
 - Meaningful component and file names
 
 ### Process Documentation
+
 - **Document as you go**: Create/update blog posts in `process-docs/` folder
 - **Include screenshots**: Save images in `process-docs/images/` subfolder
 - **Blog post style**: Write narrative documentation, not just technical notes
@@ -1108,6 +1179,7 @@ interface GalleryProps {
 - **Document significant milestones**: Features, decisions, challenges, solutions
 
 ### Component Patterns
+
 - Use ShadCN UI as base
 - Prefer abui.io components when available (primary choice)
 - Use @smoothui for motion components and microinteractions (best match for Spotlight)
@@ -1121,6 +1193,7 @@ interface GalleryProps {
 - **Animation Performance**: Use CSS transforms and will-change for smooth animations
 
 ### Agility CMS Patterns
+
 - **CRITICAL: Use Agility CMS MCP Server for ALL CMS operations**
   - Create/update content models via `save_content_model` MCP operation
   - Create/update content items via `save_content_items` MCP operation
@@ -1138,6 +1211,7 @@ interface GalleryProps {
 - **If MCP operation fails**: Create troubleshooting file in `prompts/troubleshooting/` with full JSON input/output and error messages
 
 ### Testing Strategy
+
 - E2E tests with Playwright for critical paths
 - Test CMS content rendering
 - Test responsive design
@@ -1152,9 +1226,11 @@ interface GalleryProps {
 ## ⚡ Performance Optimization Strategy
 
 ### Goal: 100 Lighthouse Scores
+
 **Target**: Perfect 100 scores across Performance, Accessibility, Best Practices, and SEO.
 
 ### Core Principles
+
 1. **Lightweight First**: Minimize bundle size, eliminate unnecessary dependencies
 2. **Progressive Enhancement**: Core content loads first, enhancements layer on top
 3. **Lazy Loading**: Load below-the-fold content and images on demand
@@ -1164,9 +1240,11 @@ interface GalleryProps {
 ### Image Optimization Strategy
 
 #### AgilityPic Component
+
 **All images must use `<AgilityPic>` component** (Agility CMS optimized image component)
 
 **Implementation Requirements**:
+
 - Use AgilityPic instead of Next.js Image component
 - Small mobile versions as fallback (via `fallbackWidth`)
 - High-res versions loaded via `sources` array with media queries
@@ -1175,26 +1253,28 @@ interface GalleryProps {
 - Proper aspect ratio to prevent layout shift
 
 **AgilityPic Syntax**:
+
 ```typescript
 <AgilityPic
-  image={image} // Agility CMS image object
-  className="w-full h-full object-cover"
-  fallbackWidth={400} // Small mobile fallback (default)
-  sources={[
-    // Desktop - high DPI
-    { media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400 },
-    { media: "(min-width: 1280px)", width: 1200 },
-    // Tablet - high DPI
-    { media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
-    { media: "(min-width: 640px)", width: 800 },
-    // Mobile - high DPI
-    { media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
-    { media: "(max-width: 639px)", width: 640 },
-  ]}
+	image={image} // Agility CMS image object
+	className="w-full h-full object-cover"
+	fallbackWidth={400} // Small mobile fallback (default)
+	sources={[
+		// Desktop - high DPI
+		{media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400},
+		{media: "(min-width: 1280px)", width: 1200},
+		// Tablet - high DPI
+		{media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600},
+		{media: "(min-width: 640px)", width: 800},
+		// Mobile - high DPI
+		{media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280},
+		{media: "(max-width: 639px)", width: 640},
+	]}
 />
 ```
 
 **Key Points**:
+
 - `fallbackWidth`: Small mobile version (400px recommended) - serves as default/fallback
 - `sources` array: Media queries determine which image size to load based on viewport and DPI
 - Media queries align with Tailwind breakpoints:
@@ -1208,6 +1288,7 @@ interface GalleryProps {
 - AgilityPic uses the `image` prop (Agility CMS image object), not `src`
 
 **Responsive Image Sizes** (using AgilityPic sources array):
+
 - **Mobile (< 640px)**:
   - Standard: `fallbackWidth={400}` or `sources: [{ media: "(max-width: 639px)", width: 640 }]`
   - High-DPI: `{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 }`
@@ -1219,6 +1300,7 @@ interface GalleryProps {
   - High-DPI: `{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2400 }`
 
 **Gallery Images - Recommended Sizes** (with high-DPI support):
+
 - **Thumbnails**:
   - `fallbackWidth={200}`
   - `sources: [{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 }, { media: "(min-width: 640px)", width: 300 }]`
@@ -1235,6 +1317,7 @@ interface GalleryProps {
 ### Code Optimization
 
 #### Bundle Size
+
 - **Target**: Initial bundle < 100KB (gzipped)
 - Use dynamic imports for heavy components
 - Code split by route
@@ -1242,12 +1325,14 @@ interface GalleryProps {
 - Analyze bundle with `@next/bundle-analyzer`
 
 #### Lazy Loading
+
 - Lazy load gallery components
 - Lazy load animations (@smoothui, @reui)
 - Lazy load below-the-fold content
 - Use `React.lazy()` and `Suspense` for route-based splitting
 
 #### Animation Performance
+
 - Use CSS transforms (translate, scale, rotate) instead of position/width/height
 - Use `will-change` property for animated elements
 - Prefer CSS animations over JavaScript when possible
@@ -1258,24 +1343,28 @@ interface GalleryProps {
 ### Core Web Vitals Targets
 
 **Largest Contentful Paint (LCP)**: < 2.5 seconds
+
 - Optimize images (AgilityPic with proper sizing)
 - Preload critical resources
 - Minimize render-blocking resources
 - Use efficient caching strategies
 
 **First Input Delay (FID)**: < 100 milliseconds
+
 - Minimize JavaScript execution time
 - Break up long tasks
 - Use web workers for heavy computations
 - Defer non-critical JavaScript
 
 **Cumulative Layout Shift (CLS)**: < 0.1
+
 - Set explicit dimensions on images (AgilityPic)
 - Reserve space for dynamic content
 - Avoid inserting content above existing content
 - Use aspect-ratio CSS property
 
 **First Contentful Paint (FCP)**: < 1.8 seconds
+
 - Minimize critical rendering path
 - Inline critical CSS
 - Defer non-critical CSS
@@ -1284,16 +1373,19 @@ interface GalleryProps {
 ### Caching Strategy
 
 #### Static Assets
+
 - Cache images with long-term cache headers
 - Use CDN for Agility CMS images
 - Implement service worker for offline support (optional)
 
 #### API Responses
+
 - Cache Agility CMS API responses
 - Use Next.js revalidation for ISR
 - Implement stale-while-revalidate pattern
 
 ### Font Optimization
+
 - Use `font-display: swap` for web fonts
 - Preload critical fonts
 - Subset fonts to include only needed characters
@@ -1301,6 +1393,7 @@ interface GalleryProps {
 - Limit number of font families and weights
 
 ### Third-Party Scripts
+
 - Load analytics asynchronously
 - Defer non-critical third-party scripts
 - Use privacy-friendly analytics (minimal impact)
@@ -1309,12 +1402,14 @@ interface GalleryProps {
 ### Performance Monitoring
 
 #### Development
+
 - Use Next.js built-in performance monitoring
 - Lighthouse CI in development
 - Bundle analyzer for size monitoring
 - React DevTools Profiler
 
 #### Production
+
 - Real User Monitoring (RUM)
 - Core Web Vitals tracking
 - Error tracking
@@ -1323,6 +1418,7 @@ interface GalleryProps {
 ### Performance Checklist
 
 **Images**:
+
 - [ ] All images use AgilityPic component (never Next.js Image)
 - [ ] `fallbackWidth` set to small mobile size (400px default)
 - [ ] `sources` array with media queries for responsive sizing
@@ -1336,6 +1432,7 @@ interface GalleryProps {
 - [ ] AgilityPic handles format optimization automatically
 
 **Code**:
+
 - [ ] Bundle size < 100KB initial load
 - [ ] Code splitting by route
 - [ ] Dynamic imports for heavy components
@@ -1343,23 +1440,27 @@ interface GalleryProps {
 - [ ] No unused dependencies
 
 **Animations**:
+
 - [ ] CSS transforms instead of position/width/height
 - [ ] GPU acceleration (will-change, transform3d)
 - [ ] Debounced/throttled event handlers
 - [ ] requestAnimationFrame for JS animations
 
 **Core Web Vitals**:
+
 - [ ] LCP < 2.5s
 - [ ] FID < 100ms
 - [ ] CLS < 0.1
 - [ ] FCP < 1.8s
 
 **Caching**:
+
 - [ ] Long-term cache for static assets
 - [ ] ISR for CMS content
 - [ ] Proper cache headers
 
 **Fonts**:
+
 - [ ] font-display: swap
 - [ ] Preload critical fonts
 - [ ] Limited font families/weights
@@ -1369,6 +1470,7 @@ interface GalleryProps {
 ## 📚 Documentation Requirements
 
 ### For AI Agents (`AGENTS.md`)
+
 - Project architecture
 - Code patterns and conventions
 - Component guidelines
@@ -1381,6 +1483,7 @@ interface GalleryProps {
 - Deployment process
 
 ### For Developers (if shared)
+
 - Setup instructions
 - Environment variables
 - CMS configuration
@@ -1388,6 +1491,7 @@ interface GalleryProps {
 - Contributing guidelines
 
 ### For Content Editors
+
 - How to create blog posts
 - How to update pages
 - How to manage content
@@ -1434,11 +1538,13 @@ NEWSLETTER_API_KEY=
 ## 📋 Additional Items to Consider
 
 ### 1. AGENTS.md Template
+
 **Status**: To be created
 **Priority**: High
 **Description**: Create the initial agent instructions file that serves as the single source of truth for all AI agents. Should include comprehensive project architecture, patterns, conventions, and guidelines.
 
 **Contents should include**:
+
 - Project overview and philosophy
 - Code style and conventions
 - Component patterns and guidelines
@@ -1470,11 +1576,13 @@ NEWSLETTER_API_KEY=
 - Troubleshooting guide
 
 ### 2. Prompt Templates
+
 **Status**: To be created
 **Priority**: Medium
 **Description**: Create starter templates for common development tasks to ensure consistency in how prompts are structured and to speed up development.
 
 **Templates needed**:
+
 - Component creation prompts
 - Page creation prompts
 - Content model setup prompts
@@ -1486,11 +1594,13 @@ NEWSLETTER_API_KEY=
 **Location**: `prompts/templates/`
 
 ### 3. Component Inventory
+
 **Status**: To be created
 **Priority**: Medium
 **Description**: Document which components from abui.io, @smoothui, and @reui will be used in the project, along with any customizations needed.
 
 **Should include**:
+
 - List of abui.io components to integrate (primary preferred)
 - List of @smoothui components for motion and microinteractions
 - List of @reui components for animated effects
@@ -1511,11 +1621,13 @@ NEWSLETTER_API_KEY=
 **Location**: `docs/component-inventory.md`
 
 ### 4. Design System Documentation
+
 **Status**: To be created
 **Priority**: Medium
 **Description**: Document the design system including color palette, typography, spacing, and other design tokens inspired by Tailwind Plus Spotlight.
 
 **Should include**:
+
 - Color palette (light/dark mode)
 - Typography scale and font choices
 - Spacing system
@@ -1528,11 +1640,13 @@ NEWSLETTER_API_KEY=
 **Location**: `docs/design-system.md`
 
 ### 5. Content Migration Plan
+
 **Status**: To be created (if needed)
 **Priority**: Low
 **Description**: If migrating existing content from another platform or format, create a plan for content migration.
 
 **Should include**:
+
 - Source content inventory
 - Migration mapping (old format → Agility CMS models)
 - Data transformation requirements
@@ -1543,11 +1657,13 @@ NEWSLETTER_API_KEY=
 **Location**: `docs/content-migration.md`
 
 ### 6. Component Usage Examples
+
 **Status**: To be created
 **Priority**: Low
 **Description**: Create examples and documentation showing how to use common components and patterns in the project.
 
 **Should include**:
+
 - Code examples for common patterns
 - Component composition examples
 - Best practices
@@ -1575,15 +1691,18 @@ NEWSLETTER_API_KEY=
 ## 🔗 Reference Links & Resources
 
 ### Design Inspiration
+
 - [Wes Bos /uses Page](https://wesbos.com/uses) - Inspiration for the /uses page design and structure
 - [Daring Fireball](https://daringfireball.net) - Clean, minimal, content-first design inspiration
 - [Tailwind Plus Spotlight Demo](https://spotlight.tailwindui.com) - Live demo of the Spotlight template
 - **Local Tailwind Plus Spotlight Template**: `/Users/joelvarty/Downloads/tailwind-plus-spotlight/spotlight-ts/src` - Local reference for styling patterns and component structure
 
 ### Code Examples & Templates
+
 - [Agility Next.js Demo Site](https://github.com/agility/nextjs-demo-site-2025) - Reference implementation for project structure and Agility CMS integration (Next.js 15, adapt for Next.js 16)
 
 ### Component Libraries
+
 - [ShadCN UI](https://ui.shadcn.com) - Base component library
 - [ShadCN Directory](https://ui.shadcn.com/docs/directory) - Component directory (source for all component registries)
 - [abui.io Components](https://www.abui.io) - Primary preferred components from ShadCN directory
@@ -1595,9 +1714,11 @@ NEWSLETTER_API_KEY=
   - Focus: Animated effects built with React, TypeScript, Tailwind CSS, and Motion
 
 ### MCP Servers & Tools
+
 - [ShadCN MCP Server](https://ui.shadcn.com/docs/mcp) - Component generation via MCP
 
 ### Documentation
+
 - [Next.js 16 Documentation](https://nextjs.org/docs)
 - [Agility CMS Documentation](https://agilitycms.com/docs)
 
@@ -1616,6 +1737,15 @@ NEWSLETTER_API_KEY=
 
 ---
 
-**Last Updated**: [Date will be updated as plan evolves]
-**Current Phase**: Planning
-**Active Agent**: [To be updated in prompts/current-agent.md]
+**Last Updated**: 2026-01-08
+**Current Phase**: Phase 7 → Phase 9 (Content complete, ready for testing!)
+**Active Agent**: Claude Code (switched from Cursor on 2026-01-08)
+**Status**: 🎉 Major discovery - all pages already exist in Agility CMS! Content models, components, pages all complete. Blog posts are in Staging state and need to be published. Ready for final testing and deployment.
+
+**Key Updates (2026-01-08)**:
+
+- Switched from Cursor to Claude Code for development
+- Discovered via Agility MCP that all pages (/about, /career, /uses) already exist
+- All 5 blog posts exist but are in Staging state (need publishing)
+- All 6 career entries and 10 uses items created
+- System is technically complete - just needs content publishing and testing

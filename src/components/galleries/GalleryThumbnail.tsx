@@ -10,6 +10,7 @@
 import React, { useState } from "react"
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
 import { AgilityPic } from "@agility/nextjs"
+import { isAgilityImage, createImageField } from "@/lib/agility/image-utils"
 
 interface GalleryThumbnailProps {
 	images: GalleryImage[]
@@ -21,9 +22,10 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 	if (images.length === 0) return null
 
 	return (
-		<div className="my-8">
+		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			{/* Main Image */}
-			<div className="mb-4 aspect-video w-full overflow-hidden rounded-lg bg-muted">
+			<div className="mb-4 aspect-video w-full overflow-hidden rounded-lg bg-muted/30">
 				{isAgilityImage(images[selectedIndex].url) ? (
 					<AgilityPic
 						image={createImageField(images[selectedIndex])}
@@ -45,12 +47,12 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 				)}
 			</div>
 			{images[selectedIndex].caption && (
-				<div className="mb-4 text-center text-sm text-foreground">{images[selectedIndex].caption}</div>
+				<div className="mb-4 text-center text-sm text-muted-foreground">{images[selectedIndex].caption}</div>
 			)}
 
 			{/* Thumbnail Strip */}
 			{images.length > 1 && (
-				<div className="flex gap-2 overflow-x-auto pb-2">
+				<div className="flex justify-center gap-2 overflow-x-auto pb-2">
 					{images.map((image, index) => (
 						<button
 							key={index}
@@ -82,22 +84,9 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 					))}
 				</div>
 			)}
+			</div>
 		</div>
 	)
 }
 
-function isAgilityImage(url: string): boolean {
-	return url.includes("agilitycms.com") || url.includes("cdn.agilitycms.com")
-}
-
-function createImageField(image: GalleryImage) {
-	return {
-		url: image.url,
-		label: image.caption || image.alt || "",
-		width: 0,
-		height: 0,
-		target: "",
-		filesize: 0,
-	} as any
-}
 
