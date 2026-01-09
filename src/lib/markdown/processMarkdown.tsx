@@ -225,14 +225,22 @@ function preprocessMarkdown(markdown: string): string {
 }
 
 /**
+ * Options for processing markdown
+ */
+export interface ProcessMarkdownOptions {
+	/** Optional className to apply to the wrapper div */
+	className?: string
+}
+
+/**
  * Process markdown content and return JSX with gallery components
  * Uses ReactMarkdown for better React integration and inline gallery rendering
  */
-export function processMarkdown(markdown: string): React.ReactElement {
+export function processMarkdown(markdown: string, options?: ProcessMarkdownOptions): React.ReactElement {
 	// Preprocess to handle gallery syntax
 	const processedMarkdown = preprocessMarkdown(markdown)
 
-	return (
+	const content = (
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm, remarkUnwrapImages, remarkGallery]}
 			rehypePlugins={[rehypeRaw]}
@@ -420,4 +428,11 @@ export function processMarkdown(markdown: string): React.ReactElement {
 			{processedMarkdown}
 		</ReactMarkdown>
 	)
+
+	// Wrap in a div with optional className if provided
+	if (options?.className) {
+		return <div className={options.className}>{content}</div>
+	}
+
+	return content
 }

@@ -48,7 +48,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 	})
 
 	const postsPerPageConfig = numberOfPosts ? parseInt(numberOfPosts, 10) : postsPerPage
-	console.log("dynamicPageItem", dynamicPageItem)
+
 	let categoryID: number | undefined = undefined // if dynamicPageItem is present, use the categoryID from the dynamicPageItem
 	if (dynamicPageItem) {
 		categoryID = dynamicPageItem.contentID
@@ -77,7 +77,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 		direction: "desc",
 	})
 
-	const titleStr = title ? title : dynamicPageItem ? dynamicPageItem.fields.name : "Blog"
+	const titleStr = title ? title : dynamicPageItem ? dynamicPageItem.fields.name : undefined
 
 	return (
 		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>

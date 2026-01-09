@@ -56,7 +56,7 @@ const BasicMarkdown = async ({ module, languageCode }: UnloadedModuleProps) => {
 				*/}
 				<div
 					data-agility-field="markdown"
-					className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none dark:prose-invert"
+					className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none! dark:prose-invert"
 				>
 					{processMarkdown(markdown)}
 				</div>
