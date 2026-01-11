@@ -122,13 +122,13 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 	let category: { title: string; slug: string } | null = null
 	if (post.fields.categoryID) {
 		try {
-			const categoryItem = await getContentItem({
+			const categoryItem = await getContentItem<{ name?: string; Name?: string; slug?: string; Slug?: string }>({
 				contentID: post.fields.categoryID,
 				languageCode,
 			})
 			category = {
-				title: categoryItem.fields.name || categoryItem.fields.Name,
-				slug: categoryItem.fields.slug || categoryItem.fields.Slug,
+				title: categoryItem.fields.name || categoryItem.fields.Name || "",
+				slug: categoryItem.fields.slug || categoryItem.fields.Slug || "",
 			}
 		} catch (error) {
 			console.error("Error fetching category:", error)
@@ -139,13 +139,13 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 	let series: { title: string; slug: string } | null = null
 	if (post.fields.seriesID) {
 		try {
-			const seriesItem = await getContentItem({
+			const seriesItem = await getContentItem<{ title?: string; Title?: string; slug?: string; Slug?: string }>({
 				contentID: post.fields.seriesID,
 				languageCode,
 			})
 			series = {
-				title: seriesItem.fields.title || seriesItem.fields.Title,
-				slug: seriesItem.fields.slug || seriesItem.fields.Slug,
+				title: seriesItem.fields.title || seriesItem.fields.Title || "",
+				slug: seriesItem.fields.slug || seriesItem.fields.Slug || "",
 			}
 		} catch (error) {
 			console.error("Error fetching series:", error)
