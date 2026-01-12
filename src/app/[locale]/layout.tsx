@@ -19,7 +19,9 @@ export default async function LocaleLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <PreviewBar isPreview={isPreview} isDevelopmentMode={isDevelopmentMode} />
+      {isPreview &&
+        <PreviewBar isPreview={isPreview} isDevelopmentMode={isDevelopmentMode} />
+      }
     </div>
   )
 }
