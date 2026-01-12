@@ -64,8 +64,13 @@ export function Footer() {
               </ul>
             </div>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground prose">
-                Built with <a href="https://nextjs.org">Next.js</a>, <a href="https://agilitycms.com">Agility CMS</a>, and AI assistance from <a href="https://cursor.com/">Cursor</a>, <a href="https://claude.ai">Claude</a>, and <a href="https://github.com/features/copilot">GitHub Copilot</a>.
+              <p className="text-sm text-muted-foreground">
+                Built with{" "}
+                <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-foreground/80 underline transition-colors">Next.js</a>,{" "}
+                <a href="https://agilitycms.com" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-foreground/80 underline transition-colors">Agility CMS</a>, and AI assistance from{" "}
+                <a href="https://cursor.com/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-foreground/80 underline transition-colors">Cursor</a>,{" "}
+                <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-foreground/80 underline transition-colors">Claude</a>, and{" "}
+                <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-foreground/80 underline transition-colors">GitHub Copilot</a>.
               </p>
             </div>
           </div>
