@@ -45,6 +45,9 @@ export function BlogPagination({
 
 	function navigateToPage(pageNum: number) {
 		router.push(url(pageNum), { scroll: false })
+		// Force refresh to bypass Next.js Router Cache (client-side RSC cache)
+		// Without this, the cached page content is reused instead of fetching new data
+		router.refresh()
 		// Scroll to target element after a short delay to allow navigation
 		setTimeout(() => {
 			const element = document.getElementById(scrollTargetId)
