@@ -1,44 +1,88 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Monitor } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
+type Theme = "system" | "light" | "dark";
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<Theme>("system");
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    // Check for saved theme preference or default to light
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+  const getSystemTheme = () => {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
 
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
-  }, []);
-
-  const applyTheme = (newTheme: "light" | "dark") => {
+  const applyTheme = (newTheme: Theme) => {
     const root = document.documentElement;
-    if (newTheme === "dark") {
+    const effectiveTheme = newTheme === "system" ? getSystemTheme() : newTheme;
+
+    if (effectiveTheme === "dark") {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
     }
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    applyTheme(newTheme);
+  useEffect(() => {
+    setMounted(true);
+    const savedTheme = localStorage.getItem("theme") as Theme | null;
+    const initialTheme = savedTheme || "system";
+
+    setTheme(initialTheme);
+    applyTheme(initialTheme);
+
+    // Listen for system theme changes when in "system" mode
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemChange = () => {
+      const currentTheme = localStorage.getItem("theme") as Theme | null;
+      if (!currentTheme || currentTheme === "system") {
+        applyTheme("system");
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleSystemChange);
+    return () => mediaQuery.removeEventListener("change", handleSystemChange);
+  }, []);
+
+  const cycleTheme = () => {
+    // Cycle: system -> light -> dark -> system
+    const themeOrder: Theme[] = ["system", "light", "dark"];
+    const currentIndex = themeOrder.indexOf(theme);
+    const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
+
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    applyTheme(nextTheme);
+  };
+
+  const getIcon = () => {
+    switch (theme) {
+      case "system":
+        return <Monitor className="h-4 w-4" />;
+      case "light":
+        return <Sun className="h-4 w-4" />;
+      case "dark":
+        return <Moon className="h-4 w-4" />;
+    }
+  };
+
+  const getAriaLabel = () => {
+    switch (theme) {
+      case "system":
+        return "Theme: System (click for Light)";
+      case "light":
+        return "Theme: Light (click for Dark)";
+      case "dark":
+        return "Theme: Dark (click for System)";
+    }
   };
 
   if (!mounted) {
     return (
       <Button variant="ghost" size="icon" className="h-9 w-9">
-        <Sun className="h-4 w-4" />
+        <Monitor className="h-4 w-4" />
       </Button>
     );
   }
@@ -47,15 +91,12 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggleTheme}
+      onClick={cycleTheme}
       className="h-9 w-9"
-      aria-label="Toggle theme"
+      aria-label={getAriaLabel()}
+      title={getAriaLabel()}
     >
-      {theme === "light" ? (
-        <Moon className="h-4 w-4" />
-      ) : (
-        <Sun className="h-4 w-4" />
-      )}
+      {getIcon()}
     </Button>
   );
 }
