@@ -371,22 +371,24 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 
 						if (galleryConfig) {
 							// Render gallery component inline
+							// Use <span> with block display to avoid hydration errors when inside <p>
 							const gallery = renderGallery(galleryConfig)
 							if (gallery) {
 								return (
-									<div className="not-prose my-8">
+									<span className="not-prose my-8 block">
 										{gallery}
-									</div>
+									</span>
 								)
 							}
 						}
 					}
 
 					// Regular image - use AgilityPic for Agility CMS images
+					// Use <span> with block display to avoid hydration errors when image is inside <p>
 					if (isAgilityImage(srcString)) {
 						const imageField = createImageFieldFromUrl(srcString, altString || "", titleString)
 						return (
-							<div className="not-prose my-6">
+							<span className="not-prose my-6 block">
 								<AgilityPic
 									image={imageField}
 									fallbackWidth={800}
@@ -402,15 +404,15 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 									]}
 								/>
 								{titleString && (
-									<p className="mt-2 text-sm text-center text-muted-foreground">{titleString}</p>
+									<span className="mt-2 text-sm text-center text-muted-foreground block">{titleString}</span>
 								)}
-							</div>
+							</span>
 						)
 					}
 
 					// Fallback to regular img for non-Agility images
 					return (
-						<div className="not-prose my-6">
+						<span className="not-prose my-6 block">
 							<img
 								src={srcString}
 								alt={altString || titleString || ""}
@@ -419,9 +421,9 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 								{...props}
 							/>
 							{titleString && (
-								<p className="mt-2 text-sm text-center text-muted-foreground">{titleString}</p>
+								<span className="mt-2 text-sm text-center text-muted-foreground block">{titleString}</span>
 							)}
-						</div>
+						</span>
 					)
 				},
 			}}

@@ -40,22 +40,20 @@ export function BlogPostItem({
 			style={{ animationDelay: `${index * 50}ms` }}
 		>
 			{featuredImage && (
-				<div className="shrink-0 sm:w-48 overflow-hidden rounded-lg bg-muted">
-					<div className="aspect-video sm:aspect-square w-full sm:w-48 overflow-hidden">
-						<AgilityPic
-							image={featuredImage as any}
-							fallbackWidth={400}
-							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-							sources={[
-								{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 800 },
-								{ media: "(min-width: 1280px)", width: 400 },
-								{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
-								{ media: "(min-width: 640px)", width: 300 },
-								{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
-								{ media: "(max-width: 639px)", width: 400 },
-							]}
-						/>
-					</div>
+				<div className="shrink-0 w-full sm:w-48 sm:h-48 aspect-video sm:aspect-square overflow-hidden rounded-lg bg-muted">
+					<AgilityPic
+						image={featuredImage as any}
+						fallbackWidth={400}
+						className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+						sources={[
+							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 800 },
+							{ media: "(min-width: 1280px)", width: 400 },
+							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
+							{ media: "(min-width: 640px)", width: 300 },
+							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
+							{ media: "(max-width: 639px)", width: 400 },
+						]}
+					/>
 				</div>
 			)}
 			<div className="flex-1">

@@ -5,6 +5,7 @@ import agilitySDK from "@agility/content-fetch"
 
 import type { Metadata, ResolvingMetadata } from "next"
 
+import { resolveAgilityMetaData } from "@/lib/cms-content/resolveAgilityMetaData"
 import { notFound } from "next/navigation"
 import { locales } from "@/lib/i18n/config"
 
@@ -70,15 +71,18 @@ export async function generateMetadata(
 	const { params } = props;
 	const awaitedParams = await params;
 
+	const { locale, sitemap, isDevelopmentMode, isPreview } = await getAgilityContext(awaitedParams.locale);
 	const agilityData = await getAgilityPage({ params });
 	if (!agilityData.page) return {};
 
-	// Basic metadata - can be enhanced with SEO fields from Agility
-	const seo = agilityData.page?.seo as { metaTitle?: string; metaDescription?: string } | undefined
-	return {
-		title: seo?.metaTitle || agilityData.page?.title || 'Page',
-		description: seo?.metaDescription || '',
-	};
+	return await resolveAgilityMetaData({
+		agilityData,
+		locale,
+		sitemap,
+		isDevelopmentMode,
+		isPreview,
+		parent,
+	});
 }
 
 export default async function Page({ params }: PageProps) {
