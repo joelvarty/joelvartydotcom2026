@@ -11,10 +11,11 @@ test.describe('Homepage', () => {
     const header = page.locator('header');
     await expect(header).toBeVisible();
 
-    // Check navigation links
+    // Check navigation links exist in header
+    const nav = page.locator('header nav');
     const navLinks = ['About', 'Blog', 'Career', 'Uses'];
     for (const link of navLinks) {
-      await expect(page.getByRole('link', { name: link })).toBeVisible();
+      await expect(nav.getByRole('link', { name: link, exact: true })).toBeVisible();
     }
 
     // Check footer is visible
@@ -25,12 +26,14 @@ test.describe('Homepage', () => {
   test('should have working navigation', async ({ page }) => {
     await page.goto('/');
 
-    // Test navigation links
-    await page.getByRole('link', { name: 'Blog' }).click();
+    // Test navigation links - target nav in header to avoid matching blog post links
+    const nav = page.locator('header nav');
+
+    await nav.getByRole('link', { name: 'Blog', exact: true }).click();
     await expect(page).toHaveURL(/.*\/blog/);
 
     await page.goto('/');
-    await page.getByRole('link', { name: 'About' }).click();
+    await nav.getByRole('link', { name: 'About', exact: true }).click();
     await expect(page).toHaveURL(/.*\/about/);
   });
 
