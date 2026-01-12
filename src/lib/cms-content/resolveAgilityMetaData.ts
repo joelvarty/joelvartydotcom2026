@@ -17,6 +17,8 @@ interface Props {
 export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Props): Promise<Metadata> => {
 	const ogImages = (await parent).openGraph?.images || []
 
+	let metaDescription = agilityData.page?.seo?.metaDescription
+
 	//#region *** resolve open graph stuff from dynamic pages ***
 	if (agilityData.sitemapNode.contentID !== undefined
 		&& agilityData.sitemapNode.contentID > 0) {
@@ -39,6 +41,11 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Pr
 						alt: image.label
 					})
 				}
+
+				if (!metaDescription && contentItem.fields["excerpt"]) {
+					metaDescription = contentItem.fields["excerpt"] as string
+				}
+
 			} else {
 				//TODO: handle other dynamic pages types here!
 			}
@@ -96,7 +103,7 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Pr
 
 	const metaData: Metadata = {
 		title: agilityData.sitemapNode?.title,
-		description: agilityData.page?.seo?.metaDescription,
+		description: metaDescription,
 		keywords: agilityData.page?.seo?.metaKeywords,
 		openGraph: {
 			images: ogImages,
