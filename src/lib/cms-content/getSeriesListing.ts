@@ -17,6 +17,15 @@ export interface IBlogPostMin {
 		label: string
 	}
 	url: string
+	category?: {
+		contentID: number
+		title: string
+		slug: string
+	}
+	tags?: {
+		contentID: number
+		name: string
+	}[]
 }
 
 interface GetSeriesListingProps {
@@ -31,6 +40,7 @@ interface GetSeriesListingProps {
 /**
  * Get a list of blog posts for a specific series and resolve the URLs for each post from the sitemap.
  * Returns posts with resolved URLs and total count for pagination.
+ * Note: Agility CMS returns expanded category and tags objects in the response.
  */
 export const getSeriesListing = async ({
 	seriesID,
@@ -62,6 +72,7 @@ export const getSeriesListing = async ({
 		const dynamicUrls = resolvePostUrls(sitemapNodes, rawPosts.items)
 
 		// Map posts to simplified format with resolved URLs
+		// Agility returns expanded category and tags objects directly
 		const posts: IBlogPostMin[] = rawPosts.items.map((post: any) => {
 			const slug = post.fields?.Slug || post.fields?.slug || ""
 			let url = dynamicUrls[post.contentID] || `/blog/${slug}`
@@ -71,6 +82,21 @@ export const getSeriesListing = async ({
 				url = `/${locale}${url}`
 			}
 
+			// Extract category from expanded object
+			const categoryObj = post.fields?.category
+			const category = categoryObj ? {
+				contentID: categoryObj.contentID,
+				title: categoryObj.fields?.name || categoryObj.fields?.Name || "",
+				slug: categoryObj.fields?.slug || categoryObj.fields?.Slug || "",
+			} : undefined
+
+			// Extract tags from expanded array
+			const tagsArray = post.fields?.tags
+			const tags: { contentID: number; name: string }[] = tagsArray?.map((tag: any) => ({
+				contentID: tag.contentID,
+				name: tag.fields?.name || tag.fields?.Name || "",
+			})) || []
+
 			return {
 				contentID: post.contentID,
 				title: post.fields?.title || "",
@@ -79,6 +105,8 @@ export const getSeriesListing = async ({
 				publishedDate: post.fields?.publishedDate || "",
 				featuredImage: post.fields?.featuredImage || undefined,
 				url,
+				category,
+				tags: tags.length > 0 ? tags : undefined,
 			}
 		})
 

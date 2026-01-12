@@ -151,6 +151,9 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 										excerpt={post.excerpt}
 										featuredImage={post.featuredImage}
 										index={index}
+										category={post.category}
+										tags={post.tags}
+										hideSeries
 									/>
 								))}
 								<BlogPagination

@@ -12,6 +12,22 @@ export interface BlogPostItemProps {
 		label: string
 	}
 	index?: number
+	series?: {
+		contentID: number
+		title: string
+		slug: string
+	}
+	category?: {
+		contentID: number
+		title: string
+		slug: string
+	}
+	tags?: {
+		contentID: number
+		name: string
+	}[]
+	hideSeries?: boolean
+	hideCategory?: boolean
 }
 
 /**
@@ -31,6 +47,11 @@ export function BlogPostItem({
 	excerpt,
 	featuredImage,
 	index = 0,
+	series,
+	category,
+	tags,
+	hideSeries = false,
+	hideCategory = false,
 }: BlogPostItemProps) {
 	return (
 		<Link
@@ -57,11 +78,27 @@ export function BlogPostItem({
 				</div>
 			)}
 			<div className="flex-1">
+				{/* Series badge */}
+				{series && !hideSeries && (
+					<span className="inline-flex items-center gap-1 text-xs font-medium text-primary mb-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							className="w-3.5 h-3.5"
+						>
+							<path d="M3.196 12.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 12.87z" />
+							<path d="M3.196 8.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 8.87z" />
+							<path d="M10.38 1.103a.75.75 0 00-.76 0l-7.25 4.25a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.76 0l7.25-4.25a.75.75 0 000-1.294l-7.25-4.25z" />
+						</svg>
+						<span className="uppercase tracking-wider">{series.title}</span>
+					</span>
+				)}
 				<h3 className="text-2xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
 					{title}
 				</h3>
 				{publishedDate && (
-					<time className="text-sm text-muted-foreground block mb-3">
+					<time className="text-sm text-muted-foreground block mb-2">
 						{(() => {
 							const date = new Date(publishedDate)
 							// Check if time is midnight (00:00) in EST
@@ -90,6 +127,24 @@ export function BlogPostItem({
 							}
 						})()}
 					</time>
+				)}
+				{/* Category and tags */}
+				{((category && !hideCategory) || (tags && tags.length > 0)) && (
+					<div className="flex flex-wrap items-center gap-2 mb-3">
+						{category && !hideCategory && (
+							<span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+								{category.title}
+							</span>
+						)}
+						{tags && tags.map((tag) => (
+							<span
+								key={tag.contentID}
+								className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+							>
+								{tag.name}
+							</span>
+						))}
+					</div>
 				)}
 				{excerpt && (
 					<p className="text-muted-foreground mb-4 line-clamp-3 group-hover:text-foreground/80 transition-colors">

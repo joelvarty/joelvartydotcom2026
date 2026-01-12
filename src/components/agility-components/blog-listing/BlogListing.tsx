@@ -116,6 +116,10 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 										excerpt={post.excerpt}
 										featuredImage={post.featuredImage}
 										index={index}
+										series={post.series}
+										category={post.category}
+										tags={post.tags}
+										hideCategory={!!categoryID}
 									/>
 								))}
 								<BlogPagination

@@ -17,6 +17,20 @@ export interface IBlogPostMin {
 		label: string
 	}
 	url: string
+	series?: {
+		contentID: number
+		title: string
+		slug: string
+	}
+	category?: {
+		contentID: number
+		title: string
+		slug: string
+	}
+	tags?: {
+		contentID: number
+		name: string
+	}[]
 }
 
 interface GetBlogListingProps {
@@ -31,6 +45,7 @@ interface GetBlogListingProps {
 /**
  * Get a list of blog posts and resolve the URLs for each post from the sitemap.
  * Returns posts with resolved URLs and total count for pagination.
+ * Note: Agility CMS returns expanded category, tags, and series objects in the response.
  */
 export const getBlogListing = async ({
 	categoryID,
@@ -62,6 +77,7 @@ export const getBlogListing = async ({
 		const dynamicUrls = resolvePostUrls(sitemapNodes, rawPosts.items)
 
 		// Map posts to simplified format with resolved URLs
+		// Agility returns expanded category, tags, and series objects directly
 		const posts: IBlogPostMin[] = rawPosts.items.map((post: any) => {
 			const slug = post.fields?.Slug || post.fields?.slug || ""
 			let url = dynamicUrls[post.contentID] || `/blog/${slug}`
@@ -71,6 +87,29 @@ export const getBlogListing = async ({
 				url = `/${locale}${url}`
 			}
 
+			// Extract series from expanded object
+			const seriesObj = post.fields?.series
+			const series = seriesObj ? {
+				contentID: seriesObj.contentID,
+				title: seriesObj.fields?.title || seriesObj.fields?.Title || "",
+				slug: seriesObj.fields?.slug || seriesObj.fields?.Slug || "",
+			} : undefined
+
+			// Extract category from expanded object
+			const categoryObj = post.fields?.category
+			const category = categoryObj ? {
+				contentID: categoryObj.contentID,
+				title: categoryObj.fields?.name || categoryObj.fields?.Name || "",
+				slug: categoryObj.fields?.slug || categoryObj.fields?.Slug || "",
+			} : undefined
+
+			// Extract tags from expanded array
+			const tagsArray = post.fields?.tags
+			const tags: { contentID: number; name: string }[] = tagsArray?.map((tag: any) => ({
+				contentID: tag.contentID,
+				name: tag.fields?.name || tag.fields?.Name || "",
+			})) || []
+
 			return {
 				contentID: post.contentID,
 				title: post.fields?.title || "",
@@ -79,6 +118,9 @@ export const getBlogListing = async ({
 				publishedDate: post.fields?.publishedDate || "",
 				featuredImage: post.fields?.featuredImage || undefined,
 				url,
+				series,
+				category,
+				tags: tags.length > 0 ? tags : undefined,
 			}
 		})
 
