@@ -45,6 +45,7 @@ export const getAgilityPage = async ({ params }: PageProps) => {
 
 	page.globalData = page.globalData || {};
 	page.globalData["searchParams"] = searchParams;
+	page.globalData["path"] = "/" + awaitedParams.slug.join("/");
 
 	return page
 }

@@ -78,14 +78,24 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 	})
 
 	const titleStr = title ? title : dynamicPageItem ? dynamicPageItem.fields.name : undefined
+	const pageCount = Math.ceil(postsResult.totalCount / postsPerPageConfig)
 
 	return (
-		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
+		<section id="blog-listing" className="relative px-4 sm:px-6 lg:px-8 py-12 scroll-mt-20" data-agility-component={contentID}>
 			<div className="mx-auto max-w-7xl">
-				{titleStr && (
-					<h2 className="text-3xl font-bold text-foreground mb-8" data-agility-field="title">
-						{titleStr}
-					</h2>
+				{(titleStr || page > 1) && (
+					<div className="flex items-baseline gap-3 mb-8">
+						{titleStr && (
+							<h2 className="text-3xl font-bold text-foreground" data-agility-field="title">
+								{titleStr}
+							</h2>
+						)}
+						{page > 1 && (
+							<span className="text-xs px-2 py-1 rounded-full border border-border bg-muted/50 text-muted-foreground">
+								Page {page} of {pageCount}
+							</span>
+						)}
+					</div>
 				)}
 
 				{/* Main content area with sidebar */}
@@ -112,8 +122,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 									page={page}
 									totalPosts={postsResult.totalCount}
 									postsPerPage={postsPerPageConfig}
-									languageCode={languageCode}
-									basePath="/blog"
+									basePath={globalData?.path || "/blog"}
 								/>
 							</>
 						)}

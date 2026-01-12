@@ -12,6 +12,7 @@ import { getSeriesListing } from "@/lib/cms-content/getSeriesListing"
 import { type UnloadedModuleProps } from "@agility/nextjs"
 import { processMarkdown } from "@/lib/markdown/processMarkdown"
 import { BlogPostItem } from "./blog-listing/BlogPostItem"
+import { BlogPagination } from "./blog-listing/BlogPagination"
 
 /**
  * Interface defining the structure of the SeriesLanding module fields.
@@ -43,7 +44,7 @@ const postsPerPage = 50
  * @param dynamicPageItem - The dynamic page item containing the Series data
  * @returns A section element with the series landing page
  */
-const SeriesLanding = async ({ module, languageCode, dynamicPageItem }: UnloadedModuleProps) => {
+const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, numberOfPosts },
@@ -69,6 +70,16 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem }: Unloaded
 	const seriesID = dynamicPageItem.contentID
 	const seriesFields = dynamicPageItem.fields as SeriesFields
 
+	// Get page from globalData search params, default to 1
+	const pageParam = globalData?.searchParams?.page
+	let page = 1
+	if (typeof pageParam === 'string') {
+		const parsed = parseInt(pageParam, 10)
+		if (!isNaN(parsed) && parsed > 0) {
+			page = parsed
+		}
+	}
+
 	// Get locale context
 	const { locale } = await getAgilityContext(languageCode)
 
@@ -76,11 +87,13 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem }: Unloaded
 	const postsResult = await getSeriesListing({
 		seriesID,
 		locale,
-		skip: 0,
+		skip: (page - 1) * postsPerPageConfig,
 		take: postsPerPageConfig,
 		sort: "publishedDate",
 		direction: "asc",
 	})
+
+	const pageCount = Math.ceil(postsResult.totalCount / postsPerPageConfig)
 
 	return (
 		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
@@ -113,8 +126,15 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem }: Unloaded
 					</aside>
 
 					{/* Series Posts - Right Column (50% width on large screens) */}
-					<div className="lg:col-span-1">
-						<h2 className="text-4xl font-bold text-foreground mb-8">Posts in this series</h2>
+					<div id="series-listing" className="lg:col-span-1 scroll-mt-20">
+						<div className="flex items-baseline gap-3 mb-8">
+							<h2 className="text-4xl font-bold text-foreground">Posts in this series</h2>
+							{page > 1 && (
+								<span className="text-xs px-2 py-1 rounded-full border border-border bg-muted/50 text-muted-foreground">
+									Page {page} of {pageCount}
+								</span>
+							)}
+						</div>
 						<div className="space-y-8">
 
 						{postsResult.posts.length === 0 ? (
@@ -133,6 +153,13 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem }: Unloaded
 										index={index}
 									/>
 								))}
+								<BlogPagination
+									page={page}
+									totalPosts={postsResult.totalCount}
+									postsPerPage={postsPerPageConfig}
+									basePath={globalData?.path || `/blog/series/${seriesFields.slug}`}
+									scrollTargetId="series-listing"
+								/>
 							</>
 						)}
 						</div>
