@@ -12,6 +12,7 @@ import { notFound } from "next/navigation"
 import { processMarkdown } from "@/lib/markdown/processMarkdown"
 import { localizeUrl } from "@/lib/i18n/localizeUrl"
 import Link from "next/link"
+import { SeriesLink } from "./SeriesLink"
 
 /**
  * Interface defining the structure of the BlogDetails module fields.
@@ -177,6 +178,19 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 		}
 	}
 
+	// Extract h1 from markdown content if present
+	let pageTitle = post.fields.title
+	let markdownContent = (post.fields.content || "").trim()
+
+	// Check for h1 anywhere in markdown (# Title on its own line)
+	// Using multiline flag to match at start of any line
+	const h1Match = markdownContent.match(/^#\s+(.+?)$/m)
+	if (h1Match) {
+		pageTitle = h1Match[1].trim()
+		// Remove the h1 line from markdown content
+		markdownContent = markdownContent.replace(/^#\s+.+?$\n?/m, "").trim()
+	}
+
 	return (
 		<article className="relative px-4 sm:px-6 lg:px-8 py-12 animate-fade-in" data-agility-component={moduleContentID}>
 			<div className="mx-auto">
@@ -200,26 +214,14 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 				<header className="mb-8 max-w-3xl mx-auto">
 					{/* Series Badge - Prominent display above title */}
 					{series && (
-						<Link
+						<SeriesLink
 							href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
-							className="inline-flex items-center gap-2 mb-4 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								className="w-5 h-5"
-							>
-								<path d="M3.196 12.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 12.87z" />
-								<path d="M3.196 8.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 8.87z" />
-								<path d="M10.38 1.103a.75.75 0 00-.76 0l-7.25 4.25a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.76 0l7.25-4.25a.75.75 0 000-1.294l-7.25-4.25z" />
-							</svg>
-							<span className="uppercase tracking-wider">Series: {series.title}</span>
-						</Link>
+							title={series.title}
+						/>
 					)}
 
 					<h1 className="text-4xl font-bold text-foreground mb-4" data-agility-field="title">
-						{post.fields.title}
+						{pageTitle}
 					</h1>
 					{post.fields.publishedDate && (
 						<time className="text-muted-foreground">
@@ -263,12 +265,12 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 						</p>
 					)}
 				</header>
-				{post.fields.content && (
+				{markdownContent && (
 					<div
 						className="prose prose-lg max-w-3xl mx-auto dark:prose-invert"
 						data-agility-field="Content"
 					>
-						{processMarkdown(post.fields.content)}
+						{processMarkdown(markdownContent)}
 					</div>
 				)}
 			</div>
