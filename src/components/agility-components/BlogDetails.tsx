@@ -238,7 +238,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 						<div className="mt-4 flex flex-wrap gap-2 items-center text-sm">
 							{category && (
 								<Link
-									href={localizeUrl(`/blog/categories/${category.slug}`, languageCode)}
+									href={localizeUrl(`/blog/category/${category.slug}`, languageCode)}
 									className="inline-flex items-center px-3 py-1 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
 								>
 									{category.title}
