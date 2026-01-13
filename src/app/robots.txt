@@ -1,0 +1,6 @@
+# Joel Varty - Robots Configuration
+
+sitemap: https://joelvarty.com/sitemap.xml
+
+User-agent: *
+Allow: /
