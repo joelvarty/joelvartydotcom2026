@@ -1,4 +1,5 @@
 import agility from '@agility/content-fetch'
+import fs from 'fs/promises'
 
 export interface Redirection {
 	id: number
@@ -25,6 +26,7 @@ interface Props {
 
 /**
  * Get the list of redirections from Agility CMS.
+ * Writes the redirections to a JSON file for use in middleware.
  */
 export const getRedirections = async ({ forceUpdate = false }: Props): Promise<RedirectionsMap> => {
 	const apiKey = process.env.AGILITY_API_FETCH_KEY
@@ -42,6 +44,24 @@ export const getRedirections = async ({ forceUpdate = false }: Props): Promise<R
 	}
 
 	try {
+		const filepath = 'data/redirections.json'
+
+		let redirectionRes: RedirectionsMap | undefined
+		let fileExists = false
+		try {
+			await fs.access(filepath, fs.constants.F_OK)
+			fileExists = true
+		} catch { }
+
+		if (fileExists) {
+			const redirectionStr = await fs.readFile(filepath, 'utf8')
+			redirectionRes = JSON.parse(redirectionStr) as RedirectionsMap
+		}
+
+		if (!forceUpdate && redirectionRes && redirectionRes.isUpToDate) {
+			return redirectionRes
+		}
+
 		let lastAccessDate: Date | null | undefined = undefined
 		const redirectionsFromServer = await agilitySDK.getUrlRedirections({ lastAccessDate }) as Redirections
 
@@ -65,6 +85,9 @@ export const getRedirections = async ({ forceUpdate = false }: Props): Promise<R
 				redirectionsMap.items[key] = redirection
 			});
 
+			// Write the redirections to the file system
+			await fs.writeFile(filepath, JSON.stringify(redirectionsMap), 'utf8')
+
 			return redirectionsMap
 		}
 
@@ -82,4 +105,3 @@ export const getRedirections = async ({ forceUpdate = false }: Props): Promise<R
 		}
 	}
 }
-

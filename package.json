@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "tsx node/prebuild.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -45,6 +46,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
+    "dotenv": "^17.2.2",
+    "tsx": "^4.20.5",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4",

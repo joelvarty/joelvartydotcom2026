@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { defaultLocale, locales, isValidLocale, getLocaleFromPathname, removeLocaleFromPathname } from './lib/i18n/config'
+import { checkRedirect } from './lib/cms-content/checkRedirect'
 
 export async function proxy(request: NextRequest) {
 	/*****************************
@@ -38,6 +39,34 @@ export async function proxy(request: NextRequest) {
 			return NextResponse.rewrite(dynredirectUrl)
 		}
 	} else if ((!ext || ext.length === 0)) {
+		/**********************
+		 * CHECK FOR REDIRECT *
+		***********************/
+		const redirection = await checkRedirect({ path: request.nextUrl.pathname })
+
+		if (redirection) {
+			// Redirect to the destination URL with caching
+			if (redirection.destinationUrl.startsWith("/")) {
+				// Handle relative paths
+				const url = request.nextUrl.clone()
+				url.pathname = redirection.destinationUrl
+				return NextResponse.redirect(url, {
+					status: redirection.statusCode,
+					headers: {
+						"Cache-Control": "public,maxage=600, stale-while-revalidate"
+					}
+				})
+			} else {
+				// Handle absolute paths
+				return NextResponse.redirect(redirection.destinationUrl, {
+					status: redirection.statusCode,
+					headers: {
+						"Cache-Control": "public,maxage=3600, stale-while-revalidate"
+					}
+				})
+			}
+		}
+
 		/**************************************
 		 * SPECIAL CASE FOR lang= QUERY PARAM *
 		 **************************************/
