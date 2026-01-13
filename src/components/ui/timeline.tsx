@@ -8,13 +8,26 @@ import {
   HTMLAttributes,
   ReactElement,
   useContext,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState
 } from "react";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
+
+// Hook to detect mobile viewport
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useLayoutEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < breakpoint);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, [breakpoint]);
+
+  return isMobile;
+}
 
 // CSS VARIANTS
 
@@ -190,6 +203,7 @@ type TimelineContextType = {
   alternating: boolean;
   alignment: "top/left" | "bottom/right";
   noCards: boolean;
+  isMobile: boolean;
 };
 
 const TlCtxt = createContext<TimelineContextType | null>(null);
@@ -217,7 +231,12 @@ export default function Timeline({
   noCards = false,
   ...props
 }: TimelineProps) {
+  const isMobile = useIsMobile();
   const isVertical = orientation === "vertical";
+
+  // On mobile, force non-alternating layout with content on the right
+  const effectiveAlternating = isMobile ? false : alternating;
+  const effectiveAlignment = isMobile ? "bottom/right" : alignment;
 
   const safePadding = Math.max(0, (horizItemWidth - horizItemSpacing) / 2);
 
@@ -269,16 +288,18 @@ export default function Timeline({
     total: Children.count(children),
     cardWidth: horizItemWidth,
     maxCardWidth: vertItemMaxWidth,
-    alternating,
-    alignment,
-    noCards
+    alternating: effectiveAlternating,
+    alignment: effectiveAlignment,
+    noCards,
+    isMobile
   };
 
   return (
     <div
       id="timeline-container"
       className={cn(
-        "flex h-full w-full p-4",
+        "flex h-full w-full overflow-hidden",
+        isMobile ? "p-1" : "p-4",
         isVertical ? "flex-col" : "flex-row",
         className
       )}
@@ -293,22 +314,26 @@ export default function Timeline({
         style={
           isVertical
             ? {
-                gridAutoRows: `${vertItemSpacing}px`,
-                // DYNAMIC GRID COLUMNS
-                gridTemplateColumns: alternating
+                // On mobile, use auto rows to prevent overlap; on desktop use fixed spacing
+                gridAutoRows: isMobile ? "auto" : `${vertItemSpacing}px`,
+                // DYNAMIC GRID COLUMNS - on mobile, use smaller line column
+                gridTemplateColumns: effectiveAlternating
                   ? "1fr 2rem 1fr" // Standard centered
-                  : alignment === "top/left" // "Content Left"
+                  : effectiveAlignment === "top/left" // "Content Left"
                     ? "1fr 2rem" // remove right column
-                    : "2rem 1fr", // remove left column (Line First)
-                paddingTop: `${verticalPadding.top}px`,
-                paddingBottom: `${verticalPadding.bottom}px`
+                    : isMobile
+                      ? "1.5rem 1fr" // Mobile: smaller line column
+                      : "2rem 1fr", // Desktop: remove left column (Line First)
+                paddingTop: isMobile ? 0 : `${verticalPadding.top}px`,
+                paddingBottom: isMobile ? 0 : `${verticalPadding.bottom}px`,
+                gap: isMobile ? "1rem" : undefined
               }
             : {
                 gridAutoColumns: `${horizItemSpacing}px`,
                 // DYNAMIC GRID ROWS
-                gridTemplateRows: alternating
+                gridTemplateRows: effectiveAlternating
                   ? "min-content 2rem min-content"
-                  : alignment === "top/left" // "Content Top"
+                  : effectiveAlignment === "top/left" // "Content Top"
                     ? "min-content 2rem"
                     : "2rem min-content",
                 paddingLeft: `${safePadding}px`,
@@ -382,8 +407,16 @@ function getGridAndLineStyles(
 function getCardStyle(
   isVertical: boolean,
   cardWidth: number,
-  maxCardWidth: number
+  maxCardWidth: number,
+  isMobile: boolean
 ): CSSProperties {
+  if (isMobile) {
+    // On mobile, let card fill available space
+    return {
+      maxWidth: "100%",
+      width: "100%"
+    };
+  }
   return isVertical
     ? {
         maxWidth: `${maxCardWidth}px`
@@ -437,7 +470,8 @@ export function TimelineItem({
     maxCardWidth,
     alternating,
     alignment,
-    noCards
+    noCards,
+    isMobile
   } = useTimelineContext();
 
   const isEven = index % 2 === 0;
@@ -472,7 +506,7 @@ export function TimelineItem({
       >
         <div
           id={`timeline-item-${index}`}
-          style={getCardStyle(isVertical, cardWidth, maxCardWidth)}
+          style={getCardStyle(isVertical, cardWidth, maxCardWidth, isMobile)}
           className={cn(timelineItemVariants({ variant, noCards }), className)}
           data-timeline-card={true}
         >
