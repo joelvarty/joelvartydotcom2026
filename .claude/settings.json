@@ -14,7 +14,10 @@
 			"Bash",
 			"Edit",
 			"Read",
-			"Write"
+			"Write",
+			"WebFetch(https://mcp.agilitycms.com/*)",
+			"WebFetch(https://cdn.agilitycms.com/*)",
+			"WebFetch(https://*.aglty.io/*)"
 		]
 	}
 }

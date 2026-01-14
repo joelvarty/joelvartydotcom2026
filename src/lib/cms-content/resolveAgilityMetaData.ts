@@ -5,6 +5,38 @@ import ReactHtmlParser from "html-react-parser"
 import { getContentItem } from "@/lib/cms/getContentItem"
 import type { JSX } from "react"
 
+/**
+ * Extract the first image URL from markdown content.
+ * Supports both standard markdown images and gallery syntax.
+ */
+function extractFirstImageFromMarkdown(markdown: string): string | null {
+	if (!markdown) return null
+
+	// Match standard markdown images: ![alt](url) or ![alt](url "title")
+	const standardImageRegex = /!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/
+	const standardMatch = markdown.match(standardImageRegex)
+	if (standardMatch) {
+		return standardMatch[1]
+	}
+
+	// Match gallery code blocks and extract first URL
+	// Format: ```gallery:type\nurl "caption"\n...```
+	const galleryCodeBlockRegex = /```gallery:[^\n]*\n([^\s]+)/
+	const galleryMatch = markdown.match(galleryCodeBlockRegex)
+	if (galleryMatch) {
+		return galleryMatch[1]
+	}
+
+	// Match plain image URLs on their own line (common in galleries)
+	const plainUrlRegex = /^(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg))/im
+	const plainMatch = markdown.match(plainUrlRegex)
+	if (plainMatch) {
+		return plainMatch[1]
+	}
+
+	return null
+}
+
 interface Props {
 	agilityData: AgilityPageProps
 	locale: string
@@ -46,8 +78,19 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Pr
 					metaDescription = contentItem.fields["excerpt"] as string
 				}
 
-			} else {
-				//TODO: handle other dynamic pages types here!
+			} else if (contentItem.properties.definitionName === "BlogSeries") {
+				/* *** Blog Series MetaData *** */
+				// Extract the first image from the markdown summary for og:image
+				const markdownSummary = contentItem.fields["markdownSummary"] as string | undefined
+				if (markdownSummary) {
+					const firstImageUrl = extractFirstImageFromMarkdown(markdownSummary)
+					if (firstImageUrl) {
+						ogImages.push({
+							url: `${firstImageUrl}?format=auto&w=1200`,
+							alt: contentItem.fields["title"] as string || "Series image"
+						})
+					}
+				}
 			}
 
 		} catch (error) {
