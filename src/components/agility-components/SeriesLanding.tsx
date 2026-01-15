@@ -113,7 +113,7 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 								{seriesFields.title}
 							</h1>
 						</div>
-						<div className="sticky top-24">
+						<div>
 							{seriesFields.markdownSummary && (
 								<div
 									data-agility-field="markdownSummary"
@@ -126,7 +126,7 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 					</aside>
 
 					{/* Series Posts - Right Column (50% width on large screens) */}
-					<div id="series-listing" className="lg:col-span-1 scroll-mt-20">
+					<div id="series-listing" className="lg:col-span-1">
 						<div className="flex items-baseline gap-3 mb-8">
 							<h2 className="text-4xl font-bold text-foreground">Posts in this series</h2>
 							{page > 1 && (

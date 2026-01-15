@@ -7,7 +7,11 @@
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_press_key",
       "mcp__Agility-CMS__get_content_models",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__Agility-CMS__get_content_items",
+      "mcp__Agility-CMS__get_content_item",
+      "Bash(curl:*)"
     ]
   }
 }

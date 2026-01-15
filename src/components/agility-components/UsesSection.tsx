@@ -134,7 +134,7 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 						const items = categoryItems as UsesItem[]
 						return (
 							<div key={category} className="animate-scale-in" style={{ animationDelay: `${catIndex * 100}ms` }}>
-								<h3 className="sticky top-16 z-10 -mx-4 px-4 py-3 text-sm font-semibold text-primary uppercase tracking-wide mb-6 bg-background/80 backdrop-blur-sm border-b border-border/50 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+								<h3 className="-mx-4 px-4 py-3 text-sm font-semibold text-primary uppercase tracking-wide mb-6 border-b border-border/50 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
 									{category}
 								</h3>
 								<div className="grid grid-cols-1 gap-4 lg:grid-cols-6">

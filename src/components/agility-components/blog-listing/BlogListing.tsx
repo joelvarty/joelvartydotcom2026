@@ -81,7 +81,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 	const pageCount = Math.ceil(postsResult.totalCount / postsPerPageConfig)
 
 	return (
-		<section id="blog-listing" className="relative px-4 sm:px-6 lg:px-8 py-12 scroll-mt-20" data-agility-component={contentID}>
+		<section id="blog-listing" className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
 			<div className="mx-auto max-w-7xl">
 				{(titleStr || page > 1) && (
 					<div className="flex items-baseline gap-3 mb-8">
@@ -134,7 +134,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 
 					{/* Categories and Series sidebar */}
 					<aside className="lg:col-span-1">
-						<div className="sticky top-24 space-y-8">
+						<div className="space-y-8">
 							<BlogCategories
 								languageCode={languageCode}
 								selectedCategoryID={categoryID}

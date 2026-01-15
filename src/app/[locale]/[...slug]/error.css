@@ -1,0 +1,93 @@
+@keyframes error-shake {
+	0%, 100% { transform: translateX(0); }
+	10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-5deg); }
+	20%, 40%, 60%, 80% { transform: translateX(10px) rotate(5deg); }
+}
+
+@keyframes error-wobble {
+	0%, 100% { transform: rotate(-3deg); }
+	50% { transform: rotate(3deg); }
+}
+
+@keyframes error-spark {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: translate(50px, -80px) scale(0);
+		opacity: 0;
+	}
+}
+
+@keyframes error-spark-left {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: translate(-50px, -60px) scale(0);
+		opacity: 0;
+	}
+}
+
+@keyframes error-smoke {
+	0%, 100% {
+		transform: translateX(-50%) translateY(0) scale(1);
+		opacity: 0.6;
+	}
+	50% {
+		transform: translateX(-50%) translateY(-15px) scale(1.2);
+		opacity: 0.3;
+	}
+}
+
+@keyframes error-spin-slow {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@keyframes error-spin-reverse {
+	from { transform: rotate(360deg); }
+	to { transform: rotate(0deg); }
+}
+
+.error-shake {
+	animation: error-shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.error-wobble {
+	animation: error-wobble 2s ease-in-out infinite;
+}
+
+.error-spark {
+	animation: error-spark 0.6s ease-out forwards;
+}
+
+.error-spark:nth-child(odd) {
+	animation-name: error-spark-left;
+}
+
+.error-smoke {
+	animation: error-smoke 3s ease-in-out infinite;
+}
+
+.error-spin-slow {
+	animation: error-spin-slow 4s linear infinite;
+}
+
+.error-spin-reverse {
+	animation: error-spin-reverse 3s linear infinite;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	.error-shake,
+	.error-wobble,
+	.error-spark,
+	.error-smoke,
+	.error-spin-slow,
+	.error-spin-reverse {
+		animation: none;
+	}
+}

@@ -21,7 +21,7 @@ export function MobileMenu() {
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
       {open && (
-        <div className="absolute left-0 right-0 top-16 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="absolute left-0 right-0 top-16 z-50 border-b border-border/40 bg-background">
           <div className="mx-auto max-w-7xl px-4 py-4">
             <Navigation />
           </div>
