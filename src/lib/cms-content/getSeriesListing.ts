@@ -82,9 +82,9 @@ export const getSeriesListing = async ({
 				url = `/${locale}${url}`
 			}
 
-			// Extract category from expanded object
+			// Extract category from expanded object (check for valid contentID)
 			const categoryObj = post.fields?.category
-			const category = categoryObj ? {
+			const category = categoryObj?.contentID ? {
 				contentID: categoryObj.contentID,
 				title: categoryObj.fields?.name || categoryObj.fields?.Name || "",
 				slug: categoryObj.fields?.slug || categoryObj.fields?.Slug || "",

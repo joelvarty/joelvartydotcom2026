@@ -127,9 +127,11 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 				contentID: post.fields.categoryID,
 				languageCode,
 			})
-			category = {
-				title: categoryItem.fields.name || categoryItem.fields.Name || "",
-				slug: categoryItem.fields.slug || categoryItem.fields.Slug || "",
+			if (categoryItem?.fields) {
+				category = {
+					title: categoryItem.fields.name || categoryItem.fields.Name || "",
+					slug: categoryItem.fields.slug || categoryItem.fields.Slug || "",
+				}
 			}
 		} catch (error) {
 			console.error("Error fetching category:", error)
@@ -144,9 +146,11 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 				contentID: post.fields.seriesID,
 				languageCode,
 			})
-			series = {
-				title: seriesItem.fields.title || seriesItem.fields.Title || "",
-				slug: seriesItem.fields.slug || seriesItem.fields.Slug || "",
+			if (seriesItem?.fields) {
+				series = {
+					title: seriesItem.fields.title || seriesItem.fields.Title || "",
+					slug: seriesItem.fields.slug || seriesItem.fields.Slug || "",
+				}
 			}
 		} catch (error) {
 			console.error("Error fetching series:", error)
