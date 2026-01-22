@@ -11,7 +11,10 @@
       "mcp__playwright__browser_evaluate",
       "mcp__Agility-CMS__get_content_items",
       "mcp__Agility-CMS__get_content_item",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "mcp__playwright__browser_close",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__evaluate_script"
     ]
   }
 }

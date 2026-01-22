@@ -41,10 +41,18 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Joel Varty",
+    title: {
+      default: "Joel Varty",
+      template: "%s",
+    },
   },
   twitter: {
     card: "summary_large_image",
     creator: "@joelvarty",
+    title: {
+      default: "Joel Varty",
+      template: "%s",
+    },
   },
   robots: {
     index: true,

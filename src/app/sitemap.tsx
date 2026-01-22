@@ -10,7 +10,7 @@ import type { MetadataRoute } from "next"
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const allSitemapEntries: MetadataRoute.Sitemap = []
-	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://joelvarty.com"
+	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.joelvarty.com"
 
 	// Generate sitemap entries for each locale
 	for (const locale of locales) {

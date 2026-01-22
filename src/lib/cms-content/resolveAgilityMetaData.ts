@@ -144,12 +144,18 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Pr
 	}
 	//#endregion
 
+	const pageTitle = agilityData.sitemapNode?.title
+
 	const metaData: Metadata = {
-		title: agilityData.sitemapNode?.title,
+		title: pageTitle,
 		description: metaDescription,
 		keywords: agilityData.page?.seo?.metaKeywords,
 		openGraph: {
+			title: pageTitle,
 			images: ogImages,
+		},
+		twitter: {
+			title: pageTitle,
 		},
 		generator: `Agility CMS`,
 		other: otherMetaData

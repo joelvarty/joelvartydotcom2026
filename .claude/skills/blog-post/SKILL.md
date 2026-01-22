@@ -213,6 +213,42 @@ mcp__Agility-CMS__save_content_items({
 })
 ```
 
+## Writing Style Guide
+
+Write in Joel's voice, which is:
+
+**Tone:**
+- Conversational and authentic, like talking to a friend
+- Personal and reflective, sharing real experiences
+- Grounded in concrete details (names, places, specific moments)
+- Builds to emotional insights naturally
+
+**Structure:**
+- Let sentences run longer when the thought flows that way
+- Short paragraphs mixed with longer ones for natural pacing
+- Use parenthetical asides (like this) to add personality
+- Avoid starting multiple sentences with "And"
+- Minimal use of em-dashes (use them sparingly)
+
+**Voice patterns:**
+- "Here's the thing..." or "Look at that..."
+- Specific names and places create authenticity
+- Stories build to moments of connection or realization
+- Use italics for genuine emphasis on key words, not decoration
+- Questions to the reader feel natural: "You know what I mean?"
+
+**Category and Tag Usage:**
+- Only assign categories that truly fit the post content
+- Only use existing tags that genuinely apply
+- NEVER force a post into a category just because one exists
+- If no category fits perfectly, ask the user which one makes most sense
+- Same for tags - only include relevant ones
+
+**Series Assignment:**
+- ONLY assign to a series if the user explicitly says so
+- Don't suggest series membership - let the user decide
+- If unsure, leave series blank
+
 ## Example Session
 
 **User:** "Create a blog post about my coffee shop visit" *[attaches 4 images]*
@@ -222,12 +258,13 @@ mcp__Agility-CMS__save_content_items({
 2. Analyzes images, selects best one for featured (e.g., the latte art photo)
 3. Generates title: "A Perfect Afternoon at Third Space Coffee"
 4. Generates slug: "perfect-afternoon-third-space-coffee"
-5. Writes engaging excerpt
-6. Creates markdown content with a carousel gallery
-7. Suggests category: "3rd Spaces" (ID: 17)
-8. Suggests tags based on content
-9. Saves the post
-10. Reports: "Created blog post with content ID 123. Featured image: latte art photo (best composition for header)."
+5. Writes engaging excerpt in Joel's voice
+6. Creates markdown content with a carousel gallery, using Joel's authentic conversational style
+7. Suggests category: "3rd Spaces" (ID: 17) - because it genuinely fits
+8. Suggests only tags that truly apply based on content
+9. Does NOT assign to series unless user specified
+10. Saves the post
+11. Reports: "Created blog post with content ID 123. Featured image: latte art photo (best composition for header)."
 
 ## Important Notes
 
