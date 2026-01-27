@@ -1,5 +1,5 @@
 /**
- * Markdown Processor with Gallery Support
+ * Markdown Processor with Gallery and Embed Support
  *
  * Processes markdown content using ReactMarkdown and converts gallery syntax
  * into React components. Supports multiple gallery types: carousel, masonry,
@@ -19,6 +19,13 @@
  * ```
  *
  * Supported types: carousel, masonry, grid, thumbnail, stacked, comparison, tabs
+ *
+ * Embed Syntax (for social media):
+ * ```embed
+ * https://www.youtube.com/watch?v=VIDEO_ID
+ * ```
+ *
+ * Supported platforms: YouTube, Facebook, Instagram
  */
 
 import React from "react"
@@ -37,6 +44,7 @@ import { GalleryStacked } from "@/components/galleries/GalleryStacked"
 import { GalleryComparison } from "@/components/galleries/GalleryComparison"
 import { GalleryTabs } from "@/components/galleries/GalleryTabs"
 import { isAgilityImage, createImageFieldFromUrl } from "@/lib/agility/image-utils"
+import { SocialEmbed } from "@/components/embeds/SocialEmbed"
 
 /**
  * Gallery image interface
@@ -246,14 +254,20 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 			remarkPlugins={[remarkGfm, remarkBreaks, remarkUnwrapImages, remarkGallery]}
 			rehypePlugins={[rehypeRaw]}
 			components={{
-				// Custom pre component to intercept gallery code blocks before they get dark background
+				// Custom pre component to intercept gallery/embed code blocks before they get dark background
 				pre({ node, children, ...props }: any) {
-					// Check if the child is a code element with gallery syntax
+					// Check if the child is a code element with gallery or embed syntax
 					const child = React.Children.only(children) as any
 					if (child?.props?.className) {
-						const match = child.props.className.match(/^language-gallery[-:]([a-z]+)(?:[-:]([a-z0-9-]+))?$/)
-						if (match) {
+						// Check for gallery syntax
+						const galleryMatch = child.props.className.match(/^language-gallery[-:]([a-z]+)(?:[-:]([a-z0-9-]+))?$/)
+						if (galleryMatch) {
 							// This is a gallery - don't render the <pre>, just pass through to code component
+							return <>{children}</>
+						}
+						// Check for embed syntax
+						if (child.props.className === "language-embed") {
+							// This is an embed - don't render the <pre>, just pass through to code component
 							return <>{children}</>
 						}
 					}
@@ -319,6 +333,21 @@ export function processMarkdown(markdown: string, options?: ProcessMarkdownOptio
 										</div>
 									)
 								}
+							}
+						}
+
+						// Check for embed syntax
+						if (className === "language-embed") {
+							const content = String(children).trim()
+							// Get the first non-empty line as the URL
+							const lines = content.split('\n').filter(line => line.trim())
+							if (lines.length > 0) {
+								const url = lines[0].trim()
+								return (
+									<div className="not-prose my-8">
+										<SocialEmbed url={url} />
+									</div>
+								)
 							}
 						}
 					}

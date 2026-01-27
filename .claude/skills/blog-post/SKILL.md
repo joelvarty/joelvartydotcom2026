@@ -16,29 +16,31 @@ Create blog posts for joelvarty.com using Agility CMS.
 
 ## Available Categories
 
-| Content ID | Name | Description |
-|------------|------|-------------|
-| 18 | Football | Posts about football - the game, tactics, analysis, and fandom |
-| 19 | Work | Posts about work, career, professional development, and workplace thoughts |
-| 17 | 3rd Spaces | Third spaces - places that are neither home nor work, but where you connect with others (sports, theatre, gym, etc.) |
-| 104 | Gear and Gadgets | Tech and gadgets that make it easier or more fun to experience and capture life |
+| Content ID | Name             | Description                                                                                                          |
+| ---------- | ---------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 18         | Football         | Posts about football - the game, tactics, analysis, and fandom                                                       |
+| 19         | Work             | Posts about work, career, professional development, and workplace thoughts                                           |
+| 17         | 3rd Spaces       | Third spaces - places that are neither home nor work, but where you connect with others (sports, theatre, gym, etc.) |
+| 104        | Gear and Gadgets | Tech and gadgets that make it easier or more fun to experience and capture life                                      |
 
 To get the current list, call:
+
 ```
 mcp__Agility-CMS__get_content_items(instanceGuid: "e9a21a52-u", referenceName: "Categories", locale: "en-us")
 ```
 
 ## Available Tags
 
-| Content ID | Name |
-|------------|------|
-| 20 | sports |
-| 21 | theatre |
-| 22 | coding |
-| 23 | leadership |
-| 69 | ai |
+| Content ID | Name       |
+| ---------- | ---------- |
+| 20         | sports     |
+| 21         | theatre    |
+| 22         | coding     |
+| 23         | leadership |
+| 69         | ai         |
 
 To get the current list, call:
+
 ```
 mcp__Agility-CMS__get_content_items(instanceGuid: "e9a21a52-u", referenceName: "Tags", locale: "en-us")
 ```
@@ -46,41 +48,45 @@ mcp__Agility-CMS__get_content_items(instanceGuid: "e9a21a52-u", referenceName: "
 ## Available Series
 
 Query for current series:
+
 ```
 mcp__Agility-CMS__get_content_items(instanceGuid: "e9a21a52-u", referenceName: "BlogSeries", locale: "en-us")
 ```
 
 ## Blog Post Fields
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `title` | Text | No | Post title |
-| `Slug` | Text | Yes | URL slug (generate from title) |
-| `excerpt` | LongText | No | Short summary |
-| `publishedDate` | Date | Yes | Format: YYYY-MM-DD |
-| `categoryID` | Integer | Yes | Set automatically via Category linked field |
-| `tagIDs` | Text | Yes | Comma-separated IDs (e.g., "22,69") |
-| `seriesID` | Integer | No | Set automatically via series linked field |
-| `featuredImage` | ImageAttachment | No | Main post image |
-| `Content` | Text | Yes | Markdown body |
+| Field           | Type            | Required | Notes                                       |
+| --------------- | --------------- | -------- | ------------------------------------------- |
+| `title`         | Text            | No       | Post title                                  |
+| `Slug`          | Text            | Yes      | URL slug (generate from title)              |
+| `excerpt`       | LongText        | No       | Short summary                               |
+| `publishedDate` | Date            | Yes      | Format: YYYY-MM-DD                          |
+| `categoryID`    | Integer         | Yes      | Set automatically via Category linked field |
+| `tagIDs`        | Text            | Yes      | Comma-separated IDs (e.g., "22,69")         |
+| `seriesID`      | Integer         | No       | Set automatically via series linked field   |
+| `featuredImage` | ImageAttachment | No       | Main post image                             |
+| `Content`       | Text            | Yes      | Markdown body                               |
 
 ## Complete Workflow
 
 ### Step 1: Gather Information
 
 Ask the user for:
+
 1. **Title** - Post title
-2. **Content** - Main content (text or dictated)
+2. **Content** - Main content (text or dictated). May include YouTube, Facebook, or Instagram URLs that should be embedded.
 3. **Category** - Football, Work, or 3rd Spaces
 4. **Tags** - Which tags apply
 5. **Series** (optional) - If part of a series
 6. **Images** (optional) - Images to include
+7. **Social media links** (optional) - YouTube, Facebook, Instagram URLs to embed
 
 ### Step 2: Upload Images (if provided)
 
 For each image the user attaches:
 
 1. **Initialize upload:**
+
 ```
 mcp__Agility-CMS__initialize_media_upload({
   instanceGuid: "e9a21a52-u",
@@ -90,6 +96,7 @@ mcp__Agility-CMS__initialize_media_upload({
 ```
 
 2. **Upload the file** using curl to the returned `uploadUrl`:
+
 ```bash
 curl -X POST "<uploadUrl>" -F "file=@/path/to/image.jpg"
 ```
@@ -114,55 +121,105 @@ When multiple images are provided without explicit featured image selection:
 Insert galleries in the Content field using this syntax:
 
 **Carousel (slideshow):**
-```
+
+````
 ```gallery:carousel
 https://cdn.agilitycms.com/image1.jpg "Caption 1"
 https://cdn.agilitycms.com/image2.jpg "Caption 2"
-```
+````
+
 ```
 
 **Grid (columns):**
 ```
+
 ```gallery:grid:columns-3
 https://cdn.agilitycms.com/image1.jpg "Caption 1"
 https://cdn.agilitycms.com/image2.jpg "Caption 2"
 ```
+
 ```
 
 **Masonry:**
 ```
+
 ```gallery:masonry
 https://cdn.agilitycms.com/image1.jpg "Caption 1"
 https://cdn.agilitycms.com/image2.jpg "Caption 2"
 ```
+
 ```
 
 **Other types:** `gallery:thumbnail`, `gallery:stacked`, `gallery:comparison` (2 images only), `gallery:tabs`
 
+### Step 4b: Add Social Media Embeds
+
+Insert social media embeds (YouTube, Facebook, Instagram) using this syntax:
+
+**YouTube:**
+```
+```embed
+https://www.youtube.com/watch?v=VIDEO_ID
+```
+```
+
+**Facebook (video/reel):**
+```
+```embed
+https://www.facebook.com/reel/1234567890
+```
+```
+
+**Facebook (post):**
+```
+```embed
+https://www.facebook.com/username/posts/1234567890
+```
+```
+
+**Instagram (post or reel):**
+```
+```embed
+https://www.instagram.com/p/POST_ID
+```
+```
+
+```
+```embed
+https://www.instagram.com/reel/REEL_ID
+```
+```
+
+The embed block automatically detects the platform from the URL and renders the appropriate embed with proper sizing and centering.
+
+**Auto-detection:** When the user includes a YouTube, Facebook, or Instagram URL anywhere in their content (pasted as a raw link, in dictated text, or mentioned explicitly), automatically wrap it in the embed syntax. Don't leave social media URLs as plain text links - convert them to embeds.
+
 ### Step 5: Save the Blog Post
 
 ```
-mcp__Agility-CMS__save_content_items({
-  instanceGuid: "e9a21a52-u",
-  locale: "en-us",
-  items: [{
-    contentID: -1,
-    referenceName: "Posts",
-    fields: {
-      title: "Post Title",
-      Slug: "post-slug",
-      excerpt: "Short summary of the post",
-      publishedDate: "2026-01-13",
-      categoryID: 19,
-      tagIDs: "22,69",
-      Content: "# Heading\n\nMarkdown content with galleries...",
-      featuredImage: {
-        url: "https://cdn.agilitycms.com/...",
-        label: "Alt text describing the image"
-      }
-    }
-  }]
+
+mcp**Agility-CMS**save_content_items({
+instanceGuid: "e9a21a52-u",
+locale: "en-us",
+items: [{
+contentID: -1,
+referenceName: "Posts",
+fields: {
+title: "Post Title",
+Slug: "post-slug",
+excerpt: "Short summary of the post",
+publishedDate: "2026-01-13",
+categoryID: 19,
+tagIDs: "22,69",
+Content: "# Heading\n\nMarkdown content with galleries...",
+featuredImage: {
+url: "https://cdn.agilitycms.com/...",
+label: "Alt text describing the image"
+}
+}
+}]
 })
+
 ```
 
 ### Step 6: Confirm Success
@@ -182,35 +239,39 @@ If a needed category or tag doesn't exist:
 
 **New Category:**
 ```
-mcp__Agility-CMS__save_content_items({
-  instanceGuid: "e9a21a52-u",
-  locale: "en-us",
-  items: [{
-    contentID: -1,
-    referenceName: "Categories",
-    fields: {
-      name: "Category Name",
-      slug: "category-slug",
-      description: "Optional description"
-    }
-  }]
+
+mcp**Agility-CMS**save_content_items({
+instanceGuid: "e9a21a52-u",
+locale: "en-us",
+items: [{
+contentID: -1,
+referenceName: "Categories",
+fields: {
+name: "Category Name",
+slug: "category-slug",
+description: "Optional description"
+}
+}]
 })
+
 ```
 
 **New Tag:**
 ```
-mcp__Agility-CMS__save_content_items({
-  instanceGuid: "e9a21a52-u",
-  locale: "en-us",
-  items: [{
-    contentID: -1,
-    referenceName: "Tags",
-    fields: {
-      name: "tagname",
-      slug: "tagname"
-    }
-  }]
+
+mcp**Agility-CMS**save_content_items({
+instanceGuid: "e9a21a52-u",
+locale: "en-us",
+items: [{
+contentID: -1,
+referenceName: "Tags",
+fields: {
+name: "tagname",
+slug: "tagname"
+}
+}]
 })
+
 ```
 
 ## Writing Style Guide
@@ -236,6 +297,8 @@ Write in Joel's voice, which is:
 - Stories build to moments of connection or realization
 - Use italics for genuine emphasis on key words, not decoration
 - Questions to the reader feel natural: "You know what I mean?"
+- don’t comment on the writing. Just write it, and keep the original words and tone as much as possible.
+- don’t use em dashes
 
 **Category and Tag Usage:**
 - Only assign categories that truly fit the post content
@@ -249,13 +312,15 @@ Write in Joel's voice, which is:
 - Don't suggest series membership - let the user decide
 - If unsure, leave series blank
 
-## Example Session
+## Example Sessions
+
+### Example 1: Blog post with images
 
 **User:** "Create a blog post about my coffee shop visit" *[attaches 4 images]*
 
 **Claude:**
 1. Uploads all 4 images to Agility CMS CDN
-2. Analyzes images, selects best one for featured (e.g., the latte art photo)
+2. Analyzes images, selects best one for featured (e.g., the latte art photo). Does not use that photo in the body.
 3. Generates title: "A Perfect Afternoon at Third Space Coffee"
 4. Generates slug: "perfect-afternoon-third-space-coffee"
 5. Writes engaging excerpt in Joel's voice
@@ -266,6 +331,23 @@ Write in Joel's voice, which is:
 10. Saves the post
 11. Reports: "Created blog post with content ID 123. Featured image: latte art photo (best composition for header)."
 
+### Example 2: Blog post with social media embed
+
+**User:** "Create a post about this cool football play I saw https://www.youtube.com/watch?v=abc123"
+
+**Claude:**
+1. Recognizes the YouTube URL in the content
+2. Generates title and slug based on the topic
+3. Creates markdown content that includes:
+   ```
+   ```embed
+   https://www.youtube.com/watch?v=abc123
+   ```
+   ```
+4. Suggests category: "Football" (ID: 18)
+5. Suggests tags: "sports" (ID: 20)
+6. Saves the post with the embedded video
+
 ## Important Notes
 
 - Use `contentID: -1` for new items
@@ -274,3 +356,4 @@ Write in Joel's voice, which is:
 - `tagIDs`: comma-separated, no spaces (e.g., "20,22,69")
 - Always provide alt text in `featuredImage.label`
 - Gallery captions go in quotes after the URL
+```
