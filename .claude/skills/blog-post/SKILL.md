@@ -74,12 +74,12 @@ mcp__Agility-CMS__get_content_items(instanceGuid: "e9a21a52-u", referenceName: "
 Ask the user for:
 
 1. **Title** - Post title
-2. **Content** - Main content (text or dictated). May include YouTube, Facebook, or Instagram URLs that should be embedded.
+2. **Content** - Main content (text or dictated). May include YouTube, Facebook, Instagram, or TikTok URLs that should be embedded.
 3. **Category** - Football, Work, or 3rd Spaces
 4. **Tags** - Which tags apply
 5. **Series** (optional) - If part of a series
 6. **Images** (optional) - Images to include
-7. **Social media links** (optional) - YouTube, Facebook, Instagram URLs to embed
+7. **Social media links** (optional) - YouTube, Facebook, Instagram, TikTok URLs to embed
 
 ### Step 2: Upload Images (if provided)
 
@@ -154,7 +154,7 @@ https://cdn.agilitycms.com/image2.jpg "Caption 2"
 
 ### Step 4b: Add Social Media Embeds
 
-Insert social media embeds (YouTube, Facebook, Instagram) using this syntax:
+Insert social media embeds (YouTube, Facebook, Instagram, TikTok) using this syntax:
 
 **YouTube:**
 ```
@@ -190,9 +190,16 @@ https://www.instagram.com/reel/REEL_ID
 ```
 ```
 
+**TikTok:**
+```
+```embed
+https://www.tiktok.com/@username/video/1234567890
+```
+```
+
 The embed block automatically detects the platform from the URL and renders the appropriate embed with proper sizing and centering.
 
-**Auto-detection:** When the user includes a YouTube, Facebook, or Instagram URL anywhere in their content (pasted as a raw link, in dictated text, or mentioned explicitly), automatically wrap it in the embed syntax. Don't leave social media URLs as plain text links - convert them to embeds.
+**Auto-detection:** When the user includes a YouTube, Facebook, Instagram, or TikTok URL anywhere in their content (pasted as a raw link, in dictated text, or mentioned explicitly), automatically wrap it in the embed syntax. Don't leave social media URLs as plain text links - convert them to embeds.
 
 ### Step 5: Save the Blog Post
 

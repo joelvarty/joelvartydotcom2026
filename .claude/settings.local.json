@@ -15,7 +15,10 @@
       "mcp__playwright__browser_close",
       "mcp__chrome-devtools__new_page",
       "mcp__chrome-devtools__evaluate_script",
-      "mcp__Agility-CMS__get_content_model_details"
+      "mcp__Agility-CMS__get_content_model_details",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__list_console_messages",
+      "mcp__chrome-devtools__wait_for"
     ]
   }
 }
