@@ -22,6 +22,7 @@ Create blog posts for joelvarty.com using Agility CMS.
 | 19         | Work             | Posts about work, career, professional development, and workplace thoughts                                           |
 | 17         | 3rd Spaces       | Third spaces - places that are neither home nor work, but where you connect with others (sports, theatre, gym, etc.) |
 | 104        | Gear and Gadgets | Tech and gadgets that make it easier or more fun to experience and capture life                                      |
+| 119        | Travel           | Posts about travel experiences, trips, and exploring new places                                                      |
 
 To get the current list, call:
 
@@ -75,7 +76,7 @@ Ask the user for:
 
 1. **Title** - Post title
 2. **Content** - Main content (text or dictated). May include YouTube, Facebook, Instagram, or TikTok URLs that should be embedded.
-3. **Category** - Football, Work, or 3rd Spaces
+3. **Category** - Football, Work, 3rd Spaces, Gear and Gadgets, or Travel
 4. **Tags** - Which tags apply
 5. **Series** (optional) - If part of a series
 6. **Images** (optional) - Images to include
@@ -83,9 +84,11 @@ Ask the user for:
 
 ### Step 2: Upload Images (if provided)
 
-For each image the user attaches:
+For each image the user attaches or points to in a folder:
 
-1. **Initialize upload:**
+1. **View the images first** using the Read tool. Claude can read image files (JPEG, PNG, etc.) to see their contents. This is essential for writing accurate captions, selecting the best featured image, and organizing images into logical gallery groups.
+
+2. **Initialize ALL uploads in parallel** for efficiency. Call `mcp__Agility-CMS__initialize_media_upload` for every image at once (all 20+ calls can go in one batch). Give each a descriptive file name (not the original UUID-style filename):
 
 ```
 mcp__Agility-CMS__initialize_media_upload({
@@ -95,13 +98,13 @@ mcp__Agility-CMS__initialize_media_upload({
 })
 ```
 
-2. **Upload the file** using curl to the returned `uploadUrl`:
+3. **Upload ALL files via curl in parallel** using the returned `uploadUrl` values:
 
 ```bash
-curl -X POST "<uploadUrl>" -F "file=@/path/to/image.jpg"
+curl -s -X POST "<uploadUrl>" -F "file=@/path/to/image.jpg"
 ```
 
-3. **Capture the CDN URL** from the response for use in content.
+4. **Capture the CDN URLs** from each response. The CDN URL pattern is: `https://cdn.agilitycms.com/j0i5uycg/blog-images/{fileName}`
 
 ### Step 3: Select Featured Image
 
@@ -359,8 +362,11 @@ Write in Joel's voice, which is:
 
 - Use `contentID: -1` for new items
 - `Slug` must be unique
-- `publishedDate` format: `YYYY-MM-DD`
-- `tagIDs`: comma-separated, no spaces (e.g., "20,22,69")
+- `publishedDate` format: `YYYY-MM-DD`. If the post is about a past event, use a date from when the event happened, not the current date.
+- `tagIDs`: comma-separated, no spaces (e.g., "20,22,69"). The field is required, so if no tags are a perfect fit, pick the closest match or ask the user.
 - Always provide alt text in `featuredImage.label`
 - Gallery captions go in quotes after the URL
+- When organizing galleries, group images by story section (e.g., hotel photos together, tomb photos together). Use **carousel** for sequences or narrative flow, **grid** for side-by-side comparisons or overview shots. Match column count to image count (columns-2 for 4 images, columns-3 for 3 or 6 images).
+- The featured image should NOT also appear in the body galleries. Reserve it exclusively as the header image.
+- When the user provides a folder of images (e.g., `/data/images`), read all images first, then batch all uploads in parallel for efficiency.
 ```
