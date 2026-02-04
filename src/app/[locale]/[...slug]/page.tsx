@@ -8,8 +8,9 @@ import type { Metadata, ResolvingMetadata } from "next"
 import { resolveAgilityMetaData } from "@/lib/cms-content/resolveAgilityMetaData"
 import { notFound } from "next/navigation"
 import { locales } from "@/lib/i18n/config"
+import { defaultRevalidate } from "@/lib/cms/cacheConfig"
 
-export const revalidate = 60
+export const revalidate = 86400
 export const runtime = "nodejs"
 
 /**
@@ -32,7 +33,7 @@ export async function generateStaticParams() {
 		agilityClient.config.fetchConfig = {
 			next: {
 				tags: [`agility-sitemap-flat-${locale}`],
-				revalidate: 60,
+				revalidate: defaultRevalidate,
 			},
 		};
 

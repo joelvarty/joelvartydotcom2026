@@ -2,8 +2,7 @@ import { getPageTemplate } from "@/components/agility-pages"
 import { type PageProps, getAgilityPage } from "@/lib/cms/getAgilityPage"
 import { notFound } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
-
-export const revalidate = 60
+export const revalidate = 86400
 export const runtime = "nodejs"
 
 /**
