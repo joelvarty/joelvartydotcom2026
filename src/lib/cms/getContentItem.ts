@@ -1,5 +1,6 @@
 import { type ContentItemRequestParams } from "@agility/content-fetch/dist/methods/getContentItem"
 import getAgilitySDK from "@/lib/cms/getAgilitySDK"
+import { defaultRevalidate } from "@/lib/cms/cacheConfig"
 import { type ContentItem } from "@agility/content-fetch"
 
 /**
@@ -11,7 +12,7 @@ export const getContentItem = async <T>(params: ContentItemRequestParams) => {
 	agilitySDK.config.fetchConfig = {
 		next: {
 			tags: [`agility-content-${params.contentID}-${params.languageCode || params.locale}`],
-			revalidate: 60,
+			revalidate: defaultRevalidate,
 		},
 	}
 
