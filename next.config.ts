@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
+  // Cache life profiles for revalidation
+  cacheLife: {
+    layout: {
+      stale: 86400,        // 1 day client-side
+      revalidate: 86400,   // 1 day server-side
+      expire: 31536000,    // 1 year max
+    },
+  },
+
   // Experimental features for performance
   experimental: {
     optimizePackageImports: ["lucide-react", "@agility/nextjs"],
