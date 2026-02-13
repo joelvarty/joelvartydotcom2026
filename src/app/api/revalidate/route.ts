@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 	//parse the body
 	const data = await req.json() as IRevalidateRequest
 
+	console.info("[revalidate] Received webhook:", JSON.stringify(data))
 
 	//only process publish events
 	if (data.state === "Published") {
@@ -51,6 +52,19 @@ export async function POST(req: NextRequest) {
 				channelName: process.env.AGILITY_SITEMAP || "website",
 				languageCode
 			})
+
+			if (sitemapFlat) {
+				const sitemapKeys = Object.keys(sitemapFlat)
+				console.info(`[revalidate] Sitemap fetched (no-cache): ${sitemapKeys.length} paths`)
+
+				// Log if we can find the content by ID
+				if (data.contentID) {
+					const matchByContentID = Object.entries(sitemapFlat).find(([, s]) => s.contentID === data.contentID)
+					console.info(`[revalidate] Content ID ${data.contentID} in sitemap: ${matchByContentID ? matchByContentID[0] : "NOT FOUND"}`)
+				}
+			} else {
+				console.warn(`[revalidate] Sitemap is NULL!`)
+			}
 		}
 
 		//revalidate the correct tags based on what changed
@@ -61,7 +75,11 @@ export async function POST(req: NextRequest) {
 			revalidateTag(itemTag, 'layout')
 			revalidateTag(listTag, 'layout')
 
-			console.info("Revalidating content tags:", itemTag, listTag)
+			// Also revalidate sitemap cache so the SDK's getAgilityPageProps gets a fresh sitemap
+			const sitemapTagFlat = `agility-sitemap-flat-${data.languageCode}`
+			revalidateTag(sitemapTagFlat, 'layout')
+
+			console.info("Revalidating content tags:", itemTag, listTag, "and sitemap tag:", sitemapTagFlat)
 
 			//grab the sitemap and check if this content is in there so we can revalidate a full path
 			if (sitemapFlat) {
