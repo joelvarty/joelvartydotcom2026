@@ -98,6 +98,16 @@ export async function POST(req: NextRequest) {
 
 				}
 			}
+		} else if (data.contentID !== undefined && data.contentID > 0) {
+			//content item change without a referenceName - look up the contentID in the sitemap
+			if (sitemapFlat) {
+				const sitemapNode = Object.values(sitemapFlat).find(s => s.contentID === data.contentID)
+				if (sitemapNode) {
+					const path = sitemapNode.path
+					revalidatePath(path, 'layout')
+					console.info("Revalidating path from contentID:", path)
+				}
+			}
 		}
 	} else if (data.contentID === undefined && data.pageID === undefined) {
 		//if no content or page id is provided, it's for a URL redirection
