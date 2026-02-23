@@ -318,15 +318,54 @@ export async function generateStaticParams() {
 }
 ```
 
+## Critical: Sitemap Tag Revalidation on Content Changes
+
+When a content item is published (e.g., a blog post), the revalidation webhook must also invalidate the sitemap cache tag (`agility-sitemap-flat-{locale}`), not just the content tags.
+
+### Why This Matters
+
+The `@agility/nextjs` SDK's `getAgilityPageProps` fetches the sitemap from the Next.js Data Cache (tagged with `agility-sitemap-flat-{locale}`) to look up the page by path. If a content item's slug changes in the CMS, the sitemap will have a new path for that content ID. Without revalidating the sitemap tag, the SDK uses a stale cached sitemap where the old path no longer matches, causing a 404 that gets cached.
+
+### The Problem Sequence (without sitemap revalidation)
+
+1. Content slug changes in CMS (e.g., `/blog/old-slug` -> `/blog/new-slug`)
+2. Webhook fires, content tags are revalidated, `revalidatePath` is called for the new path
+3. Page re-renders, but `getAgilityPageProps` fetches the sitemap from Data Cache
+4. Cached sitemap still has the old path -> `sitemap["/blog/new-slug"]` returns `undefined`
+5. Page returns 404, which gets cached for the full `revalidate` duration (24h)
+
+### The Fix
+
+Always revalidate the sitemap tag alongside content tags in the revalidation webhook:
+
+```typescript
+// app/api/revalidate/route.ts
+if (data.referenceName) {
+  const itemTag = `agility-content-${data.referenceName.toLowerCase()}-${data.languageCode}`
+  const listTag = `agility-content-${data.contentID}-${data.languageCode}`
+  revalidateTag(itemTag)
+  revalidateTag(listTag)
+
+  // IMPORTANT: Also revalidate sitemap so getAgilityPageProps gets fresh data
+  const sitemapTagFlat = `agility-sitemap-flat-${data.languageCode}`
+  revalidateTag(sitemapTagFlat)
+}
+```
+
+### SDK Cache Duration
+
+The SDK's default cache duration (`AGILITY_FETCH_CACHE_DURATION`) is 60 seconds if not set. This controls how long the sitemap and page data are cached in the Next.js Data Cache. Even with short cache durations, the stale-while-revalidate behavior means the first request after expiry serves old data, which can produce a cached 404 if the sitemap has changed.
+
 ## Best Practices
 
 1. **Use Appropriate Revalidation**: Don't over-cache or under-cache
 2. **Tag Everything**: Always add cache tags to CMS fetches
 3. **Webhook Integration**: Set up webhooks for instant updates
-4. **Monitor Performance**: Track cache hit rates
-5. **Preview Mode**: Use for content editors to see drafts
-6. **Incremental Updates**: Only revalidate what changed
-7. **Build-Time Generation**: Pre-render critical pages
+4. **Revalidate Sitemap on Content Changes**: Always invalidate `agility-sitemap-flat-{locale}` when content items change, not just content tags
+5. **Monitor Performance**: Track cache hit rates
+6. **Preview Mode**: Use for content editors to see drafts
+7. **Incremental Updates**: Only revalidate what changed
+8. **Build-Time Generation**: Pre-render critical pages
 
 ## Common Caching Patterns
 

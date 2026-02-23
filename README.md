@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project for [joelvarty.com](https://www.joelvarty.com), powered by [Agility CMS](https://agilitycms.com).
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **CMS**: Agility CMS (content, sitemap, dynamic pages)
+- **Framework**: Next.js App Router with `[locale]/[...slug]` dynamic routing
+- **Hosting**: Vercel
+- **Localization**: Locale-based routing via middleware (`src/proxy.ts`)
 
-## Learn More
+### Key Files
 
-To learn more about Next.js, take a look at the following resources:
+| File | Purpose |
+|------|---------|
+| `src/app/[locale]/[...slug]/page.tsx` | Dynamic page renderer with static param generation |
+| `src/app/api/revalidate/route.ts` | Webhook handler for Agility CMS publish events |
+| `src/app/api/preview/route.ts` | Enables draft mode for preview requests |
+| `src/proxy.ts` | Middleware for locale routing, preview, and redirects |
+| `src/lib/cms/getAgilityPage.ts` | Wrapper around Agility SDK's page props |
+| `src/lib/cms/getAgilityContext.ts` | Determines preview mode based on draft mode |
+| `src/lib/cms/getAgilitySDK.ts` | Initializes SDK with correct API key |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Caching & Revalidation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Content is cached using Next.js Data Cache with on-demand revalidation via Agility CMS webhooks.
+
+### How Revalidation Works
+
+1. Content is published in Agility CMS
+2. Webhook fires to `/api/revalidate` with content/page IDs
+3. Relevant cache tags are invalidated (`agility-content-*`, `agility-sitemap-flat-*`)
+4. `revalidatePath()` purges the Full Route Cache for the affected page
+5. Next request triggers a fresh server render with updated data
+
+### Important: Sitemap Tag Revalidation
+
+When content items change, the revalidation route must also invalidate the sitemap cache tag (`agility-sitemap-flat-{locale}`). The `@agility/nextjs` SDK caches the sitemap in the Data Cache and uses it to look up pages by path. If only content tags are invalidated, the SDK may use a stale sitemap and fail to find the page, producing a cached 404.
+
+See [src/docs/07-caching-strategies.md](src/docs/07-caching-strategies.md) for full details.
+
+## Documentation
+
+Detailed docs are in `src/docs/`:
+
+- [01 - Agility CMS Overview](src/docs/01-agility-cms-overview.md)
+- [02 - Page Routing](src/docs/02-page-routing.md)
+- [03 - Creating Components](src/docs/03-creating-components.md)
+- [04 - Data Fetching](src/docs/04-data-fetching.md)
+- [05 - Containers and Lists](src/docs/05-containers-and-lists.md)
+- [06 - Localization](src/docs/06-localization.md)
+- [07 - Caching Strategies](src/docs/07-caching-strategies.md)
+- [08 - Common Components](src/docs/08-common-components.md)
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed automatically via Git integration on the `main` branch.
