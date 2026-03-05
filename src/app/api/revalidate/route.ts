@@ -67,6 +67,9 @@ export async function POST(req: NextRequest) {
 			}
 		}
 
+		// Always revalidate the sitemap.xml so it reflects new/changed pages and posts
+		revalidatePath("/sitemap.xml")
+
 		//revalidate the correct tags based on what changed
 		if (data.referenceName) {
 			//content item change
@@ -118,6 +121,10 @@ export async function POST(req: NextRequest) {
 			}
 		} else if (data.contentID !== undefined && data.contentID > 0) {
 			//content item change without a referenceName - look up the contentID in the sitemap
+			const sitemapTagFlat = `agility-sitemap-flat-${data.languageCode}`
+			revalidateTag(sitemapTagFlat, 'layout')
+			console.info("Revalidating sitemap tag:", sitemapTagFlat)
+
 			if (sitemapFlat) {
 				const sitemapNode = Object.values(sitemapFlat).find(s => s.contentID === data.contentID)
 				if (sitemapNode) {
