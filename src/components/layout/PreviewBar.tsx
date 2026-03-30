@@ -107,6 +107,16 @@ export function PreviewBar({ isPreview, isDevelopmentMode }: PreviewBarProps) {
                 </Button>
               )}
 
+              <a
+                href="https://app.agilitycms.com/instance/e9a21a52-u"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="w-full">
+                  Open in Agility CMS
+                </Button>
+              </a>
+
               {isDevelopmentMode && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Development mode is active. Preview mode is enabled by default.

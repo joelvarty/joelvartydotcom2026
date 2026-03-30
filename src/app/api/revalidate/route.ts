@@ -1,9 +1,10 @@
 
 
 import { revalidatePath, revalidateTag } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import agilitySDK from "@agility/content-fetch"
 import type { SitemapNode } from "@/lib/types/SitemapNode";
+import { publishToSubstack } from "@/lib/substack/publishToSubstack";
 
 interface IRevalidateRequest {
 	state: string,
@@ -95,6 +96,16 @@ export async function POST(req: NextRequest) {
 				}
 			}
 
+			// If this is a blog post, async publish to Substack after the response is sent
+			if (data.referenceName.toLowerCase() === "posts" && data.contentID) {
+				after(async () => {
+					console.info("[substack] Triggering async publish for contentID:", data.contentID)
+					await publishToSubstack({
+						contentID: data.contentID!,
+						languageCode: data.languageCode || "en-us",
+					})
+				})
+			}
 
 		} else if (data.pageID !== undefined && data.pageID > 0) {
 			//page change

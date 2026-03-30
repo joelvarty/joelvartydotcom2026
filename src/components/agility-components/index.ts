@@ -19,6 +19,7 @@ import UsesSection from "./UsesSection"
 import Hero from "./Hero"
 import BasicMarkdown from "./BasicMarkdown"
 import SeriesLanding from "./SeriesLanding"
+import SubstackSubscribe from "./SubstackSubscribe"
 
 /**
  * Returns the React component for a given Agility CMS module name.
@@ -44,6 +45,8 @@ export const getModule = (moduleName: string) => {
 			return BasicMarkdown
 		case "SeriesLanding":
 			return SeriesLanding
+		case "SubstackSubscribe":
+			return SubstackSubscribe
 		default:
 			return null
 	}
