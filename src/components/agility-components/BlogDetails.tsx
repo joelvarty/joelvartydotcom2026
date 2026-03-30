@@ -195,6 +195,25 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 		markdownContent = markdownContent.replace(/^#\s+.+?$\n?/m, "").trim()
 	}
 
+	// Fetch a random subscribe CTA
+	let subscribeCTA: { heading: string; description: string } | null = null
+	try {
+		const ctaList = await getContentList({
+			referenceName: "SubscribeCTAs",
+			languageCode,
+			take: 50,
+		})
+		if (ctaList.items.length > 0) {
+			const randomItem = ctaList.items[Math.floor(Math.random() * ctaList.items.length)] as any
+			subscribeCTA = {
+				heading: randomItem.fields.heading || randomItem.fields.Heading,
+				description: randomItem.fields.description || randomItem.fields.Description,
+			}
+		}
+	} catch (error) {
+		// Silently fail - subscribe CTA is not critical
+	}
+
 	return (
 		<article className="relative px-4 sm:px-6 lg:px-8 py-12 animate-fade-in" data-agility-component={moduleContentID}>
 			<div className="mx-auto">
@@ -277,6 +296,23 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 						{processMarkdown(markdownContent)}
 					</div>
 				)}
+				<div className="max-w-3xl mx-auto mt-12 border-t border-border pt-8 text-center">
+					{subscribeCTA && (
+						<>
+							<h3 className="text-xl font-bold text-foreground mb-2">{subscribeCTA.heading}</h3>
+							<p className="text-muted-foreground mb-6">{subscribeCTA.description}</p>
+						</>
+					)}
+					<iframe
+						src="https://joelvarty.substack.com/embed"
+						width="100%"
+						height="150"
+						style={{ border: "none", background: "transparent" }}
+						frameBorder="0"
+						scrolling="no"
+						title="Subscribe to newsletter"
+					/>
+				</div>
 			</div>
 		</article>
 	)
