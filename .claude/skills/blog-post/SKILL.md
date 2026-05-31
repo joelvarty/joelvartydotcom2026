@@ -88,7 +88,19 @@ For each image the user attaches or points to in a folder:
 
 1. **View the images first** using the Read tool. Claude can read image files (JPEG, PNG, etc.) to see their contents. This is essential for writing accurate captions, selecting the best featured image, and organizing images into logical gallery groups.
 
-2. **Initialize ALL uploads in parallel** for efficiency. Call `mcp__Agility-CMS__initialize_media_upload` for every image at once (all 20+ calls can go in one batch). Give each a descriptive file name (not the original UUID-style filename):
+2. **Resize and convert to JPG if needed** before uploading. Photos from phones and cameras are often huge (4000px+, 5-15MB), and may be PNG, HEIC, or WEBP. Run them through the bundled script, which downscales the longest edge to 2000px, converts everything to web-friendly JPG, strips metadata, and flattens transparency on white:
+
+   ```bash
+   .claude/skills/blog-post/process-images.sh <source-dir> <output-dir>
+   # e.g. .claude/skills/blog-post/process-images.sh post-images/my-post/source post-images/my-post/processed
+   # optional: ... <output-dir> <max-width> <quality>   (defaults 2000 / 82)
+   ```
+
+   The script auto-detects an image backend (ImageMagick `magick`/`convert`, macOS `sips`, or Python `Pillow`) and writes `descriptive-name.jpg` files (lowercased, spaces -> dashes). Skip a file only if it is already a JPG at/under 2000px. Upload the files from the **processed** output dir, not the originals. If no backend is installed, tell the user to `brew install imagemagick` (macOS) or `pip install Pillow`.
+
+   When reading images for captions/featured selection (step 1), read the originals; for upload, use the processed JPGs.
+
+3. **Initialize ALL uploads in parallel** for efficiency. Call `mcp__Agility-CMS__initialize_media_upload` for every image at once (all 20+ calls can go in one batch). Give each a descriptive file name (not the original UUID-style filename):
 
 ```
 mcp__Agility-CMS__initialize_media_upload({
@@ -98,13 +110,13 @@ mcp__Agility-CMS__initialize_media_upload({
 })
 ```
 
-3. **Upload ALL files via curl in parallel** using the returned `uploadUrl` values:
+4. **Upload ALL files via curl in parallel** using the returned `uploadUrl` values (use the processed JPGs):
 
 ```bash
 curl -s -X POST "<uploadUrl>" -F "file=@/path/to/image.jpg"
 ```
 
-4. **Capture the CDN URLs** from each response. The CDN URL pattern is: `https://cdn.agilitycms.com/j0i5uycg/blog-images/{fileName}`
+5. **Capture the CDN URLs** from each response. The CDN URL pattern is: `https://cdn.agilitycms.com/j0i5uycg/blog-images/{fileName}`
 
 ### Step 3: Select Featured Image
 
@@ -369,4 +381,5 @@ Write in Joel's voice, which is:
 - When organizing galleries, group images by story section (e.g., hotel photos together, tomb photos together). Use **carousel** for sequences or narrative flow, **grid** for side-by-side comparisons or overview shots. Match column count to image count (columns-2 for 4 images, columns-3 for 3 or 6 images).
 - The featured image should NOT also appear in the body galleries. Reserve it exclusively as the header image.
 - When the user provides a folder of images (e.g., `/data/images`), read all images first, then batch all uploads in parallel for efficiency.
+- Always run images through `process-images.sh` (resize to 2000px + convert to JPG) before uploading. Upload the processed JPGs, never the raw originals. See Step 2.
 ```

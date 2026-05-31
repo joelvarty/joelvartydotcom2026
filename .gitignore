@@ -43,3 +43,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# blog post image staging (large originals + processed output)
+post-images/**/source/
+post-images/**/processed/
