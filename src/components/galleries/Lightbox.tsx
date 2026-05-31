@@ -133,9 +133,12 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 					onTouchStart={handleTouchStart}
 					onTouchEnd={handleTouchEnd}
 				>
-					{/* Top bar: counter + close */}
-					<div className="flex items-center justify-between px-4 py-3 text-white sm:px-6">
-						<div className="text-sm font-medium tabular-nums text-white/80">
+					{/* Top bar: brand label + counter + close */}
+					<div className="flex items-center justify-between gap-4 px-4 py-3 text-white sm:px-6">
+						<span className="text-sm font-semibold tracking-wide text-white/90 select-none">
+							joelvarty.com
+						</span>
+						<div className="text-sm font-medium tabular-nums text-white/60">
 							{hasMultiple ? `${current + 1} / ${images.length}` : ""}
 						</div>
 						<button
@@ -151,10 +154,10 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 					<div className="relative flex min-h-0 flex-1 items-center justify-center px-2 sm:px-16">
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
-								key={image.url}
+								key={current}
 								image={createImageField(image)}
 								fallbackWidth={1920}
-								className="max-h-full max-w-full w-auto object-contain"
+								className="max-h-full max-w-full w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
 								sources={[
 									{ media: "(min-width: 1920px) and (min-resolution: 2dppx)", width: 3840 },
 									{ media: "(min-width: 1920px)", width: 1920 },
@@ -165,10 +168,10 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 							/>
 						) : (
 							<img
-								key={image.url}
+								key={current}
 								src={image.url}
 								alt={image.alt || image.caption || ""}
-								className="max-h-full max-w-full w-auto object-contain"
+								className="max-h-full max-w-full w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
 							/>
 						)}
 
@@ -197,7 +200,10 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 
 					{/* Caption: below the image, bounded + scrollable so long text never eats the photo */}
 					{image.caption && (
-						<figcaption className="mx-auto max-h-[18vh] w-full max-w-3xl overflow-y-auto px-6 py-3 text-center text-sm leading-relaxed text-white/85">
+						<figcaption
+							key={current}
+							className="mx-auto max-h-[18vh] w-full max-w-3xl overflow-y-auto px-6 py-3 text-center text-sm leading-relaxed text-white/85 animate-in fade-in-0 duration-500 ease-out"
+						>
 							{image.caption}
 						</figcaption>
 					)}
