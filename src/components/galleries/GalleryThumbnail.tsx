@@ -25,7 +25,8 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			{/* Main Image */}
-			<div className="mb-4 aspect-video w-full overflow-hidden rounded-lg bg-muted/30">
+			<figure className="m-0">
+			<div className="mb-2 aspect-video w-full overflow-hidden rounded-lg bg-muted/30">
 				{isAgilityImage(images[selectedIndex].url) ? (
 					<AgilityPic
 						image={createImageField(images[selectedIndex])}
@@ -47,8 +48,11 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 				)}
 			</div>
 			{images[selectedIndex].caption && (
-				<div className="mb-4 text-center text-sm text-muted-foreground">{images[selectedIndex].caption}</div>
+				<figcaption className="mx-auto mb-4 max-w-2xl px-4 text-center text-sm leading-relaxed text-muted-foreground">
+					{images[selectedIndex].caption}
+				</figcaption>
 			)}
+			</figure>
 
 			{/* Thumbnail Strip */}
 			{images.length > 1 && (

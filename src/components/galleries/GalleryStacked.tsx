@@ -21,7 +21,7 @@ export function GalleryStacked({ images }: GalleryStackedProps) {
 		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
 			{images.map((image, index) => (
-				<div key={index} className="w-full">
+				<figure key={index} className="m-0 w-full">
 					<div className="relative w-full overflow-hidden rounded-lg">
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
@@ -47,9 +47,11 @@ export function GalleryStacked({ images }: GalleryStackedProps) {
 						)}
 					</div>
 					{image.caption && (
-						<div className="mt-2 text-center text-sm text-muted-foreground">{image.caption}</div>
+						<figcaption className="mx-auto mt-3 max-w-2xl px-4 text-center text-sm leading-relaxed text-muted-foreground">
+							{image.caption}
+						</figcaption>
 					)}
-				</div>
+				</figure>
 			))}
 			</div>
 		</div>
