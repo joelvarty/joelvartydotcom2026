@@ -144,24 +144,6 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 											loading="lazy"
 										/>
 									)}
-
-									{/* Hover overlays for left/right navigation zones */}
-									<div
-										className={`absolute left-0 top-0 bottom-0 w-1/3 backdrop-blur-[2px] transition-all duration-300 pointer-events-none ${
-											hoveredZone === "left" ? "opacity-100" : "opacity-0"
-										}`}
-										style={{
-											background: "linear-gradient(to right, rgba(0, 0, 0, 0.25), transparent)",
-										}}
-									/>
-									<div
-										className={`absolute right-0 top-0 bottom-0 w-1/3 backdrop-blur-[2px] transition-all duration-300 pointer-events-none ${
-											hoveredZone === "right" ? "opacity-100" : "opacity-0"
-										}`}
-										style={{
-											background: "linear-gradient(to left, rgba(0, 0, 0, 0.25), transparent)",
-										}}
-									/>
 								</div>
 
 								{image.caption && (
