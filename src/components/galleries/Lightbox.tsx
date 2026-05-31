@@ -163,7 +163,10 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 									{ media: "(min-width: 1920px)", width: 1920 },
 									{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2560 },
 									{ media: "(min-width: 1280px)", width: 1280 },
-									{ media: "(min-resolution: 2dppx)", width: 2048 },
+									{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
+									{ media: "(min-width: 640px)", width: 1024 },
+									{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
+									{ media: "(max-width: 639px)", width: 640 },
 								]}
 							/>
 						) : (

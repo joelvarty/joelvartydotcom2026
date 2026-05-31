@@ -43,6 +43,8 @@ export function GalleryMasonry({ images, columns = 3 }: GalleryMasonryProps) {
 										{ media: "(min-width: 1280px)", width: 400 },
 										{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
 										{ media: "(min-width: 640px)", width: 300 },
+										{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1000 },
+										{ media: "(max-width: 639px)", width: 500 },
 									]}
 								/>
 							) : (

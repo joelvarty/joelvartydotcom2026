@@ -43,6 +43,8 @@ export function GalleryThumbnail({ images }: GalleryThumbnailProps) {
 							{ media: "(min-width: 1280px)", width: 1920 },
 							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
 							{ media: "(min-width: 640px)", width: 1280 },
+							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1280 },
+							{ media: "(max-width: 639px)", width: 640 },
 						]}
 					/>
 				) : (
