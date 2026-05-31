@@ -15,6 +15,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
 import { AgilityPic } from "@agility/nextjs"
 import { isAgilityImage, createImageField } from "@/lib/agility/image-utils"
+import { Lightbox } from "./Lightbox"
 
 interface GalleryCarouselProps {
 	images: GalleryImage[]
@@ -25,9 +26,13 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 	const [hoveredZone, setHoveredZone] = useState<"left" | "right" | null>(null)
 	const [canScrollPrev, setCanScrollPrev] = useState(false)
 	const [canScrollNext, setCanScrollNext] = useState(false)
+	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
-	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (!api) return
+	const handleClick = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
+		if (!api) {
+			setLightboxIndex(index)
+			return
+		}
 
 		const rect = e.currentTarget.getBoundingClientRect()
 		const x = e.clientX - rect.left
@@ -41,7 +46,10 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 		else if (x > (2 * width) / 3 && canScrollNext) {
 			api.scrollNext()
 		}
-		// Middle third - do nothing (let user interact with image)
+		// Otherwise (center, or an edge with nowhere to go) open the full-screen view
+		else {
+			setLightboxIndex(index)
+		}
 	}
 
 	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -85,6 +93,7 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 	}, [api])
 
 	return (
+		<>
 		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<Carousel
@@ -108,10 +117,8 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 						<CarouselItem key={index} className="pl-0">
 							<figure className="m-0">
 								<div
-									className={`relative aspect-video w-full overflow-hidden rounded-lg bg-muted/30 group ${
-										(canScrollPrev || canScrollNext) ? "cursor-pointer" : ""
-									}`}
-									onClick={handleClick}
+									className="relative aspect-video w-full cursor-pointer overflow-hidden rounded-lg bg-muted/30 group"
+									onClick={(e) => handleClick(e, index)}
 									onMouseMove={handleMouseMove}
 									onMouseLeave={handleMouseLeave}
 								>
@@ -191,5 +198,8 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 			</Carousel>
 			</div>
 		</div>
+
+		<Lightbox images={images} index={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+		</>
 	)
 }
