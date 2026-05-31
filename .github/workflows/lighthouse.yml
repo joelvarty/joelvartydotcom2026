@@ -16,6 +16,10 @@ jobs:
           cache: 'npm'
 
       - name: Run Lighthouse CI
+        # Informational only: a failed audit (e.g. when the Vercel preview is
+        # behind Deployment Protection and returns 401 to the runner) must not
+        # red-flag the PR. The step still runs and uploads reports when it can.
+        continue-on-error: true
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |

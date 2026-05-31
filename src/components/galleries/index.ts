@@ -11,4 +11,5 @@ export { GalleryThumbnail } from "./GalleryThumbnail"
 export { GalleryStacked } from "./GalleryStacked"
 export { GalleryComparison } from "./GalleryComparison"
 export { GalleryTabs } from "./GalleryTabs"
+export { Lightbox } from "./Lightbox"
 

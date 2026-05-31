@@ -7,22 +7,29 @@
 
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
 import { AgilityPic } from "@agility/nextjs"
 import { isAgilityImage, createImageField } from "@/lib/agility/image-utils"
+import { Lightbox } from "./Lightbox"
 
 interface GalleryStackedProps {
 	images: GalleryImage[]
 }
 
 export function GalleryStacked({ images }: GalleryStackedProps) {
+	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
 	return (
+		<>
 		<div className="my-8 relative left-1/2 right-1/2 -mx-[50vw] w-screen">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
 			{images.map((image, index) => (
-				<div key={index} className="w-full">
-					<div className="relative w-full overflow-hidden rounded-lg">
+				<figure key={index} className="m-0 w-full">
+					<div
+						className="group relative w-full cursor-zoom-in overflow-hidden rounded-lg"
+						onClick={() => setLightboxIndex(index)}
+					>
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
 								image={createImageField(image)}
@@ -47,12 +54,17 @@ export function GalleryStacked({ images }: GalleryStackedProps) {
 						)}
 					</div>
 					{image.caption && (
-						<div className="mt-2 text-center text-sm text-muted-foreground">{image.caption}</div>
+						<figcaption className="mx-auto mt-3 max-w-2xl px-4 text-center text-sm leading-relaxed text-muted-foreground">
+							{image.caption}
+						</figcaption>
 					)}
-				</div>
+				</figure>
 			))}
 			</div>
 		</div>
+
+		<Lightbox images={images} index={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+		</>
 	)
 }
 

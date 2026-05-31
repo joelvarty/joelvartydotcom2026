@@ -13,6 +13,19 @@ export function isAgilityImage(url: string): boolean {
 }
 
 /**
+ * Upper bound used for an image's intrinsic dimensions when the real ones are
+ * unknown (gallery/markdown images are only given a URL).
+ *
+ * AgilityPic clamps each responsive <source> width to `image.width`
+ * (Math.min(source.width, image.width)) to avoid upscaling past the original.
+ * Hardcoding a small value here silently caps every source at that size, so a
+ * retina/full-screen request for e.g. 3840px would only ever load 1200px.
+ * Agility's image CDN does not upscale beyond the original anyway, so we use a
+ * generous bound that lets legitimate high-resolution requests pass through.
+ */
+const MAX_INTRINSIC_DIMENSION = 6000
+
+/**
  * Create an Agility CMS ImageField object from image data
  * This is used by gallery components to pass data to AgilityPic
  */
@@ -20,8 +33,8 @@ export function createImageField(image: { url: string; caption?: string; alt?: s
 	return {
 		url: image.url,
 		label: image.caption || image.alt || "",
-		width: 1200,
-		height: 800,
+		width: MAX_INTRINSIC_DIMENSION,
+		height: MAX_INTRINSIC_DIMENSION,
 		target: "",
 		filesize: 0,
 	} as any
@@ -35,8 +48,8 @@ export function createImageFieldFromUrl(url: string, alt: string, title: string 
 	return {
 		url,
 		label: title || alt || "",
-		width: 1200,
-		height: 800,
+		width: MAX_INTRINSIC_DIMENSION,
+		height: MAX_INTRINSIC_DIMENSION,
 		target: "",
 		filesize: 0,
 	}
