@@ -120,7 +120,7 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<DialogContent
 				showCloseButton={false}
-				className="max-w-none w-screen h-[100dvh] translate-x-[-50%] translate-y-[-50%] gap-0 rounded-none border-0 bg-black/95 p-0 shadow-none sm:max-w-none"
+				className="block overflow-hidden w-screen max-w-[100vw] h-[100dvh] max-h-[100dvh] translate-x-[-50%] translate-y-[-50%] gap-0 rounded-none border-0 bg-black/95 p-0 shadow-none sm:max-w-[100vw]"
 			>
 				<VisuallyHidden>
 					<DialogTitle>
@@ -129,7 +129,7 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 				</VisuallyHidden>
 
 				<div
-					className="flex h-full w-full flex-col"
+					className="flex h-full w-full min-w-0 max-w-full flex-col overflow-hidden"
 					onTouchStart={handleTouchStart}
 					onTouchEnd={handleTouchEnd}
 				>
@@ -151,7 +151,7 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 					</div>
 
 					{/* Image stage */}
-					<div className="relative flex min-h-0 flex-1 items-center justify-center px-2 sm:px-16">
+					<div className="relative flex min-h-0 min-w-0 flex-1 items-center justify-center px-2 sm:px-16">
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
 								key={current}
@@ -205,7 +205,7 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 					{image.caption && (
 						<figcaption
 							key={current}
-							className="mx-auto max-h-[18vh] w-full max-w-3xl overflow-y-auto px-6 py-3 text-center text-sm leading-relaxed text-white/85 animate-in fade-in-0 duration-500 ease-out"
+							className="mx-auto max-h-[18vh] w-full max-w-2xl overflow-y-auto px-6 py-3 text-center text-sm leading-relaxed text-pretty break-words text-white/85 animate-in fade-in-0 duration-500 ease-out"
 						>
 							{image.caption}
 						</figcaption>
