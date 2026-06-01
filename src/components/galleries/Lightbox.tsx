@@ -151,13 +151,13 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 					</div>
 
 					{/* Image stage */}
-					<div className="relative flex min-h-0 min-w-0 flex-1 items-center justify-center px-2 sm:px-16">
+					<div className="relative flex min-h-0 min-w-0 flex-1 items-center justify-center px-2 sm:px-16 [&>picture]:contents">
 						{isAgilityImage(image.url) ? (
 							<AgilityPic
 								key={current}
 								image={createImageField(image)}
 								fallbackWidth={1920}
-								className="max-h-full max-w-full w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
+								className="max-h-full max-w-full min-h-0 min-w-0 w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
 								sources={[
 									{ media: "(min-width: 1920px) and (min-resolution: 2dppx)", width: 3840 },
 									{ media: "(min-width: 1920px)", width: 1920 },
@@ -174,7 +174,7 @@ export function Lightbox({ images, index, onClose }: LightboxProps) {
 								key={current}
 								src={image.url}
 								alt={image.alt || image.caption || ""}
-								className="max-h-full max-w-full w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
+								className="max-h-full max-w-full min-h-0 min-w-0 w-auto object-contain animate-in fade-in-0 duration-500 ease-out"
 							/>
 						)}
 
