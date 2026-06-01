@@ -11,6 +11,8 @@ interface BlogPaginationProps {
 	postsPerPage: number
 	basePath?: string
 	scrollTargetId?: string
+	/** Extra query params to preserve across page navigation (e.g. sort order). */
+	extraParams?: Record<string, string | undefined>
 }
 
 /**
@@ -31,6 +33,7 @@ export function BlogPagination({
 	postsPerPage,
 	basePath = "/blog",
 	scrollTargetId = "blog-listing",
+	extraParams,
 }: BlogPaginationProps) {
 	const router = useRouter()
 
@@ -38,6 +41,11 @@ export function BlogPagination({
 		const params = new URLSearchParams()
 		if (pageNum > 1) {
 			params.set("page", pageNum.toString())
+		}
+		if (extraParams) {
+			for (const [key, value] of Object.entries(extraParams)) {
+				if (value) params.set(key, value)
+			}
 		}
 
 		return params.size !== 0 ? `${basePath}?${params.toString()}` : basePath

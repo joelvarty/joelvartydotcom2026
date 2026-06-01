@@ -13,6 +13,7 @@ import { type UnloadedModuleProps } from "@agility/nextjs"
 import { processMarkdown } from "@/lib/markdown/processMarkdown"
 import { BlogPostItem } from "./blog-listing/BlogPostItem"
 import { BlogPagination } from "./blog-listing/BlogPagination"
+import { SeriesSortToggle, type SeriesOrder } from "./blog-listing/SeriesSortToggle"
 
 /**
  * Interface defining the structure of the SeriesLanding module fields.
@@ -80,6 +81,10 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 		}
 	}
 
+	// Read sort order from search params. Default to oldest-first so a series
+	// reads in chronological order; "newest" flips it.
+	const order: SeriesOrder = globalData?.searchParams?.order === "newest" ? "newest" : "oldest"
+
 	// Get locale context
 	const { locale } = await getAgilityContext(languageCode)
 
@@ -90,10 +95,14 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 		skip: (page - 1) * postsPerPageConfig,
 		take: postsPerPageConfig,
 		sort: "publishedDate",
-		direction: "asc",
+		direction: order === "newest" ? "desc" : "asc",
 	})
 
-	const pageCount = Math.ceil(postsResult.totalCount / postsPerPageConfig)
+	const { totalCount } = postsResult
+	const pageCount = Math.ceil(totalCount / postsPerPageConfig)
+	const rangeStart = totalCount === 0 ? 0 : (page - 1) * postsPerPageConfig + 1
+	const rangeEnd = Math.min(page * postsPerPageConfig, totalCount)
+	const basePath = globalData?.path || `/blog/series/${seriesFields.slug}`
 
 	return (
 		<section className="relative px-4 sm:px-6 lg:px-8 py-12" data-agility-component={contentID}>
@@ -127,12 +136,26 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 
 					{/* Series Posts - Right Column (50% width on large screens) */}
 					<div id="series-listing" className="lg:col-span-1">
-						<div className="flex items-baseline gap-3 mb-8">
-							<h2 className="text-4xl font-bold text-foreground">Posts in this series</h2>
-							{page > 1 && (
-								<span className="text-xs px-2 py-1 rounded-full border border-border bg-muted/50 text-muted-foreground">
-									Page {page} of {pageCount}
-								</span>
+						<div className="mb-8">
+							<div className="flex items-baseline gap-3 flex-wrap">
+								<h2 className="text-4xl font-bold text-foreground">Posts in this series</h2>
+								{pageCount > 1 && (
+									<span className="text-xs px-2 py-1 rounded-full border border-border bg-muted/50 text-muted-foreground">
+										Page {page} of {pageCount}
+									</span>
+								)}
+							</div>
+							{totalCount > 0 && (
+								<div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
+									<p className="text-sm text-muted-foreground">
+										{pageCount > 1
+											? `Showing ${rangeStart}-${rangeEnd} of ${totalCount} posts`
+											: `${totalCount} ${totalCount === 1 ? "post" : "posts"}`}
+									</p>
+									{totalCount > 1 && (
+										<SeriesSortToggle currentOrder={order} basePath={basePath} scrollTargetId="series-listing" />
+									)}
+								</div>
 							)}
 						</div>
 						<div className="space-y-8">
@@ -158,10 +181,11 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 								))}
 								<BlogPagination
 									page={page}
-									totalPosts={postsResult.totalCount}
+									totalPosts={totalCount}
 									postsPerPage={postsPerPageConfig}
-									basePath={globalData?.path || `/blog/series/${seriesFields.slug}`}
+									basePath={basePath}
 									scrollTargetId="series-listing"
+									extraParams={{ order: order === "newest" ? "newest" : undefined }}
 								/>
 							</>
 						)}

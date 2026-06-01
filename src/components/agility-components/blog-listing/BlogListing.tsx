@@ -132,14 +132,14 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 						)}
 					</div>
 
-					{/* Categories and Series sidebar */}
+					{/* Series and Categories sidebar */}
 					<aside className="lg:col-span-1">
 						<div className="space-y-8">
+							<BlogSeries languageCode={languageCode} />
 							<BlogCategories
 								languageCode={languageCode}
 								selectedCategoryID={categoryID}
 							/>
-							<BlogSeries languageCode={languageCode} />
 						</div>
 					</aside>
 				</div>
