@@ -99,7 +99,7 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 				<Carousel
 				setApi={setApi}
 				className="w-full"
-				style={{ touchAction: "pan-x", overscrollBehavior: "contain" }}
+				style={{ touchAction: "pan-y", overscrollBehavior: "contain" }}
 				opts={{
 					align: "start",
 					loop: false,
@@ -111,7 +111,7 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
 			>
 				<CarouselContent
 					className="-ml-0"
-					style={{ touchAction: "pan-x", overscrollBehavior: "contain" }}
+					style={{ touchAction: "pan-y", overscrollBehavior: "contain" }}
 				>
 					{images.map((image, index) => (
 						<CarouselItem key={index} className="pl-0">
