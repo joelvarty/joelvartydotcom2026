@@ -31,20 +31,23 @@ export async function BlogSeries({ languageCode }: BlogSeriesProps) {
 	const seriesResult = await getContentList<Series>({
 		referenceName: "blogseries",
 		languageCode,
-		sort: "fields.title",
-		direction: "asc",
+		take: 250,
 	})
 
 	if (seriesResult.items.length === 0) {
 		return null
 	}
 
+	// Newest series first. Series items have no date field of their own, so we
+	// order by contentID descending (Agility assigns IDs in creation order).
+	const sortedSeries = [...seriesResult.items].sort((a, b) => b.contentID - a.contentID)
+
 	return (
 		<aside className="space-y-4">
 			<h3 className="text-lg font-semibold text-foreground mb-4">Series</h3>
 			<nav className="space-y-2">
-				{/* Series links */}
-				{seriesResult.items.map((series: Series) => {
+				{/* Series links (newest first) */}
+				{sortedSeries.map((series: Series) => {
 					const seriesUrl = localizeUrl(`/blog/series/${series.fields.slug}`, languageCode)
 
 					return (
