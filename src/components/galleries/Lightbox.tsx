@@ -16,7 +16,7 @@
 
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { GalleryImage } from "@/lib/markdown/processMarkdown"
@@ -86,6 +86,22 @@ function LightboxContent({ images, startIndex, onClose }: LightboxContentProps) 
 	const canScrollPrev = current > 0
 	const canScrollNext = current < images.length - 1
 
+	// Swipe down to dismiss. Scoped to the image stage and gated on a dominant
+	// downward gesture so it never competes with Embla's horizontal drag.
+	const touchStart = useRef<{ x: number; y: number } | null>(null)
+	const handleTouchStart = (e: React.TouchEvent) => {
+		const t = e.touches[0]
+		touchStart.current = { x: t.clientX, y: t.clientY }
+	}
+	const handleTouchEnd = (e: React.TouchEvent) => {
+		if (!touchStart.current) return
+		const t = e.changedTouches[0]
+		const dx = t.clientX - touchStart.current.x
+		const dy = t.clientY - touchStart.current.y
+		touchStart.current = null
+		if (dy > 80 && dy > Math.abs(dx)) onClose()
+	}
+
 	// Keep our index (caption, counter, filmstrip) in sync as Embla settles on a
 	// slide, whether the user dragged, tapped an arrow, or used the keyboard.
 	useEffect(() => {
@@ -136,7 +152,11 @@ function LightboxContent({ images, startIndex, onClose }: LightboxContentProps) 
 			</div>
 
 			{/* Image stage: an Embla carousel that slides between images. */}
-			<div className="relative min-h-0 min-w-0 flex-1">
+			<div
+				className="relative min-h-0 min-w-0 flex-1"
+				onTouchStart={handleTouchStart}
+				onTouchEnd={handleTouchEnd}
+			>
 				<div className="h-full overflow-hidden" ref={emblaRef}>
 					<div className="flex h-full">
 						{images.map((image, i) => (
