@@ -7,12 +7,13 @@
 
 import { getContentItem } from "@/lib/cms/getContentItem"
 import { getContentList } from "@/lib/cms/getContentList"
-import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
+import { type UnloadedModuleProps } from "@agility/nextjs"
 import { notFound } from "next/navigation"
 import { processMarkdown } from "@/lib/markdown/processMarkdown"
 import { localizeUrl } from "@/lib/i18n/localizeUrl"
 import Link from "next/link"
 import { SeriesLink } from "./SeriesLink"
+import { ScrollBanner } from "./ScrollBanner"
 
 /**
  * Interface defining the structure of the BlogDetails module fields.
@@ -214,47 +215,50 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 		// Silently fail - subscribe CTA is not critical
 	}
 
+	const formattedDate = post.fields.publishedDate
+		? new Date(post.fields.publishedDate).toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+			})
+		: null
+
+	const hasBanner = Boolean(post.fields.featuredImage)
+
 	return (
-		<article className="relative px-4 sm:px-6 lg:px-8 py-12 animate-fade-in" data-agility-component={moduleContentID}>
-			<div className="mx-auto">
-				{post.fields.featuredImage && (
-					<div className="mb-8 aspect-video w-full max-w-3xl mx-auto overflow-hidden rounded-lg bg-muted">
-						<AgilityPic
-							image={post.fields.featuredImage as any}
-							fallbackWidth={1200}
-							className="h-full w-full object-cover"
-							sources={[
-								{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 3840 },
-								{ media: "(min-width: 1280px)", width: 1920 },
-								{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
-								{ media: "(min-width: 640px)", width: 1280 },
-								{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1920 },
-								{ media: "(max-width: 639px)", width: 960 },
-							]}
-						/>
-					</div>
-				)}
-				<header className="mb-8 max-w-3xl mx-auto">
-					{/* Series Badge - Prominent display above title */}
+		<article className="animate-fade-in" data-agility-component={moduleContentID}>
+			{/* Full-bleed banner: photo stays pinned while the heading scrolls off (>= sm) */}
+			{post.fields.featuredImage && (
+				<ScrollBanner image={post.fields.featuredImage}>
 					{series && (
 						<SeriesLink
+							variant="onImage"
 							href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
 							title={series.title}
 						/>
 					)}
-
-					<h1 className="text-4xl font-bold text-foreground mb-4" data-agility-field="title">
+					<h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" data-agility-field="title">
 						{pageTitle}
 					</h1>
-					{post.fields.publishedDate && (
-						<time className="text-muted-foreground">
-							{new Date(post.fields.publishedDate).toLocaleDateString("en-US", {
-								year: "numeric",
-								month: "long",
-								day: "numeric",
-							})}
-						</time>
-					)}
+					{formattedDate && <time className="mt-4 block text-white/90 drop-shadow-md">{formattedDate}</time>}
+				</ScrollBanner>
+			)}
+
+			<div className="px-4 sm:px-6 lg:px-8 py-12">
+				<header className="mb-8 max-w-3xl mx-auto">
+					{/* Heading: rendered below the photo on mobile, or as the main header when there is no banner. */}
+					<div className={hasBanner ? "sm:hidden" : undefined}>
+						{series && (
+							<SeriesLink
+								href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
+								title={series.title}
+							/>
+						)}
+						<h1 className="text-4xl font-bold text-foreground mb-4" data-agility-field="title">
+							{pageTitle}
+						</h1>
+						{formattedDate && <time className="text-muted-foreground">{formattedDate}</time>}
+					</div>
 
 					{/* Metadata: Category and Tags */}
 					{(category || tags.length > 0) && (
