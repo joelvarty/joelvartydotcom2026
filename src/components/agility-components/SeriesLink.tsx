@@ -7,6 +7,8 @@ interface SeriesLinkProps {
 	href: string
 	title: string
 	children?: React.ReactNode
+	/** "onImage" renders white text for use over a photo banner. */
+	variant?: "default" | "onImage"
 }
 
 /**
@@ -16,8 +18,13 @@ interface SeriesLinkProps {
  * Uses router.push with scroll:true and also manually scrolls to overcome
  * browser scroll restoration behavior.
  */
-export function SeriesLink({ href, title, children }: SeriesLinkProps) {
+export function SeriesLink({ href, title, children, variant = "default" }: SeriesLinkProps) {
 	const router = useRouter()
+
+	const colorClasses =
+		variant === "onImage"
+			? "text-white hover:text-white/80 drop-shadow-md"
+			: "text-primary hover:text-primary/80"
 
 	const handleClick = (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -41,7 +48,7 @@ export function SeriesLink({ href, title, children }: SeriesLinkProps) {
 		<Link
 			href={href}
 			onClick={handleClick}
-			className="inline-flex items-center gap-2 mb-4 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+			className={`inline-flex items-center gap-2 mb-4 text-sm font-semibold transition-colors ${colorClasses}`}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
