@@ -103,8 +103,10 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 	return (
 		<div ref={outerRef} className="relative w-full">
 			<div ref={frozenRef} className="sm:will-change-transform">
-				{/* Photo (full width, natural ratio so nothing is cropped) + overlaid heading. */}
-				<div className="relative w-full overflow-hidden sm:min-h-[50vh]">
+				{/* Photo (full width, natural ratio so nothing is cropped) + overlaid heading.
+				    No min-height: the banner is exactly the photo's height so a short/panoramic
+				    photo never leaves a scrim band below it. */}
+				<div className="relative w-full overflow-hidden">
 					<AgilityPic
 						image={createImageField({ url: image.url, alt: image.label })}
 						fallbackWidth={1920}
