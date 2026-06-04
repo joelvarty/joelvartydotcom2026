@@ -1,19 +1,22 @@
 /**
  * ScrollBanner Component
  *
- * A full-bleed banner image with overlaid content (passed as children), used at
- * the top of blog post detail pages.
+ * A full-bleed banner image with an overlaid heading, used at the top of blog
+ * post detail pages. It wraps the heading AND the article body so it can hold
+ * them together during the scroll effect.
  *
  * Behaviour (>= sm screens):
- *  - The photo is shown full width at its natural aspect ratio, so none of it is
- *    cropped.
- *  - The photo is pinned (sticky) while you scroll. The overlaid heading scrolls
- *    up and fades out completely BEFORE the photo itself starts to move, then
- *    the (now clean) photo scrolls away with the rest of the page.
+ *  - The photo shows full width at its natural aspect ratio, so none of it is
+ *    cropped, with the article content sitting directly beneath it (no gap).
+ *  - Once the banner reaches the top of the viewport, the photo and the content
+ *    are HELD still while the overlaid heading scrolls up and fades out. After
+ *    the heading is gone the whole thing scrolls away together. The scroll room
+ *    this consumes is added as an invisible spacer at the END of the article so
+ *    there is never empty space under the photo.
  *
  * On small screens the overlay would not sit well over a short, full-width photo,
- * so the overlay/pin are disabled here and the heading is rendered below the
- * photo by the parent (BlogDetails) instead.
+ * so the effect is disabled: the photo shows full width and the heading is
+ * rendered below it by the parent (BlogDetails).
  *
  * The effect uses a passive scroll listener + requestAnimationFrame (CSS
  * scroll-timelines aren't supported in Safari/iPad yet) and mutates transforms
@@ -29,13 +32,16 @@ import { createImageField } from "@/lib/agility/image-utils"
 
 interface ScrollBannerProps {
 	image: { url: string; label: string }
+	heading: ReactNode
 	children: ReactNode
 }
 
-export function ScrollBanner({ image, children }: ScrollBannerProps) {
-	const wrapperRef = useRef<HTMLDivElement>(null)
+export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
+	const outerRef = useRef<HTMLDivElement>(null)
+	const frozenRef = useRef<HTMLDivElement>(null)
 	const overlayRef = useRef<HTMLDivElement>(null)
 	const textRef = useRef<HTMLDivElement>(null)
+	const spacerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -43,29 +49,40 @@ export function ScrollBanner({ image, children }: ScrollBannerProps) {
 		let raf = 0
 
 		const update = () => {
-			const wrapper = wrapperRef.current
+			const outer = outerRef.current
+			const frozen = frozenRef.current
 			const overlay = overlayRef.current
 			const text = textRef.current
-			if (!wrapper || !overlay || !text) return
+			const spacer = spacerRef.current
+			if (!outer || !frozen || !overlay || !text || !spacer) return
 
-			// The overlay/pin only exist on >= sm; leave things untouched on mobile.
+			// The effect only exists on >= sm; leave everything untouched on mobile.
 			if (window.innerWidth < 640) {
-				overlay.style.opacity = ""
+				frozen.style.transform = ""
 				text.style.transform = ""
+				overlay.style.opacity = ""
+				spacer.style.height = ""
 				return
 			}
 
-			// How far we've scrolled past the top of the banner. While the photo is
-			// pinned this is exactly how far the page has scrolled, so translating
-			// the text up 1:1 reads as the text scrolling off the still photo.
-			const scrolled = Math.max(-wrapper.getBoundingClientRect().top, 0)
 			const vh = window.innerHeight || 1
-			const fade = Math.max(1 - scrolled / (vh * 0.5), 0)
+			// How far the photo + content are held still while the heading scrolls off.
+			const hold = vh * 0.65
+			spacer.style.height = `${hold}px`
 
-			text.style.transform = `translate3d(0, ${-scrolled}px, 0)`
-			// Fade the scrim + text together so the photo is left clean once the
-			// heading has scrolled away.
-			overlay.style.opacity = String(fade)
+			// naturalTop: the banner's top relative to the viewport, ignoring our transform
+			// (outer is never transformed, only its frozen child is).
+			const naturalTop = outer.getBoundingClientRect().top
+			// Once the banner reaches the top of the viewport, counter the scroll for `hold`
+			// pixels so the photo + content stay still, then let them scroll away.
+			const held = Math.min(Math.max(-naturalTop, 0), hold)
+
+			frozen.style.transform = `translate3d(0, ${held}px, 0)`
+			// Cancel the hold for just the heading so it scrolls off the still photo at
+			// the natural scroll speed.
+			text.style.transform = `translate3d(0, ${-held}px, 0)`
+			// Fade the scrim + heading together so the photo is left clean.
+			overlay.style.opacity = String(Math.max(1 - held / (vh * 0.55), 0))
 		}
 
 		const onScroll = () => {
@@ -84,38 +101,43 @@ export function ScrollBanner({ image, children }: ScrollBannerProps) {
 	}, [])
 
 	return (
-		<div ref={wrapperRef} className="relative w-full">
-			{/* Pinned photo stage. Sticky on >= sm so the heading can scroll off before the photo moves. */}
-			<div className="w-full min-h-[40vh] overflow-hidden sm:sticky sm:top-0">
-				<AgilityPic
-					image={createImageField({ url: image.url, alt: image.label })}
-					fallbackWidth={1920}
-					priority
-					className="block h-auto w-full"
-					sources={[
-						{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 3840 },
-						{ media: "(min-width: 1280px)", width: 1920 },
-						{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
-						{ media: "(min-width: 640px)", width: 1280 },
-						{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1920 },
-						{ media: "(max-width: 639px)", width: 960 },
-					]}
-				/>
+		<div ref={outerRef} className="relative w-full">
+			<div ref={frozenRef} className="sm:will-change-transform">
+				{/* Photo (full width, natural ratio so nothing is cropped) + overlaid heading. */}
+				<div className="relative w-full overflow-hidden sm:min-h-[50vh]">
+					<AgilityPic
+						image={createImageField({ url: image.url, alt: image.label })}
+						fallbackWidth={1920}
+						priority
+						className="block h-auto w-full"
+						sources={[
+							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 3840 },
+							{ media: "(min-width: 1280px)", width: 1920 },
+							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
+							{ media: "(min-width: 640px)", width: 1280 },
+							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1920 },
+							{ media: "(max-width: 639px)", width: 960 },
+						]}
+					/>
 
-				{/* Scrim + overlaid heading (>= sm only). Fades out as the heading scrolls away. */}
-				<div ref={overlayRef} className="hidden will-change-[opacity] sm:block">
-					<div className="absolute inset-0 bg-black/25" />
-					<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
-					<div className="absolute inset-x-0 top-0 flex h-[100svh] max-h-full items-center justify-center px-6 lg:px-8">
-						<div ref={textRef} className="w-full max-w-3xl text-center will-change-transform">
-							{children}
+					{/* Scrim + overlaid heading (>= sm only). Fades out as the heading scrolls away. */}
+					<div ref={overlayRef} className="hidden will-change-[opacity] sm:block">
+						<div className="absolute inset-0 bg-black/25" />
+						<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
+						<div className="absolute inset-x-0 top-0 flex h-[100svh] max-h-full items-center justify-center px-6 lg:px-8">
+							<div ref={textRef} className="w-full max-w-3xl text-center will-change-transform">
+								{heading}
+							</div>
 						</div>
 					</div>
 				</div>
+
+				{/* Article content: held with the photo, then scrolls away together. */}
+				{children}
 			</div>
 
-			{/* Spacer that gives the heading room to scroll away while the photo stays pinned (>= sm only). */}
-			<div className="hidden sm:block sm:h-[55vh]" aria-hidden="true" />
+			{/* Scroll room consumed while holding (>= sm). Sits at the end of the article so there's no gap under the photo. */}
+			<div ref={spacerRef} aria-hidden="true" className="hidden sm:block" />
 		</div>
 	)
 }

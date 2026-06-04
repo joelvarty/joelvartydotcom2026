@@ -225,99 +225,111 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 
 	const hasBanner = Boolean(post.fields.featuredImage)
 
-	return (
-		<article className="animate-fade-in" data-agility-component={moduleContentID}>
-			{/* Full-bleed banner: photo stays pinned while the heading scrolls off (>= sm) */}
-			{post.fields.featuredImage && (
-				<ScrollBanner image={post.fields.featuredImage}>
+	// The heading overlaid on the photo banner (>= sm). It scrolls off the still photo.
+	const overlayHeading = (
+		<>
+			{series && (
+				<SeriesLink
+					variant="onImage"
+					href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
+					title={series.title}
+				/>
+			)}
+			<h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" data-agility-field="title">
+				{pageTitle}
+			</h1>
+			{formattedDate && <time className="mt-4 block text-white/90 drop-shadow-md">{formattedDate}</time>}
+		</>
+	)
+
+	const body = (
+		<div className="px-4 sm:px-6 lg:px-8 py-12">
+			<header className="mb-8 max-w-3xl mx-auto">
+				{/* Heading: rendered below the photo on mobile, or as the main header when there is no banner. */}
+				<div className={hasBanner ? "sm:hidden" : undefined}>
 					{series && (
 						<SeriesLink
-							variant="onImage"
 							href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
 							title={series.title}
 						/>
 					)}
-					<h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl" data-agility-field="title">
+					<h1 className="text-4xl font-bold text-foreground mb-4" data-agility-field="title">
 						{pageTitle}
 					</h1>
-					{formattedDate && <time className="mt-4 block text-white/90 drop-shadow-md">{formattedDate}</time>}
-				</ScrollBanner>
-			)}
+					{formattedDate && <time className="text-muted-foreground">{formattedDate}</time>}
+				</div>
 
-			<div className="px-4 sm:px-6 lg:px-8 py-12">
-				<header className="mb-8 max-w-3xl mx-auto">
-					{/* Heading: rendered below the photo on mobile, or as the main header when there is no banner. */}
-					<div className={hasBanner ? "sm:hidden" : undefined}>
-						{series && (
-							<SeriesLink
-								href={localizeUrl(`/blog/series/${series.slug}`, languageCode)}
-								title={series.title}
-							/>
+				{/* Metadata: Category and Tags */}
+				{(category || tags.length > 0) && (
+					<div className="mt-4 flex flex-wrap gap-2 items-center text-sm">
+						{category && (
+							<Link
+								href={localizeUrl(`/blog/category/${category.slug}`, languageCode)}
+								className="inline-flex items-center px-3 py-1 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+							>
+								{category.title}
+							</Link>
 						)}
-						<h1 className="text-4xl font-bold text-foreground mb-4" data-agility-field="title">
-							{pageTitle}
-						</h1>
-						{formattedDate && <time className="text-muted-foreground">{formattedDate}</time>}
-					</div>
-
-					{/* Metadata: Category and Tags */}
-					{(category || tags.length > 0) && (
-						<div className="mt-4 flex flex-wrap gap-2 items-center text-sm">
-							{category && (
-								<Link
-									href={localizeUrl(`/blog/category/${category.slug}`, languageCode)}
-									className="inline-flex items-center px-3 py-1 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
-								>
-									{category.title}
-								</Link>
-							)}
-							{tags.length > 0 && (
-								<>
-									{tags.map((tag) => (
-										<span
-											key={tag.contentID}
-											className="inline-flex items-center px-3 py-1 rounded-full bg-muted text-muted-foreground font-medium"
-										>
-											{tag.name}
-										</span>
-									))}
-								</>
-							)}
-						</div>
-					)}
-
-					{post.fields.excerpt && (
-						<p className="mt-4 text-xl text-muted-foreground" data-agility-field="excerpt">
-							{post.fields.excerpt}
-						</p>
-					)}
-				</header>
-				{markdownContent && (
-					<div
-						className="prose prose-lg max-w-3xl mx-auto dark:prose-invert"
-						data-agility-field="Content"
-					>
-						{processMarkdown(markdownContent)}
+						{tags.length > 0 && (
+							<>
+								{tags.map((tag) => (
+									<span
+										key={tag.contentID}
+										className="inline-flex items-center px-3 py-1 rounded-full bg-muted text-muted-foreground font-medium"
+									>
+										{tag.name}
+									</span>
+								))}
+							</>
+						)}
 					</div>
 				)}
-				<div className="max-w-3xl mx-auto mt-12 border-t border-border pt-8 text-center">
-					{subscribeCTA && (
-						<>
-							<h3 className="text-xl font-bold text-foreground mb-2">{subscribeCTA.heading}</h3>
-							<p className="text-muted-foreground mb-6">{subscribeCTA.description}</p>
-						</>
-					)}
-					<iframe
-						src="https://joelvarty.substack.com/embed"
-						width="100%"
-						height="150"
-						style={{ border: "none", background: "transparent" }}
-						frameBorder="0"
-						scrolling="no"
-						title="Subscribe to newsletter"
-					/>
+
+				{post.fields.excerpt && (
+					<p className="mt-4 text-xl text-muted-foreground" data-agility-field="excerpt">
+						{post.fields.excerpt}
+					</p>
+				)}
+			</header>
+			{markdownContent && (
+				<div
+					className="prose prose-lg max-w-3xl mx-auto dark:prose-invert"
+					data-agility-field="Content"
+				>
+					{processMarkdown(markdownContent)}
 				</div>
+			)}
+			<div className="max-w-3xl mx-auto mt-12 border-t border-border pt-8 text-center">
+				{subscribeCTA && (
+					<>
+						<h3 className="text-xl font-bold text-foreground mb-2">{subscribeCTA.heading}</h3>
+						<p className="text-muted-foreground mb-6">{subscribeCTA.description}</p>
+					</>
+				)}
+				<iframe
+					src="https://joelvarty.substack.com/embed"
+					width="100%"
+					height="150"
+					style={{ border: "none", background: "transparent" }}
+					frameBorder="0"
+					scrolling="no"
+					title="Subscribe to newsletter"
+				/>
 			</div>
+		</div>
+	)
+
+	return (
+		<article className="animate-fade-in" data-agility-component={moduleContentID}>
+			{post.fields.featuredImage ? (
+				// Full-bleed banner: the photo and content are held still while the heading
+				// scrolls off, then everything scrolls away together (>= sm).
+				<ScrollBanner image={post.fields.featuredImage} heading={overlayHeading}>
+					{body}
+				</ScrollBanner>
+			) : (
+				body
+			)}
 		</article>
 	)
 }
