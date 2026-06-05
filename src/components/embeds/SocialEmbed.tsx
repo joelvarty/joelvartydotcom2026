@@ -143,6 +143,7 @@ function YouTubeEmbed({ videoId }: { videoId: string }) {
 				<iframe
 					src={`https://www.youtube.com/embed/${videoId}`}
 					title="YouTube video"
+					loading="lazy"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 					allowFullScreen
 					className="w-full h-full rounded-lg"
@@ -178,6 +179,7 @@ function FacebookEmbed({ url }: { url: string }) {
 					src={`https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=false&width=${width}`}
 					width={width}
 					height={height}
+					loading="lazy"
 					style={{ border: "none", overflow: "hidden" }}
 					scrolling="no"
 					frameBorder="0"
@@ -195,6 +197,7 @@ function FacebookEmbed({ url }: { url: string }) {
 					src={`https://www.facebook.com/plugins/post.php?href=${encodedUrl}&show_text=true&width=500`}
 					width={500}
 					height={600}
+					loading="lazy"
 					style={{ border: "none", overflow: "hidden" }}
 					scrolling="no"
 					frameBorder="0"

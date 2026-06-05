@@ -310,6 +310,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 					src="https://joelvarty.substack.com/embed"
 					width="100%"
 					height="150"
+					loading="lazy"
 					style={{ border: "none", background: "transparent" }}
 					frameBorder="0"
 					scrolling="no"

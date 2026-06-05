@@ -109,16 +109,19 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 				<div className="relative w-full overflow-hidden">
 					<AgilityPic
 						image={createImageField({ url: image.url, alt: image.label })}
-						fallbackWidth={1920}
+						fallbackWidth={1280}
 						priority
 						className="block h-auto w-full"
 						sources={[
-							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 3840 },
-							{ media: "(min-width: 1280px)", width: 1920 },
-							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
-							{ media: "(min-width: 640px)", width: 1280 },
-							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1920 },
-							{ media: "(max-width: 639px)", width: 960 },
+							// Full-bleed image. Widths kept modest: a full-bleed hero rarely
+							// benefits from > ~2x the layout width, and oversizing here is the
+							// single biggest hit to LCP (especially on mobile).
+							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2560 },
+							{ media: "(min-width: 1280px)", width: 1600 },
+							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
+							{ media: "(min-width: 640px)", width: 1080 },
+							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1080 },
+							{ media: "(max-width: 639px)", width: 640 },
 						]}
 					/>
 
