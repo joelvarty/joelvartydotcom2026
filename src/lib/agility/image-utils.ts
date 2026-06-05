@@ -54,3 +54,34 @@ export function createImageFieldFromUrl(url: string, alt: string, title: string 
 		filesize: 0,
 	}
 }
+
+/**
+ * Full-bleed hero image helpers.
+ *
+ * The blog hero is the LCP element. To win it on slow connections it must be
+ * (a) prioritized over the rest of the page and (b) discoverable in the initial
+ * HTML. AgilityPic emits neither `fetchpriority` nor a preload, so the hero is
+ * rendered as a plain responsive <img fetchpriority="high"> plus a matching
+ * <link rel="preload"> (see BlogDetails). The img's srcSet/sizes and the
+ * preload's imageSrcSet/imageSizes must be identical so the browser reuses the
+ * single fetch instead of downloading twice.
+ *
+ * Widths target a full-bleed (100vw) image: small enough for phones, with a few
+ * larger steps for tablets/retina. Agility's CDN will not upscale past the
+ * original, so the upper steps are safe.
+ */
+const HERO_IMAGE_WIDTHS = [640, 828, 1080, 1280, 1600, 2048, 2560] as const
+
+/** Default `src` for the hero <img> (used when srcSet can't be evaluated). */
+export const HERO_IMAGE_FALLBACK_WIDTH = 1280
+
+export const HERO_IMAGE_SIZES = "100vw"
+
+export function agilityImageUrl(url: string, width: number): string {
+	return `${url}?format=auto&w=${width}`
+}
+
+export function heroImageSrcSet(url: string): string {
+	return HERO_IMAGE_WIDTHS.map((w) => `${agilityImageUrl(url, w)} ${w}w`).join(", ")
+}
+
