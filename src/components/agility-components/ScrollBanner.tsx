@@ -27,8 +27,12 @@
 "use client"
 
 import { useEffect, useRef, type ReactNode } from "react"
-import { AgilityPic } from "@agility/nextjs"
-import { createImageField } from "@/lib/agility/image-utils"
+import {
+	agilityImageUrl,
+	heroImageSrcSet,
+	HERO_IMAGE_FALLBACK_WIDTH,
+	HERO_IMAGE_SIZES,
+} from "@/lib/agility/image-utils"
 
 interface ScrollBannerProps {
 	image: { url: string; label: string }
@@ -107,22 +111,24 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 				    No min-height: the banner is exactly the photo's height so a short/panoramic
 				    photo never leaves a scrim band below it. */}
 				<div className="relative w-full overflow-hidden">
-					<AgilityPic
-						image={createImageField({ url: image.url, alt: image.label })}
-						fallbackWidth={1280}
-						priority
+					{/*
+					  Hero = LCP element. Rendered as a plain responsive <img> (not
+					  AgilityPic) so it can carry fetchPriority="high"; a matching
+					  <link rel="preload"> is emitted server-side in BlogDetails. The
+					  srcSet/sizes here MUST match the preload so the browser reuses the
+					  single fetch. eslint-disable-next-line @next/next/no-img-element:
+					  intentional — Agility CDN images don't go through next/image.
+					*/}
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img
+						src={agilityImageUrl(image.url, HERO_IMAGE_FALLBACK_WIDTH)}
+						srcSet={heroImageSrcSet(image.url)}
+						sizes={HERO_IMAGE_SIZES}
+						alt={image.label}
+						fetchPriority="high"
+						loading="eager"
+						decoding="async"
 						className="block h-auto w-full"
-						sources={[
-							// Full-bleed image. Widths kept modest: a full-bleed hero rarely
-							// benefits from > ~2x the layout width, and oversizing here is the
-							// single biggest hit to LCP (especially on mobile).
-							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 2560 },
-							{ media: "(min-width: 1280px)", width: 1600 },
-							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1600 },
-							{ media: "(min-width: 640px)", width: 1080 },
-							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1080 },
-							{ media: "(max-width: 639px)", width: 640 },
-						]}
 					/>
 
 					{/* Scrim + overlaid heading (>= sm only). Fades out as the heading scrolls away. */}
