@@ -25,7 +25,14 @@ jobs:
           urls: |
             ${{ github.event.deployment_status.target_url }}
             ${{ github.event.deployment_status.target_url }}/blog
+          # Use our config (assertions + the Vercel automation-bypass header).
+          configPath: ./.lighthouserc.js
           uploadArtifacts: true
           temporaryPublicStorage: true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          # Lets .lighthouserc.js bypass Vercel Deployment Protection so the
+          # audit measures the real page instead of the login screen. Create the
+          # secret in Vercel (Settings → Deployment Protection → Protection
+          # Bypass for Automation) and add it as a repo Actions secret.
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
