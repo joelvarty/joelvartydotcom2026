@@ -127,7 +127,10 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 						alt={image.label}
 						fetchPriority="high"
 						loading="eager"
-						decoding="async"
+						// Deliberately NOT decoding="async": for the LCP image that defers the
+						// decode/paint (it queued behind the gallery image decodes here and
+						// pushed LCP render delay to ~8s). "sync" decodes it up front.
+						decoding="sync"
 						className="block h-auto w-full"
 					/>
 
