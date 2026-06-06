@@ -18,7 +18,7 @@
 
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 export type EmbedPlatform = "youtube" | "facebook" | "instagram" | "tiktok" | "unknown"
 
@@ -137,19 +137,51 @@ export function SocialEmbed({ url }: SocialEmbedProps) {
  * YouTube Embed Component
  */
 function YouTubeEmbed({ videoId }: { videoId: string }) {
+	const [activated, setActivated] = useState(false)
+
+	if (activated) {
+		return (
+			<div className="my-6 flex justify-center">
+				<div className="w-full max-w-3xl aspect-video">
+					<iframe
+						src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+						title="YouTube video"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowFullScreen
+						className="w-full h-full rounded-lg"
+						style={{ border: "none" }}
+					/>
+				</div>
+			</div>
+		)
+	}
+
+	// Facade: show a lightweight thumbnail + play button. The full YouTube player
+	// (iframe + ~1 MB of JS) only loads when the user clicks, so it no longer
+	// competes for bandwidth/CPU during initial page load.
 	return (
 		<div className="my-6 flex justify-center">
-			<div className="w-full max-w-3xl aspect-video">
-				<iframe
-					src={`https://www.youtube.com/embed/${videoId}`}
-					title="YouTube video"
+			<button
+				type="button"
+				onClick={() => setActivated(true)}
+				aria-label="Play YouTube video"
+				className="group relative block aspect-video w-full max-w-3xl overflow-hidden rounded-lg bg-black"
+			>
+				{/* eslint-disable-next-line @next/next/no-img-element */}
+				<img
+					src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+					alt=""
 					loading="lazy"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowFullScreen
-					className="w-full h-full rounded-lg"
-					style={{ border: "none" }}
+					className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100"
 				/>
-			</div>
+				<span className="absolute inset-0 flex items-center justify-center">
+					<span className="flex h-14 w-20 items-center justify-center rounded-xl bg-red-600/90 shadow-lg transition group-hover:scale-105 group-hover:bg-red-600">
+						<svg viewBox="0 0 24 24" fill="white" className="h-7 w-7" aria-hidden="true">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+					</span>
+				</span>
+			</button>
 		</div>
 	)
 }
