@@ -116,6 +116,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 										excerpt={post.excerpt}
 										featuredImage={post.featuredImage}
 										index={index}
+										priority={index === 0}
 										series={post.series}
 										category={post.category}
 										tags={post.tags}

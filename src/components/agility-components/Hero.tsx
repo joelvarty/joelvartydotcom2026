@@ -120,6 +120,7 @@ const Hero = async ({ module, languageCode }: UnloadedModuleProps) => {
 							>
 									<AgilityPic
 										image={heroImage as any}
+										priority
 										fallbackWidth={800}
 										className="h-auto w-full object-cover"
 										sources={[
@@ -150,6 +151,7 @@ const Hero = async ({ module, languageCode }: UnloadedModuleProps) => {
 				<div className="absolute inset-0 z-0">
 					<AgilityPic
 						image={image as any}
+						priority
 						fallbackWidth={1920}
 						className="h-full w-full object-cover"
 						sources={[
