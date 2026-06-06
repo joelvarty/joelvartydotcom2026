@@ -25,6 +25,7 @@ jobs:
           urls: |
             ${{ github.event.deployment_status.target_url }}
             ${{ github.event.deployment_status.target_url }}/blog
+            ${{ github.event.deployment_status.target_url }}/blog/scotland-day-five-quiraing-northern-skye
           # Use our config (assertions + the Vercel automation-bypass header).
           configPath: ./.lighthouserc.js
           uploadArtifacts: true
