@@ -12,6 +12,8 @@ export interface BlogPostItemProps {
 		label: string
 	}
 	index?: number
+	/** Eagerly load + prioritize this card's image (use for the first, above-the-fold card so it isn't the lazily-loaded LCP). */
+	priority?: boolean
 	series?: {
 		contentID: number
 		title: string
@@ -47,6 +49,7 @@ export function BlogPostItem({
 	excerpt,
 	featuredImage,
 	index = 0,
+	priority = false,
 	series,
 	category,
 	tags,
@@ -64,6 +67,7 @@ export function BlogPostItem({
 				<div className="shrink-0 w-full sm:w-48 sm:h-48 aspect-video sm:aspect-square overflow-hidden rounded-lg bg-muted">
 					<AgilityPic
 						image={featuredImage as any}
+						priority={priority}
 						fallbackWidth={400}
 						className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
 						sources={[
