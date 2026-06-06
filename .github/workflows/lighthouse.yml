@@ -7,6 +7,12 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success' && contains(github.event.deployment_status.target_url, 'vercel.app')
+    env:
+      # Single source of truth for the audited URLs (used by warm-up + Lighthouse).
+      LH_URLS: |
+        ${{ github.event.deployment_status.target_url }}
+        ${{ github.event.deployment_status.target_url }}/blog
+        ${{ github.event.deployment_status.target_url }}/blog/scotland-day-five-quiraing-northern-skye
     steps:
       - uses: actions/checkout@v4
 
@@ -15,6 +21,23 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Warm up cache (ISR + image CDN)
+        # Seed the caches so Lighthouse measures the warm path instead of a cold
+        # serverless start (cold TTFB was ~600ms). Hits each page twice (the first
+        # may trigger ISR regeneration, the second serves warm), then best-effort
+        # warms the Agility CDN images the page references — including the LCP hero
+        # — so the image CDN serves them warm during the audit.
+        run: |
+          printf '%s\n' "$LH_URLS" | grep -v '^[[:space:]]*$' | while read -r url; do
+            echo "Warming $url"
+            for i in 1 2; do curl -fsS -A "$UA" -o /tmp/warm.html "$url" || true; sleep 1; done
+            grep -oiE "https://[a-z0-9.-]*(agilitycms\.com|aglty\.io)/[^\" ]+" /tmp/warm.html \
+              | sed 's/&amp;/\&/g' | sort -u | head -30 \
+              | while read -r img; do curl -fsS -o /dev/null "$img" || true; done
+          done
+        env:
+          UA: "Mozilla/5.0 (compatible; LighthouseWarmup)"
+
       - name: Run Lighthouse CI
         # Informational only: a failed audit (e.g. when the Vercel preview is
         # behind Deployment Protection and returns 401 to the runner) must not
@@ -22,10 +45,7 @@ jobs:
         continue-on-error: true
         uses: treosh/lighthouse-ci-action@v12
         with:
-          urls: |
-            ${{ github.event.deployment_status.target_url }}
-            ${{ github.event.deployment_status.target_url }}/blog
-            ${{ github.event.deployment_status.target_url }}/blog/scotland-day-five-quiraing-northern-skye
+          urls: ${{ env.LH_URLS }}
           # Use our config (assertions + the Vercel automation-bypass header).
           configPath: ./.lighthouserc.js
           uploadArtifacts: true
