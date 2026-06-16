@@ -18,10 +18,14 @@
  * so the effect is disabled: the photo shows full width and the heading is
  * rendered below it by the parent (BlogDetails).
  *
- * The effect uses a passive scroll listener + requestAnimationFrame (CSS
- * scroll-timelines aren't supported in Safari/iPad yet) and mutates transforms
- * directly to avoid per-frame React re-renders. It is disabled under
- * prefers-reduced-motion.
+ * The effect is a NATIVE CSS scroll-driven animation (see the `.sb-*` rules in
+ * globals.css): `animation-timeline: scroll()` runs on the compositor, so it
+ * stays glued to the scroll and is smooth even with a mouse wheel — unlike a JS
+ * scroll handler, which trails the scroll by a frame. The only JS here reads the
+ * layout once (mount + resize) to set the scroll *range* the animation plays
+ * over, then flips on `.sb-ready`. Where scroll-driven animations aren't
+ * supported (older Safari/iPad) or under reduced motion, the banner just scrolls
+ * normally.
  */
 
 "use client"
@@ -42,71 +46,33 @@ interface ScrollBannerProps {
 
 export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 	const outerRef = useRef<HTMLDivElement>(null)
-	const frozenRef = useRef<HTMLDivElement>(null)
-	const overlayRef = useRef<HTMLDivElement>(null)
-	const textRef = useRef<HTMLDivElement>(null)
-	const spacerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+		const outer = outerRef.current
+		if (!outer) return
 
-		let raf = 0
-
-		const update = () => {
-			const outer = outerRef.current
-			const frozen = frozenRef.current
-			const overlay = overlayRef.current
-			const text = textRef.current
-			const spacer = spacerRef.current
-			if (!outer || !frozen || !overlay || !text || !spacer) return
-
-			// The effect only exists on >= sm; leave everything untouched on mobile.
-			if (window.innerWidth < 640) {
-				frozen.style.transform = ""
-				text.style.transform = ""
-				overlay.style.opacity = ""
-				spacer.style.height = ""
-				return
-			}
-
-			const vh = window.innerHeight || 1
-			// How far the photo + content are held still while the heading scrolls off.
-			const hold = vh * 0.65
-			spacer.style.height = `${hold}px`
-
-			// naturalTop: the banner's top relative to the viewport, ignoring our transform
-			// (outer is never transformed, only its frozen child is).
-			const naturalTop = outer.getBoundingClientRect().top
-			// Once the banner reaches the top of the viewport, counter the scroll for `hold`
-			// pixels so the photo + content stay still, then let them scroll away.
-			const held = Math.min(Math.max(-naturalTop, 0), hold)
-
-			frozen.style.transform = `translate3d(0, ${held}px, 0)`
-			// Cancel the hold for just the heading so it scrolls off the still photo at
-			// the natural scroll speed.
-			text.style.transform = `translate3d(0, ${-held}px, 0)`
-			// Fade the scrim + heading together so the photo is left clean.
-			overlay.style.opacity = String(Math.max(1 - held / (vh * 0.55), 0))
+		// Set the scroll range the CSS animation plays over: from when the banner
+		// reaches the top of the viewport (its document offset) through the next
+		// `hold` pixels. This is the one thing CSS can't compute, so we read it once
+		// here (never per scroll frame). `.sb-ready` then enables the animation, so
+		// it never runs over the wrong (default) range before this runs.
+		const setVars = () => {
+			const hold = Math.round(window.innerHeight * 0.65)
+			const start = Math.round(outer.getBoundingClientRect().top + window.scrollY)
+			outer.style.setProperty("--sb-hold", `${hold}px`)
+			outer.style.setProperty("--sb-range", `${start}px ${start + hold}px`)
+			outer.style.setProperty("--sb-range-fade", `${start}px ${start + Math.round(hold * 0.82)}px`)
+			outer.classList.add("sb-ready")
 		}
 
-		const onScroll = () => {
-			cancelAnimationFrame(raf)
-			raf = requestAnimationFrame(update)
-		}
-
-		update()
-		window.addEventListener("scroll", onScroll, { passive: true })
-		window.addEventListener("resize", onScroll, { passive: true })
-		return () => {
-			cancelAnimationFrame(raf)
-			window.removeEventListener("scroll", onScroll)
-			window.removeEventListener("resize", onScroll)
-		}
+		setVars()
+		window.addEventListener("resize", setVars)
+		return () => window.removeEventListener("resize", setVars)
 	}, [])
 
 	return (
-		<div ref={outerRef} className="relative w-full">
-			<div ref={frozenRef} className="sm:will-change-transform">
+		<div ref={outerRef} className="sb-root relative w-full">
+			<div className="sb-frozen">
 				{/* Photo (full width, natural ratio so nothing is cropped) + overlaid heading.
 				    No min-height: the banner is exactly the photo's height so a short/panoramic
 				    photo never leaves a scrim band below it. */}
@@ -135,11 +101,11 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 					/>
 
 					{/* Scrim + overlaid heading (>= sm only). Fades out as the heading scrolls away. */}
-					<div ref={overlayRef} className="hidden will-change-[opacity] sm:block">
+					<div className="sb-overlay hidden sm:block">
 						<div className="absolute inset-0 bg-black/25" />
 						<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
 						<div className="absolute inset-x-0 top-0 flex h-[100svh] max-h-full items-center justify-center px-6 lg:px-8">
-							<div ref={textRef} className="w-full max-w-3xl text-center will-change-transform">
+							<div className="sb-heading w-full max-w-3xl text-center">
 								{heading}
 							</div>
 						</div>
@@ -151,7 +117,7 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 			</div>
 
 			{/* Scroll room consumed while holding (>= sm). Sits at the end of the article so there's no gap under the photo. */}
-			<div ref={spacerRef} aria-hidden="true" className="hidden sm:block" />
+			<div className="sb-spacer hidden sm:block" aria-hidden="true" />
 		</div>
 	)
 }
