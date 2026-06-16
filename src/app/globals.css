@@ -212,3 +212,79 @@
     transform: scale(1);
   }
 }
+
+/*
+ * Blog hero: "hold, then scroll away" (see ScrollBanner.tsx).
+ *
+ * Driven by a native scroll-driven animation so it runs on the compositor and
+ * tracks the scroll smoothly, including with a mouse wheel — unlike a per-frame
+ * JS scroll handler, which trails by a frame and feels janky.
+ *
+ * The CSS variables (--sb-range, --sb-range-fade, --sb-hold) are set by
+ * ScrollBanner.tsx, which also adds `.sb-ready` once they're set. We gate on:
+ *   - >= sm (the overlay heading only exists on larger screens),
+ *   - prefers-reduced-motion: no-preference,
+ *   - @supports (animation-timeline: scroll())  [older Safari/iPad lack it],
+ *   - .sb-ready  [so the animation never plays over the default range].
+ * When any gate fails, the banner simply scrolls normally.
+ *
+ * `animation-duration` is intentionally left at its initial `auto`, which spans
+ * the `animation-range` for scroll timelines — so these use longhands rather
+ * than the `animation` shorthand (which would reset duration to 0s).
+ */
+@media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    /* Counter-translate the photo + content so they hold still while held. */
+    .sb-ready .sb-frozen {
+      animation-name: sb-hold;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--sb-range, 0 100vh);
+      will-change: transform;
+    }
+
+    /* Cancel the hold for the heading so it scrolls off at the natural speed. */
+    .sb-ready .sb-heading {
+      animation-name: sb-heading-off;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--sb-range, 0 100vh);
+      will-change: transform;
+    }
+
+    /* Fade the scrim + heading together so the photo is left clean. */
+    .sb-ready .sb-overlay {
+      animation-name: sb-overlay-fade;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--sb-range-fade, 0 100vh);
+      will-change: opacity;
+    }
+
+    /* Scroll room consumed while holding (only when the effect is active). */
+    .sb-ready .sb-spacer {
+      height: var(--sb-hold, 0px);
+    }
+  }
+}
+
+@keyframes sb-hold {
+  to {
+    transform: translate3d(0, var(--sb-hold, 0px), 0);
+  }
+}
+
+@keyframes sb-heading-off {
+  to {
+    transform: translate3d(0, calc(-1 * var(--sb-hold, 0px)), 0);
+  }
+}
+
+@keyframes sb-overlay-fade {
+  to {
+    opacity: 0;
+  }
+}
