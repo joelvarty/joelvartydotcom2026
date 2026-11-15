@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { defaultLocale, locales, isValidLocale, getLocaleFromPathname, removeLocaleFromPathname } from './lib/i18n/config'
 import { checkRedirect } from './lib/cms-content/checkRedirect'
-import { isPublishedPath } from './lib/cms/publishedPaths'
+import { isAppPath, isPublicFile, isPublishedPath } from './lib/cms/publishedPaths'
 
 /** Next sets this cookie when draft mode is on. */
 const DRAFT_COOKIE = "__prerender_bypass"
@@ -228,6 +228,16 @@ export async function proxy(request: NextRequest) {
 		}
 
 		return applyCacheHeaders(NextResponse.next(), request)
+	} else if (process.env.NODE_ENV !== "development"
+		&& !getLocaleFromPathname(pathname, locales)
+		&& !isAppPath(pathname)
+		&& !isPublicFile(pathname)) {
+		/*******************************************
+		 * UNKNOWN FILE-LIKE PATHS (/x.php, /a.md) *
+		 *******************************************/
+		// Nothing serves these: without this they reach the [locale] route with
+		// the file name as the "locale" and stream a 200 before notFound() runs.
+		return await notFoundResponse(request)
 	}
 }
 

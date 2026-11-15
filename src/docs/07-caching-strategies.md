@@ -117,8 +117,10 @@ and fails open if Agility is unreachable.
 
 **Adding a hand-written route under `app/`?** Add it to `APP_PATHS` or
 `APP_PREFIXES` in `publishedPaths.ts`, or it will 404 in production while working
-in `next dev`. (Paths with a file extension, like `/blog/rss.xml`, skip the
-check.)
+in `next dev`. A path with a dot (`/x.php`, `/about.md`) that is neither an app
+path nor a file in `public/` also gets a 404 from the proxy; when you add a file
+or folder to `public/`, add it to `PUBLIC_FILES` / `PUBLIC_PREFIXES` in the same
+file.
 
 **Cache headers are set in the proxy**, because it can see the draft cookie:
 draft renders get `private, no-store`; everything else gets

@@ -1,6 +1,7 @@
 import { getDynamicPageURL } from "@agility/nextjs/node";
 import { NextRequest, NextResponse } from "next/server";
 import { draftMode } from "next/headers"
+import { defaultLocale } from "@/lib/i18n/config"
 
 /**
  * Resolves a ?ContentID= deep link from the CMS to the dynamic page that renders
@@ -22,8 +23,13 @@ export async function GET(req: NextRequest) {
 	const contentID = parseInt(contentIDStr)
 	const { isEnabled: preview } = await draftMode()
 
-	//the page that was originally requested, supplied by the rewrite
-	const slug = searchParams.get("slug") || ""
+	//the page that was originally requested, supplied by the rewrite. On Vercel
+	//the proxy's locale rewrite can run first, so drop the default-locale prefix
+	//rather than bounce the visitor through /en-us/... and a second redirect.
+	let slug = searchParams.get("slug") || ""
+	if (slug === `/${defaultLocale}` || slug.startsWith(`/${defaultLocale}/`)) {
+		slug = slug.slice(defaultLocale.length + 1) || "/"
+	}
 
 	if (!isNaN(contentID) && contentID > 0) {
 		//*** this is a dynamic page request ***

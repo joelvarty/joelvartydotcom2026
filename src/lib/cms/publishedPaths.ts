@@ -27,6 +27,25 @@ const APP_PREFIXES = [
 	"/_next",
 ]
 
+/**
+ * Files served from public/. Paths with a dot skip the sitemap check, and a
+ * dotted path that is NOT one of these (or an app path) would otherwise fall
+ * through to the [locale] route and stream a soft 404 with a 200 status.
+ *
+ * Add to this when you add a file or folder to public/.
+ */
+const PUBLIC_FILES = new Set([
+	"/file.svg",
+	"/globe.svg",
+	"/next.svg",
+	"/vercel.svg",
+	"/window.svg",
+])
+const PUBLIC_PREFIXES = ["/favicons/"]
+
+export const isPublicFile = (path: string): boolean =>
+	PUBLIC_FILES.has(path) || PUBLIC_PREFIXES.some(p => path.startsWith(p))
+
 export const isAppPath = (path: string): boolean => {
 	if (APP_PATHS.has(path)) return true
 	//NOTE: the path-boundary test matters. A bare `startsWith` prefix test would

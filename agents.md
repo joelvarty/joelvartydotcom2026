@@ -125,7 +125,8 @@ export default function ClientPart({ data }: { data: any }) {
   build (dates parsed from content are fine).
 - **404s come from the proxy**, checked against the published sitemap. Add
   hand-written routes to `APP_PATHS`/`APP_PREFIXES` in
-  `src/lib/cms/publishedPaths.ts`, or they 404 in production only.
+  `src/lib/cms/publishedPaths.ts`, or they 404 in production only. Same for
+  new files or folders in `public/` (`PUBLIC_FILES` / `PUBLIC_PREFIXES`).
 - Preview params are handled by both the proxy and `beforeFiles` rewrites in
   `next.config.ts` (cached pages skip the proxy). Keep both.
 - Only the `page` and `order` query params reach pages (encoded into the path by
