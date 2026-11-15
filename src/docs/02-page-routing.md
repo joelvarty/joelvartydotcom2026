@@ -156,19 +156,17 @@ export const locales = ["en-us", "fr", "es"] as const
 
 4. Rebuild the site
 
-## Static Generation with ISR
+## Static Generation with Cache Components
 
-The project uses Incremental Static Regeneration (ISR):
+`generateStaticParams` returns every published, non-folder, non-redirect node in
+the flat sitemap, and each page is prerendered at build time. There is no
+time-based `revalidate` (route segment configs are rejected under
+`cacheComponents`): a publish in Agility calls `/api/revalidate`, which clears
+the cache tags for what changed, and the next request renders fresh content.
 
-```typescript
-export const revalidate = 60  // Revalidate every 60 seconds
-```
-
-**How it works**:
-1. First request: Page is generated statically at build time
-2. Subsequent requests: Serve cached page
-3. After 60 seconds: Next request triggers regeneration in background
-4. New version: Cached for next 60 seconds
+Unknown paths are answered with a real 404 by the proxy (`src/proxy.ts`), which
+checks the path against the published sitemap before anything renders. See
+[07-caching-strategies.md](./07-caching-strategies.md).
 
 ## Dynamic Routing Scenarios
 

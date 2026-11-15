@@ -165,10 +165,10 @@ npm run lint      # Run ESLint
 ## 📦 What's Included
 
 - ✅ **Agility CMS Integration** - Full SDK with type-safe helpers
-- ✅ **Next.js 15** - App Router with Server Components
+- ✅ **Next.js 16** - App Router with Server Components and Cache Components
 - ✅ **Multi-Locale Support** - Built-in internationalization
 - ✅ **TypeScript** - Full type safety
-- ✅ **Caching** - ISR with on-demand revalidation
+- ✅ **Caching** - prerendered pages, `"use cache"` reads, on-demand revalidation by webhook
 - ✅ **Preview Mode** - See draft content before publishing
 - ✅ **AI-Friendly Docs** - Optimized for all AI coding tools
 

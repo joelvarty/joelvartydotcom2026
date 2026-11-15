@@ -2,6 +2,9 @@
 
 This document explains the different types of linked and nested content in Agility CMS and how to properly fetch and work with each type.
 
+> **Preview:** every read in `src/lib/cms/` takes `preview`. In a module component, destructure `isPreview` from the props (`UnloadedModuleProps`) and pass `preview: isPreview` to every `getContentItem` / `getContentList` call, as the examples below do. Never call `draftMode()` from a component or a `lib/cms` helper. See [07-caching-strategies.md](./07-caching-strategies.md).
+
+
 ## Understanding Content Relationships
 
 Agility CMS supports several types of content relationships. Understanding which type you're working with is **CRITICAL** for correct data fetching.
@@ -78,6 +81,7 @@ export default async function BlogPost({ module, locale }: any) {
 const author = await getContentItem({
   contentID: post.fields.author.contentID,  // Unnecessary!
   locale,
+  preview: isPreview,
 });
 
 // ✅ CORRECT: Use it directly
@@ -116,12 +120,14 @@ export default async function BentoSection({ module, locale }: any) {
   const { fields: { heading, cards } } = await getContentItem<BentoSection>({
     contentID: module.contentid,
     languageCode: locale,
+    preview: isPreview,
   });
 
   // Step 2: Fetch the nested content using the reference name
   const cardItems = await getContentList({
     referenceName: cards.referencename,  // ✅ CRITICAL: Use referencename
     languageCode: locale,
+    preview: isPreview,
     take: 20,
   });
 
@@ -151,12 +157,14 @@ export default async function BentoSection({ module, locale }: any) {
 const items = await getContentList({
   referenceName: cards.contentID,  // Wrong property!
   locale,
+  preview: isPreview,
 });
 
 // ✅ CORRECT: Fetch using referencename
 const items = await getContentList({
   referenceName: cards.referencename,  // Correct!
   locale,
+  preview: isPreview,
 });
 ```
 
@@ -188,6 +196,7 @@ if (module.fields.cards?.referencename) {
   const items = await getContentList({
     referenceName: module.fields.cards.referencename,
     locale,
+    preview: isPreview,
   });
 }
 ```
@@ -316,12 +325,14 @@ export default async function TestimonialsGrid({ module, locale }: any) {
   const { fields } = await getContentItem<TestimonialsModule>({
     contentID: module.contentid,
     languageCode: locale,
+    preview: isPreview,
   });
 
   // Step 2: Fetch the actual testimonials using the reference
   const testimonials = await getContentList<Testimonial>({
     referenceName: fields.testimonials.referencename,
     languageCode: locale,
+    preview: isPreview,
     take: 12,
   });
 
@@ -385,12 +396,14 @@ export default async function FeaturedSection({ module, locale }: any) {
   const { fields } = await getContentItem<FeaturedSection>({
     contentID: module.contentid,
     languageCode: locale,
+    preview: isPreview,
   });
 
   // Fetch the referenced list
   const relatedPosts = await getContentList<BlogPost>({
     referenceName: fields.relatedPosts.referencename,
     languageCode: locale,
+    preview: isPreview,
     take: 3,
   });
 
@@ -483,6 +496,7 @@ export default async function Dashboard({ module, locale }: any) {
   const { fields } = await getContentItem({
     contentID: module.contentid,
     languageCode: locale,
+    preview: isPreview,
   });
 
   // Fetch multiple referenced lists in parallel
@@ -490,14 +504,17 @@ export default async function Dashboard({ module, locale }: any) {
     getContentList({
       referenceName: fields.testimonials.referencename,
       languageCode: locale,
+      preview: isPreview,
     }),
     getContentList({
       referenceName: fields.team.referencename,
       languageCode: locale,
+      preview: isPreview,
     }),
     getContentList({
       referenceName: fields.stats.referencename,
       languageCode: locale,
+      preview: isPreview,
     }),
   ]);
 
@@ -550,6 +567,7 @@ const { fields } = await getContentItem({ contentID, languageCode });
 const items = await getContentList({
   referenceName: fields.myList.referencename,
   languageCode,
+  preview: isPreview,
 });
 ```
 
@@ -561,6 +579,7 @@ const items = fields.optionalList?.referencename
   ? await getContentList({
       referenceName: fields.optionalList.referencename,
       languageCode: locale,
+      preview: isPreview,
     })
   : [];
 ```

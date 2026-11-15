@@ -47,7 +47,7 @@ interface CareerEntry {
  * @param languageCode - The language code for localized content
  * @returns A section element with the career timeline
  */
-const CareerTimeline = async ({ module, languageCode }: UnloadedModuleProps) => {
+const CareerTimeline = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, containerReferenceName },
@@ -55,6 +55,7 @@ const CareerTimeline = async ({ module, languageCode }: UnloadedModuleProps) => 
 	} = await getContentItem<CareerTimelineFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const containerName = containerReferenceName || "CareerEntries"
@@ -63,6 +64,7 @@ const CareerTimeline = async ({ module, languageCode }: UnloadedModuleProps) => 
 	const entries = await getContentList<CareerEntry>({
 		referenceName: containerName,
 		languageCode,
+		preview: isPreview,
 		sort: "startDate desc",
 	})
 

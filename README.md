@@ -11,37 +11,40 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Architecture
 
 - **CMS**: Agility CMS (content, sitemap, dynamic pages)
-- **Framework**: Next.js App Router with `[locale]/[...slug]` dynamic routing
+- **Framework**: Next.js 16 App Router + React 19.3, with **Cache Components** (`cacheComponents: true`)
+- **Routing**: `[locale]/[...slug]` dynamic routing driven by the Agility sitemap
 - **Hosting**: Vercel
-- **Localization**: Locale-based routing via middleware (`src/proxy.ts`)
+- **Proxy**: `src/proxy.ts` handles preview, redirects, locale rewrites, real 404s and CDN cache headers
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `src/app/[locale]/[...slug]/page.tsx` | Dynamic page renderer with static param generation |
-| `src/app/api/revalidate/route.ts` | Webhook handler for Agility CMS publish events |
+| `src/app/[locale]/[...slug]/page.tsx` | Page renderer, with `generateStaticParams` from the sitemap |
+| `src/lib/cms/getAgilityPage.ts` | Composes the cached getters (sitemap → page → dynamic item) |
+| `src/lib/cms/getAgilityContext.ts` | The ONE place `draftMode()` is read |
+| `src/lib/cms/get*.ts` | Cached Agility reads (`"use cache"` + tag), uncached in preview |
+| `src/lib/cms/publishedPaths.ts` | Published-path check the proxy uses for real 404s |
+| `src/app/api/revalidate/route.ts` | Agility publish webhook: clears cache tags |
 | `src/app/api/preview/route.ts` | Enables draft mode for preview requests |
-| `src/proxy.ts` | Middleware for locale routing, preview, and redirects |
-| `src/lib/cms/getAgilityPage.ts` | Wrapper around Agility SDK's page props |
-| `src/lib/cms/getAgilityContext.ts` | Determines preview mode based on draft mode |
-| `src/lib/cms/getAgilitySDK.ts` | Initializes SDK with correct API key |
+| `src/proxy.ts` | Preview, redirects, locale routing, 404s, cache headers |
 
 ## Caching & Revalidation
 
-Content is cached using Next.js Data Cache with on-demand revalidation via Agility CMS webhooks.
+Every page is prerendered. Every published Agility read is a `"use cache"`
+entry with a cache tag; preview reads are never cached. `preview` is passed
+explicitly to every read, and `draftMode()` is read only in `getAgilityContext()`.
 
-### How Revalidation Works
+### How a publish goes live
 
 1. Content is published in Agility CMS
-2. Webhook fires to `/api/revalidate` with content/page IDs
-3. Relevant cache tags are invalidated (`agility-content-*`, `agility-sitemap-flat-*`)
-4. `revalidatePath()` purges the Full Route Cache for the affected page
-5. Next request triggers a fresh server render with updated data
+2. The webhook posts to `/api/revalidate` with the content or page ID
+3. The handler clears the matching tags (`agility-content-*`, `agility-page-*`, `agility-sitemap-*`) and revalidates the page's path
+4. The next request renders with the new content
 
-### Important: Sitemap Tag Revalidation
+The tag strings in `src/lib/cms/` and in the webhook are a contract: change them together.
 
-When content items change, the revalidation route must also invalidate the sitemap cache tag (`agility-sitemap-flat-{locale}`). The `@agility/nextjs` SDK caches the sitemap in the Data Cache and uses it to look up pages by path. If only content tags are invalidated, the SDK may use a stale sitemap and fail to find the page, producing a cached 404.
+`FORCE_PUBLISHED=1 npm run dev` serves published content locally (dev serves staging by default).
 
 See [src/docs/07-caching-strategies.md](src/docs/07-caching-strategies.md) for full details.
 

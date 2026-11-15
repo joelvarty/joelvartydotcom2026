@@ -112,7 +112,7 @@ Multi-language support with clean URLs.
 
 ### Caching
 Automatic caching with Next.js Data Cache.
-- Time-based revalidation (ISR)
+- Prerendering with Cache Components and webhook tag invalidation
 - On-demand revalidation via webhooks
 - Cache tags for targeted updates
 

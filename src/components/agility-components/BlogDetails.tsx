@@ -65,7 +65,7 @@ type BlogPost = {
  * @param page - The page object (may contain sitemapNode with contentID for dynamic pages)
  * @returns A section element with the blog post content
  */
-const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: UnloadedModuleProps) => {
+const BlogDetails = async ({ module, languageCode, isPreview, dynamicPageItem, page }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { containerReferenceName, contentID },
@@ -73,6 +73,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 	} = await getContentItem<BlogDetailsFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const containerName = containerReferenceName || "Posts"
@@ -90,6 +91,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 			const contentItem = await getContentItem({
 				contentID: parseInt(contentID, 10),
 				languageCode,
+				preview: isPreview,
 			})
 			post = contentItem as unknown as BlogPost
 		} catch (error) {
@@ -110,6 +112,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 			const allPosts = await getContentList({
 				referenceName: containerName,
 				languageCode,
+				preview: isPreview,
 				take: 100, // Get enough to find the post
 			})
 			// Match by Slug field (case-insensitive comparison)
@@ -134,6 +137,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 			const categoryItem = await getContentItem<{ name?: string; Name?: string; slug?: string; Slug?: string }>({
 				contentID: post.fields.categoryID,
 				languageCode,
+				preview: isPreview,
 			})
 			if (categoryItem?.fields) {
 				category = {
@@ -153,6 +157,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 			const seriesItem = await getContentItem<{ title?: string; Title?: string; slug?: string; Slug?: string }>({
 				contentID: post.fields.seriesID,
 				languageCode,
+				preview: isPreview,
 			})
 			if (seriesItem?.fields) {
 				series = {
@@ -175,6 +180,7 @@ const BlogDetails = async ({ module, languageCode, dynamicPageItem, page }: Unlo
 				const allTags = await getContentList({
 					referenceName: "tags",
 					languageCode,
+					preview: isPreview,
 					take: 100,
 				})
 				// Filter to only the tags used by this post

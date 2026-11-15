@@ -53,7 +53,7 @@ interface UsesItem {
  * @param languageCode - The language code for localized content
  * @returns A section element with the uses items
  */
-const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
+const UsesSection = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, categoryFilter },
@@ -61,6 +61,7 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 	} = await getContentItem<UsesSectionFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const containerName = "UsesItems"
@@ -69,6 +70,7 @@ const UsesSection = async ({ module, languageCode }: UnloadedModuleProps) => {
 	const allItems = await getContentList<UsesItem>({
 		referenceName: containerName,
 		languageCode,
+		preview: isPreview,
 		take: 250,
 
 	})

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Next.js 15 App Router site powered by Agility CMS, hosted on Vercel. All pages route through `src/app/[locale]/[...slug]/page.tsx` using a flat sitemap from the CMS.
+Next.js 16 App Router site (React 19.3, Cache Components) powered by Agility CMS, hosted on Vercel. All pages route through `src/app/[locale]/[...slug]/page.tsx` using a flat sitemap from the CMS.
 
 ## File Structure
 
@@ -25,7 +25,8 @@ src/
 │       └── Main.tsx
 ├── lib/
 │   ├── cms/                          # CMS helper functions
-│   │   ├── getAgilityPage.ts
+│   │   ├── getAgilityPage.ts         # composes the cached getters below
+│   │   ├── getPage.ts
 │   │   ├── getContentItem.ts
 │   │   ├── getContentList.ts
 │   │   ├── getSitemapFlat.ts
@@ -33,7 +34,7 @@ src/
 │   │   ├── getAgilityContext.ts
 │   │   ├── getAgilitySDK.ts
 │   │   ├── getRedirections.ts
-│   │   └── cacheConfig.ts
+│   │   └── publishedPaths.ts        # published-path check for proxy 404s
 │   └── i18n/config.ts               # Locale configuration
 ├── proxy.ts                          # Routing middleware (locale rewrites)
 └── docs/                             # Detailed reference docs (01-11)
@@ -47,18 +48,20 @@ src/
 
 ```tsx
 // YourModule.tsx
-interface YourModuleProps {
-  module: {
-    fields: {
-      title: string;
-      // ... fields from CMS
-    };
-  };
-  locale: string;
+import { type UnloadedModuleProps } from "@agility/nextjs";
+import { getContentItem } from "@/lib/cms/getContentItem";
+
+interface YourModuleFields {
+  title: string;
+  // ... fields from CMS
 }
 
-export default function YourModule({ module, locale }: YourModuleProps) {
-  const { title } = module.fields;
+export default async function YourModule({ module, languageCode, isPreview }: UnloadedModuleProps) {
+  const { fields: { title } } = await getContentItem<YourModuleFields>({
+    contentID: module.contentid,
+    languageCode,
+    preview: isPreview, // ALWAYS pass this through
+  });
   return <div>{title}</div>;
 }
 ```
@@ -76,10 +79,10 @@ import { getContentItem } from "@/lib/cms/getContentItem";
 import { getSitemapFlat } from "@/lib/cms/getSitemapFlat";
 
 // List of items
-const posts = await getContentList({ referenceName: "posts", locale, take: 10, sort: "fields.date desc" });
+const posts = await getContentList({ referenceName: "posts", languageCode, take: 10, preview: isPreview });
 
 // Single item
-const item = await getContentItem({ contentID: 123, locale: "en-us" });
+const item = await getContentItem({ contentID: 123, languageCode: "en-us", preview: isPreview });
 ```
 
 ## Client Components
@@ -101,12 +104,34 @@ export default function ClientPart({ data }: { data: any }) {
 }
 ```
 
-## Caching & Revalidation
+## Caching & Revalidation (Cache Components)
 
-- Page revalidation: `export const revalidate = 86400` (24h) in page.tsx
-- On-demand revalidation: webhook at `/api/revalidate`
-- **Critical**: When content changes, the sitemap tag `agility-sitemap-flat-{locale}` must be revalidated alongside content tags, or 404s get cached for 24h
-- See `src/docs/07-caching-strategies.md` for details
+`cacheComponents: true` is on. Every route is prerendered as a static shell.
+
+- **`preview` is an explicit parameter, never ambient state.** `draftMode()` is
+  read only in `getAgilityContext()`. Components get `isPreview` in their props
+  and pass `preview: isPreview` to every read. A `draftMode()` call inside
+  `src/lib/cms/` would make every read request-scoped and stop prerendering.
+- Each primitive in `src/lib/cms/` is `"use cache"` + `cacheTag` +
+  `cacheLife("days")` when published, and an uncached fetch after
+  `await connection()` in preview.
+- `getAgilityPage` composes the primitives (sitemap → page → dynamic item). Do
+  not go back to `getAgilityPageProps`: it fetches uncached and calls `Date.now()`.
+- Tags (`agility-content-{id|refname}-{locale}`, `agility-page-{id}-{locale}`,
+  `agility-sitemap-{flat|nested}-{locale}`) are a **contract** with
+  `/api/revalidate`. Change both in the same commit.
+- **Rejected under cacheComponents:** `export const revalidate/runtime/dynamic`.
+  `new Date()`/`Date.now()`/`Math.random()` in render outside a cache fail the
+  build (dates parsed from content are fine).
+- **404s come from the proxy**, checked against the published sitemap. Add
+  hand-written routes to `APP_PATHS`/`APP_PREFIXES` in
+  `src/lib/cms/publishedPaths.ts`, or they 404 in production only.
+- Preview params are handled by both the proxy and `beforeFiles` rewrites in
+  `next.config.ts` (cached pages skip the proxy). Keep both.
+- Only the `page` and `order` query params reach pages (encoded into the path by
+  the proxy); add to `ALLOWED_QUERY_PARAMS` in `src/proxy.ts` if a component needs another.
+- `FORCE_PUBLISHED=1 npm run dev` serves published content locally.
+- See `src/docs/07-caching-strategies.md` for details.
 
 ## Locales
 

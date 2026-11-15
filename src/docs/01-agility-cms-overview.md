@@ -126,11 +126,14 @@ To exit preview mode:
 
 ## Caching Strategy
 
-The project uses Next.js caching with Agility CMS:
+The project uses Next.js 16 Cache Components with Agility CMS:
 
-1. **Time-based Revalidation**: Pages revalidate every 60 seconds (configurable)
-2. **Cache Tags**: Each piece of content has a tag (e.g., `agility-content-123-en-us`)
-3. **On-demand Revalidation**: Webhook can revalidate specific content via `/api/revalidate`
+1. **Prerendered pages**: every published page is prerendered at build time as a static shell
+2. **Cache Tags**: every published read is a `"use cache"` entry with a tag (e.g., `agility-content-123-en-us`)
+3. **On-demand Revalidation**: the publish webhook at `/api/revalidate` clears the tags that changed, so a publish is live immediately
+4. **Preview**: draft mode reads staging content uncached; `preview` is passed explicitly to every read
+
+See [07-caching-strategies.md](./07-caching-strategies.md).
 
 ## Next Steps
 

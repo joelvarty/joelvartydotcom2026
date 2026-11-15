@@ -9,10 +9,10 @@ This document lists all features, patterns, and capabilities included in this Ag
 - Environment-based configuration (fetch vs preview API)
 - Type-safe helper functions for all CMS operations
 
-### ✅ Next.js 15 App Router
+### ✅ Next.js 16 App Router (Cache Components)
 - Dynamic routing with `[locale]/[...slug]`
 - Server Components by default
-- Incremental Static Regeneration (ISR)
+- Cache Components: prerendered pages, tagged `"use cache"` reads, webhook invalidation
 - Static generation at build time
 
 ### ✅ Multi-Locale Support
@@ -259,7 +259,7 @@ After creating your project, consider adding:
 This starter provides:
 - ✅ **Solid Foundation**: All core Agility CMS patterns
 - ✅ **Type Safety**: Full TypeScript support
-- ✅ **Performance**: Caching and ISR built-in
+- ✅ **Performance**: Prerendering and tag-based caching built-in
 - ✅ **Scalability**: Multi-locale support
 - ✅ **Extensibility**: Easy to add features
 - ✅ **Documentation**: Comprehensive AI-friendly docs

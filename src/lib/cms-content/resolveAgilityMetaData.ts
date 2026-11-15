@@ -46,7 +46,7 @@ interface Props {
 	parent: ResolvingMetadata
 }
 
-export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Props): Promise<Metadata> => {
+export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, parent }: Props): Promise<Metadata> => {
 	const ogImages = (await parent).openGraph?.images || []
 
 	let metaDescription = agilityData.page?.seo?.metaDescription
@@ -57,11 +57,14 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, parent }: Pr
 
 		//get the content item for this dynamic page
 		try {
-			const contentItem: ContentItem = await getContentItem({
-				contentID: agilityData.sitemapNode.contentID,
-				languageCode: locale,
-				locale
-			})
+			//getAgilityPage already fetched the dynamic item; read it again (a cache
+				//hit when published) only if it is missing
+				const contentItem: ContentItem = (agilityData.dynamicPageItem as ContentItem | undefined)
+					?? await getContentItem({
+						contentID: agilityData.sitemapNode.contentID,
+						languageCode: locale,
+						preview: isPreview,
+					})
 
 			if (contentItem.properties.definitionName === "BlogPost") {
 				/* *** Blog Posts MetaData *** */

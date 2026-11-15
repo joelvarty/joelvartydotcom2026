@@ -4,12 +4,13 @@ See [AGENTS.md](./AGENTS.md) for full coding guidelines and project structure.
 
 ## Quick Reference
 
-- **Stack**: Next.js 15 App Router + Agility CMS + TypeScript
+- **Stack**: Next.js 16 App Router (Cache Components) + React 19.3 + Agility CMS + TypeScript
+- **Caching rule**: pass `preview` explicitly to every `src/lib/cms/` read (`preview: isPreview` in components); `draftMode()` is read only in `getAgilityContext()`. No `revalidate`/`runtime` route segment configs. See `src/docs/07-caching-strategies.md`
 - **Docs**: Detailed docs in `src/docs/` (01 through 11)
 - **Components**: `src/components/agility-components/` - register in `index.ts`
 - **Pages**: `src/components/agility-pages/` - register in `index.ts`
-- **CMS helpers**: `src/lib/cms/` (getAgilityPage, getContentItem, getContentList, getSitemapFlat)
-- **Routing**: Dynamic `[locale]/[...slug]` with middleware rewrites in `src/proxy.ts`
+- **CMS helpers**: `src/lib/cms/` (getAgilityPage, getPage, getContentItem, getContentList, getSitemapFlat), all `"use cache"` + tag
+- **Routing**: Dynamic `[locale]/[...slug]` with rewrites, real 404s and cache headers in `src/proxy.ts`. New hand-written routes go in `APP_PATHS`/`APP_PREFIXES` in `src/lib/cms/publishedPaths.ts`
 - **MCP Server**: Agility CMS MCP is pre-configured for direct CMS access
 
 ## Commands

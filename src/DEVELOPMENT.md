@@ -137,7 +137,7 @@ npm run start   # Start production server
 
 - ✅ Agility CMS integration with type-safe helpers
 - ✅ Multi-locale support out of the box
-- ✅ Server Components with ISR caching
+- ✅ Server Components with Cache Components (tagged "use cache" reads)
 - ✅ AI-friendly documentation
 - ✅ Production-ready patterns
 
