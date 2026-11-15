@@ -5,6 +5,7 @@ import ReactHtmlParser from "html-react-parser"
 import { getContentItem } from "@/lib/cms/getContentItem"
 import { generateAgilityMetadata } from "@agility/nextjs/geo"
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/config/site"
+import { X_HANDLE } from "@/config/social"
 import { publicUrl } from "@/lib/seo/buildPageJsonLd"
 import { toPublicPath } from "@/lib/cms/homePage"
 import type { SitemapNode } from "@/lib/types/SitemapNode"
@@ -206,7 +207,7 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, p
 		},
 		twitter: {
 			card: "summary_large_image",
-			creator: "@joelvarty",
+			...(X_HANDLE ? { creator: X_HANDLE } : {}),
 			title: pageTitle,
 			description,
 		},

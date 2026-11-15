@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { SITE_DESCRIPTION, SITE_URL } from "@/config/site";
+import { X_HANDLE } from "@/config/social";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@joelvarty",
+    ...(X_HANDLE ? { creator: X_HANDLE } : {}),
     title: {
       default: "Joel Varty",
       template: "%s",

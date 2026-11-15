@@ -13,6 +13,8 @@ import { processMarkdown } from "@/lib/markdown/processMarkdown"
 import { localizeUrl } from "@/lib/i18n/localizeUrl"
 import Link from "next/link"
 import { SeriesLink } from "./SeriesLink"
+import { SocialEmbed } from "@/components/embeds/SocialEmbed"
+import { embeddedYouTubeIds, youTubeId, youTubeWatchUrl } from "@/lib/video/youtube"
 import { ScrollBanner } from "./ScrollBanner"
 import { preload } from "react-dom"
 import {
@@ -49,6 +51,8 @@ type BlogPost = {
 		categoryID?: number
 		seriesID?: number
 		tagIDs?: string
+		/** Optional: the YouTube video this post is the companion page for. */
+		videoUrl?: string
 	}
 }
 
@@ -219,6 +223,13 @@ const BlogDetails = async ({ module, languageCode, isPreview, dynamicPageItem, p
 
 	const hasBanner = Boolean(post.fields.featuredImage)
 
+	// A companion page for a video: the post's videoUrl field puts the video at the
+	// top of the post (the same click-to-play facade as embeds in the body), and
+	// buildPageJsonLd emits it as a VideoObject. Skipped when the body already
+	// embeds the same video.
+	const companionVideoId = youTubeId(post.fields.videoUrl)
+	const showCompanionVideo = companionVideoId !== null && !embeddedYouTubeIds(markdownContent).includes(companionVideoId)
+
 	// Preload the hero (LCP element) with high priority so it's fetched first on
 	// slow connections instead of competing with CSS/JS and gallery images.
 	// Must match the <img> srcSet/sizes in ScrollBanner so the fetch is reused.
@@ -297,6 +308,11 @@ const BlogDetails = async ({ module, languageCode, isPreview, dynamicPageItem, p
 					</p>
 				)}
 			</header>
+			{showCompanionVideo && (
+				<div className="max-w-3xl mx-auto" data-agility-field="videoUrl">
+					<SocialEmbed url={youTubeWatchUrl(companionVideoId)} />
+				</div>
+			)}
 			{markdownContent && (
 				<div
 					className="prose prose-lg max-w-3xl mx-auto dark:prose-invert"

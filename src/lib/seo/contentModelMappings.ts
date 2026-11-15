@@ -22,7 +22,9 @@ interface BlogPostFields {
 	content?: string
 	publishedDate?: string
 	featuredImage?: { url?: string; label?: string; width?: number; height?: number }
+	/** Optional companion-page fields: the video, and its length as ISO 8601 (PT8M30S). */
 	videoUrl?: string
+	videoDuration?: string
 	category?: { fields?: { name?: string } }
 	series?: { fields?: { title?: string } }
 	tags?: { fields?: { name?: string } }[]
@@ -97,6 +99,8 @@ const blogPost: Mapper = (item, { url, geo, locale }) => {
 			...(description ? { description } : {}),
 			isPartOf: ref(articleId(url)),
 		}
+		// the duration field describes the companion video (the first one)
+		if (i === 0 && fieldVideo && /^P(T|\d)/.test(fields.videoDuration || "")) node.duration = fields.videoDuration
 		nodes.push(node)
 	})
 	if (videoIds.length) post.video = videoIds.map((_, i) => ref(videoId(url, i + 1)))

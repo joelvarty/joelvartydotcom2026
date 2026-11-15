@@ -29,6 +29,24 @@ Rules:
 - **Map content models in `src/lib/seo/contentModelMappings.ts`**, keyed by the
   model's `definitionName`. Don't build JSON-LD inside components.
 - Who Joel is (name, job title, image, description) lives in `src/config/site.ts`.
+- **His profiles live in `src/config/social.ts`**: one list that drives the
+  Person's `sameAs`, the header icons (`header: true`), the footer "Connect"
+  links, `twitter:creator` and llms.txt. Add a profile the day the account goes
+  live; set `enabled: false` to hide one. A `sameAs` link that 404s hurts.
+
+## Video companion posts
+
+A blog post can be the companion page for a video:
+
+- Put the YouTube URL in the post's **Video URL** (`videoUrl`) field: the post
+  shows the video (click-to-play facade, no YouTube JS until clicked) under its
+  header, and the graph gets a `VideoObject` (name, description, thumbnail,
+  embed URL, upload date = the post's date, author = Joel) linked from the
+  BlogPosting's `video`. Optional **Video Duration** (`videoDuration`, ISO 8601
+  like `PT8M30S`) adds `duration`.
+- Videos embedded in the body (an `embed` fence or an `<iframe>`) get a
+  `VideoObject` too.
+- The `.md` twin lists the video URL near the top.
 
 ### Page types
 
