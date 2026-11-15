@@ -45,7 +45,7 @@ const postsPerPage = 50
  * @param dynamicPageItem - The dynamic page item containing the Series data
  * @returns A section element with the series landing page
  */
-const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData }: UnloadedModuleProps) => {
+const SeriesLanding = async ({ module, languageCode, isPreview, dynamicPageItem, globalData }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, numberOfPosts },
@@ -53,6 +53,7 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 	} = await getContentItem<SeriesLandingFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const postsPerPageConfig = numberOfPosts ? parseInt(numberOfPosts, 10) : postsPerPage
@@ -90,6 +91,7 @@ const SeriesLanding = async ({ module, languageCode, dynamicPageItem, globalData
 
 	// Fetch blog posts for this series
 	const postsResult = await getSeriesListing({
+		preview: isPreview,
 		seriesID,
 		locale,
 		skip: (page - 1) * postsPerPageConfig,

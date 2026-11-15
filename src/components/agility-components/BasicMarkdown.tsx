@@ -36,7 +36,7 @@ export interface BasicMarkdownFields {
  * - Includes dark mode support via `dark:prose-invert`
  * - Supports gallery syntax in markdown (carousel, masonry, grid, etc.)
  */
-const BasicMarkdown = async ({ module, languageCode }: UnloadedModuleProps) => {
+const BasicMarkdown = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { markdown },
@@ -44,6 +44,7 @@ const BasicMarkdown = async ({ module, languageCode }: UnloadedModuleProps) => {
 	} = await getContentItem<BasicMarkdownFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	return (

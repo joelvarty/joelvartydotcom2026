@@ -27,13 +27,17 @@ interface BlogPost {
  * Generate RSS feed XML
  */
 function generateRSSFeed(posts: BlogPost[], siteUrl: string): string {
+	//the newest post's date, not the clock: under cacheComponents a route that
+	//reads `new Date()` cannot be prerendered, and "now" was never true anyway
+	const lastBuildDate = posts[0]?.fields.publishedDate
+		? `\n    <lastBuildDate>${new Date(posts[0].fields.publishedDate).toUTCString()}</lastBuildDate>`
+		: ""
 	const feedItems = posts
 		.map((post) => {
 			const slug = post.fields.Slug || `post-${post.contentID}`
 			const url = `${siteUrl}/blog/${slug}`
-			const pubDate = post.fields.publishedDate
-				? new Date(post.fields.publishedDate).toUTCString()
-				: new Date().toUTCString()
+			//only posts with a publishedDate reach here (filtered in GET)
+			const pubDate = new Date(post.fields.publishedDate as string).toUTCString()
 			const description = post.fields.excerpt || ""
 			const content = post.fields.Content || ""
 
@@ -55,8 +59,7 @@ function generateRSSFeed(posts: BlogPost[], siteUrl: string): string {
     <title>Joel Varty - Blog</title>
     <link>${siteUrl}</link>
     <description>Blog posts by Joel Varty</description>
-    <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <language>en-us</language>${lastBuildDate}
     <ttl>60</ttl>
 ${feedItems}
   </channel>
@@ -84,6 +87,7 @@ export async function GET() {
 		const posts = await getContentList<BlogPost>({
 			referenceName: "Posts",
 			languageCode: locale,
+			preview: false,
 			sort: "fields.publishedDate desc",
 			take: 20, // Limit to 20 most recent posts
 		})

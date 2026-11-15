@@ -37,7 +37,7 @@ const postsPerPage = 10
  * @param dynamicPageItem - The dynamic page item for the optional CATEGORY to show posts for
  * @returns A section element with the blog post listing
  */
-const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }: UnloadedModuleProps) => {
+const BlogListing = async ({ module, languageCode, isPreview, globalData, dynamicPageItem }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, numberOfPosts },
@@ -45,6 +45,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 	} = await getContentItem<BlogListingFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const postsPerPageConfig = numberOfPosts ? parseInt(numberOfPosts, 10) : postsPerPage
@@ -69,6 +70,7 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 
 	// Fetch blog posts using lib function
 	const postsResult = await getBlogListing({
+		preview: isPreview,
 		categoryID,
 		locale,
 		skip: (page - 1) * postsPerPageConfig,
@@ -136,8 +138,9 @@ const BlogListing = async ({ module, languageCode, globalData, dynamicPageItem }
 					{/* Series and Categories sidebar */}
 					<aside className="lg:col-span-1">
 						<div className="space-y-8">
-							<BlogSeries languageCode={languageCode} />
+							<BlogSeries languageCode={languageCode} preview={isPreview} />
 							<BlogCategories
+								preview={isPreview}
 								languageCode={languageCode}
 								selectedCategoryID={categoryID}
 							/>

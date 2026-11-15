@@ -4,6 +4,8 @@ import Link from "next/link"
 
 interface BlogSeriesProps {
 	languageCode: string
+	/** Read staging content (draft mode / local dev) instead of published. */
+	preview?: boolean
 }
 
 /**
@@ -26,11 +28,12 @@ interface Series {
  *
  * @param languageCode - The language code for localized content
  */
-export async function BlogSeries({ languageCode }: BlogSeriesProps) {
+export async function BlogSeries({ languageCode, preview = false }: BlogSeriesProps) {
 	// Fetch series from container
 	const seriesResult = await getContentList<Series>({
 		referenceName: "blogseries",
 		languageCode,
+		preview,
 		take: 250,
 	})
 

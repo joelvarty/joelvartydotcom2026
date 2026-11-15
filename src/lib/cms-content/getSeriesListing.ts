@@ -29,6 +29,8 @@ export interface IBlogPostMin {
 }
 
 interface GetSeriesListingProps {
+	/** Read staging content (draft mode / local dev) instead of published. */
+	preview?: boolean
 	seriesID: number
 	locale: string
 	skip: number
@@ -43,6 +45,7 @@ interface GetSeriesListingProps {
  * Note: Agility CMS returns expanded category and tags objects in the response.
  */
 export const getSeriesListing = async ({
+	preview = false,
 	seriesID,
 	locale,
 	sort = "publishedDate",
@@ -55,12 +58,14 @@ export const getSeriesListing = async ({
 		const sitemapNodes = await getSitemapFlat({
 			channelName: process.env.AGILITY_SITEMAP || "website",
 			languageCode: locale,
+			preview,
 		})
 
 		// Get posts from container filtered by seriesID
 		const rawPosts: ContentList = await getContentList({
 			referenceName: "posts",
 			languageCode: locale,
+			preview,
 			take,
 			skip,
 			sort: `fields.${sort}`,

@@ -2,6 +2,9 @@
 
 This document explains how to work with content lists (containers) in Agility CMS, including common patterns like blog posts, testimonials, team members, and shared data.
 
+> **Preview:** every read in `src/lib/cms/` takes `preview`. In a module component, destructure `isPreview` from the props (`UnloadedModuleProps`) and pass `preview: isPreview` to every `getContentItem` / `getContentList` call, as the examples below do. Never call `draftMode()` from a component or a `lib/cms` helper. See [07-caching-strategies.md](./07-caching-strategies.md).
+
+
 ## What are Content Lists?
 
 Content lists (also called containers) are collections of content items of the same type. Common examples:
@@ -57,6 +60,7 @@ export default async function PostListing({ module, locale }: PostListingProps) 
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: numberOfPosts || 10,
     sort: "fields.date desc",
   });
@@ -118,6 +122,7 @@ export default async function CardGrid({ module, locale }: CardGridProps) {
   const cardItems = await getContentList({
     referenceName: cards.referenceName, // e.g., "testimonials", "team", etc.
     locale,
+    preview: isPreview,
   });
 
   return (
@@ -159,6 +164,7 @@ export default async function Testimonials({ module, locale }: any) {
   const testimonials = await getContentList({
     referenceName: "testimonials",
     locale,
+    preview: isPreview,
     take: 10,
   });
 
@@ -219,6 +225,7 @@ export default async function TeamListing({ module, locale }: any) {
   const team = await getContentList({
     referenceName: "team",
     locale,
+    preview: isPreview,
     sort: "fields.order asc",
   });
 
@@ -271,6 +278,7 @@ export default async function BlogListing({ searchParams, locale }: any) {
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: perPage,
     skip: (page - 1) * perPage,
     sort: "fields.date desc",
@@ -322,6 +330,7 @@ export default async function PostListing({ module, locale }: any) {
   const initialPosts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: 6,
     sort: "fields.date desc",
   });
@@ -392,6 +401,7 @@ export default async function BlogWithCategories({ searchParams, locale }: any) 
   const categories = await getContentList({
     referenceName: "categories",
     locale,
+    preview: isPreview,
     sort: "fields.name asc",
   });
 
@@ -399,6 +409,7 @@ export default async function BlogWithCategories({ searchParams, locale }: any) 
   const allPosts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     sort: "fields.date desc",
   });
 
@@ -449,6 +460,7 @@ export default async function PostSearch({ searchParams, locale }: any) {
   const allPosts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     sort: "fields.date desc",
   });
 
@@ -499,6 +511,7 @@ export async function getSiteSettings(locale: string) {
   const settings = await getContentList({
     referenceName: "siteSettings",
     locale,
+    preview: isPreview,
     take: 1,
   });
 
@@ -540,6 +553,7 @@ export default async function PostsWithAuthors({ locale }: any) {
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: 10,
   });
 
@@ -550,6 +564,7 @@ export default async function PostsWithAuthors({ locale }: any) {
         const author = await getContentItem({
           contentID: post.fields.author.contentID,
           locale,
+          preview: isPreview,
         });
         return { ...post, author };
       }

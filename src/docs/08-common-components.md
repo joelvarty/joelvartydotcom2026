@@ -2,6 +2,9 @@
 
 This document provides ready-to-use component examples for common Agility CMS patterns.
 
+> **Preview:** every read in `src/lib/cms/` takes `preview`. In a module component, destructure `isPreview` from the props (`UnloadedModuleProps`) and pass `preview: isPreview` to every `getContentItem` / `getContentList` call, as the examples below do. Never call `draftMode()` from a component or a `lib/cms` helper. See [07-caching-strategies.md](./07-caching-strategies.md).
+
+
 ## ⚠️ CRITICAL: Image Handling with AgilityPic
 
 **ALL images from Agility CMS MUST be rendered using the `<AgilityPic>` component!**
@@ -139,6 +142,7 @@ export default async function Footer({ locale }: FooterProps) {
   const footer = await getContentItem({
     referenceName: "footerSettings",
     locale,
+    preview: isPreview,
   });
 
   if (!footer) return null;
@@ -303,6 +307,7 @@ export default async function PostListing({
   const posts = await getContentList<Post>({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: perPage,
     skip: (page - 1) * perPage,
     sort: "fields.date desc",
@@ -532,6 +537,7 @@ export default async function FAQ({ module, locale }: any) {
   const faqs = await getContentList({
     referenceName: "faqs",
     locale,
+    preview: isPreview,
     sort: "fields.order asc",
   });
 
@@ -594,6 +600,7 @@ export default async function ImageGallery({ module, locale }: any) {
   const images = await getContentList({
     referenceName: gallery.referenceName,
     locale,
+    preview: isPreview,
   });
 
   return (
@@ -672,6 +679,7 @@ export default async function Testimonials({ module, locale }: any) {
   const testimonials = await getContentList({
     referenceName: "testimonials",
     locale,
+    preview: isPreview,
   });
 
   return (

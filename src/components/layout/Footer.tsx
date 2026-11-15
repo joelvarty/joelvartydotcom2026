@@ -1,7 +1,18 @@
 import Link from "next/link";
+/**
+ * The copyright year, read once when the server module loads (at build time
+ * for prerendered pages, and on each cold start).
+ *
+ * Not read in render: under `cacheComponents` a render that calls `new Date()`
+ * outside a cache cannot be prerendered. Not a `"use cache"` function either:
+ * draft mode bypasses that cache, and every preview render then logged an
+ * "Unexpected cache miss after cache warming" error. The year rolls over with
+ * the next deploy or cold start after New Year, which is fine for this line.
+ */
+const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
+  const currentYear = COPYRIGHT_YEAR;
 
   return (
     <footer className="border-t border-border/40 bg-background">

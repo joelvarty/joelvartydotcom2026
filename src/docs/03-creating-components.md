@@ -2,6 +2,9 @@
 
 This document explains how to create new components (also called modules in the CMS) for Agility CMS.
 
+> **Preview:** every read in `src/lib/cms/` takes `preview`. In a module component, destructure `isPreview` from the props (`UnloadedModuleProps`) and pass `preview: isPreview` to every `getContentItem` / `getContentList` call, as the examples below do. Never call `draftMode()` from a component or a `lib/cms` helper. See [07-caching-strategies.md](./07-caching-strategies.md).
+
+
 ## What is an Agility Component?
 
 An **Agility Component** (also referred to as a "module" in the CMS interface) is a reusable component that editors can add to pages in Agility CMS. Common examples:
@@ -153,6 +156,7 @@ export default async function PostListing({ module, locale }: PostListingProps) 
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: postsToShow,
   });
 
@@ -372,6 +376,7 @@ export default async function FeaturedPost({ module, locale }: FeaturedPostProps
   const fullPost = await getContentItem({
     contentID: post.contentID,
     locale,
+    preview: isPreview,
   });
 
   return (
@@ -396,6 +401,7 @@ export default async function PostListing({ module, locale }: any) {
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     sort: "fields.date desc",
     take: 10,
   });
@@ -407,6 +413,7 @@ export default async function PostListing({ module, locale }: any) {
         const category = await getContentItem({
           contentID: post.fields.category.contentID,
           locale,
+          preview: isPreview,
         });
         return { ...post, category };
       }

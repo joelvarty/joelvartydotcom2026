@@ -34,7 +34,7 @@ export interface RichText {
  * - Supports responsive typography sizing (sm, lg, xl)
  * - Includes dark mode support via `dark:prose-invert`
  */
-const RichTextArea = async ({ module, languageCode }: UnloadedModuleProps) => {
+const RichTextArea = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { textblob },
@@ -42,6 +42,7 @@ const RichTextArea = async ({ module, languageCode }: UnloadedModuleProps) => {
 	} = await getContentItem<RichText>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	return (

@@ -15,10 +15,11 @@ interface SubstackSubscribeFields {
 	description?: string
 }
 
-const SubstackSubscribe = async ({ module, languageCode }: UnloadedModuleProps) => {
+const SubstackSubscribe = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	const { fields, contentID } = await getContentItem<SubstackSubscribeFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	const publication = process.env.SUBSTACK_PUBLICATION || "joelvarty"

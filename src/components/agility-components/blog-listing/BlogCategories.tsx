@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 
 interface BlogCategoriesProps {
 	languageCode: string
+	/** Read staging content (draft mode / local dev) instead of published. */
+	preview?: boolean
 	selectedCategoryID?: number
 	containerReferenceName?: string
 }
@@ -33,12 +35,14 @@ interface Category {
  */
 export async function BlogCategories({
 	languageCode,
+	preview = false,
 	selectedCategoryID,
 }: BlogCategoriesProps) {
 	// Fetch categories from container
 	const categoriesResult = await getContentList<Category>({
 		referenceName: "categories",
 		languageCode,
+		preview,
 		sort: "name",
 		direction: "asc",
 	})

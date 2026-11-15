@@ -40,7 +40,7 @@ export interface HeroFields {
  * @param languageCode - The language code for localized content
  * @returns A section element with the hero content
  */
-const Hero = async ({ module, languageCode }: UnloadedModuleProps) => {
+const Hero = async ({ module, languageCode, isPreview }: UnloadedModuleProps) => {
 	// Fetch the content item from Agility CMS
 	const {
 		fields: { title, subtitle, image, heroImage, ctaButton },
@@ -48,6 +48,7 @@ const Hero = async ({ module, languageCode }: UnloadedModuleProps) => {
 	} = await getContentItem<HeroFields>({
 		contentID: module.contentid,
 		languageCode,
+		preview: isPreview,
 	})
 
 	// Side-by-side layout when heroImage is present

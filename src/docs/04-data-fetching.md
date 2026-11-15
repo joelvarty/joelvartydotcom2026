@@ -45,6 +45,7 @@ import { getContentItem } from "@/lib/cms/getContentItem";
 const post = await getContentItem({
   contentID: 123,
   locale: "en-us",
+  preview: isPreview,
 });
 
 // Returns:
@@ -68,6 +69,7 @@ import { getContentList } from "@/lib/cms/getContentList";
 const posts = await getContentList({
   referenceName: "posts",
   locale: "en-us",
+  preview: isPreview,
   sort: "fields.date desc",
   take: 10,
   skip: 0,
@@ -136,16 +138,19 @@ const redirects = await getRedirections({ locale: "en-us" });
 
 ## Caching
 
-All CMS functions automatically cache data using Next.js caching with tags:
+Every function in `src/lib/cms/` takes a `preview` boolean. Published reads
+(`preview: false`) are `"use cache"` entries with a cache tag and
+`cacheLife("days")`; preview reads are never cached. Module components get
+`isPreview` in their props and pass it as `preview: isPreview`.
 
 ```typescript
-// Example from getContentItem.ts
-agilityClient.config.fetchConfig = {
-  next: {
-    tags: [`agility-content-${contentID}-${locale}`],
-    revalidate: 60, // Revalidate every 60 seconds
-  },
-};
+// src/lib/cms/getContentItem.ts (simplified)
+const cachedContentItem = async (params) => {
+  "use cache"
+  cacheTag(`agility-content-${params.contentID}-${params.languageCode}`)
+  cacheLife("days")
+  return getAgilitySDK(false).getContentItem(params)
+}
 ```
 
 ### Cache Tags Format
@@ -157,18 +162,9 @@ agilityClient.config.fetchConfig = {
 
 ### On-Demand Revalidation
 
-Use the `/api/revalidate` endpoint with a webhook:
-
-```typescript
-// Webhook from Agility CMS
-POST /api/revalidate
-{
-  "tag": "agility-content-123-en-us",
-  "securityKey": "your-security-key"
-}
-```
-
-This immediately revalidates the cached content.
+Agility's publish webhook posts to `/api/revalidate`, which clears the tags for
+the item or page that changed (and the sitemap tags). See
+[07-caching-strategies.md](./07-caching-strategies.md).
 
 ## Common Patterns
 
@@ -183,6 +179,7 @@ export default async function BlogPage({ params }: any) {
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     take: 20,
   });
 
@@ -213,6 +210,7 @@ export default async function CardGrid({ module, locale }: any) {
   const cardItems = await getContentList({
     referenceName: cards.referenceName, // e.g., "testimonials"
     locale,
+    preview: isPreview,
   });
 
   return (
@@ -251,6 +249,7 @@ export default async function BlogListing({ searchParams }: BlogListingProps) {
   const posts = await getContentList({
     referenceName: "posts",
     locale: "en-us",
+    preview: isPreview,
     take: perPage,
     skip: (page - 1) * perPage,
     sort: "fields.date desc",
@@ -280,6 +279,7 @@ export default async function PostsByCategory({ categoryId, locale }: any) {
   const allPosts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     sort: "fields.date desc",
   });
 
@@ -292,6 +292,7 @@ export default async function PostsByCategory({ categoryId, locale }: any) {
   const posts = await getContentList({
     referenceName: "posts",
     locale,
+    preview: isPreview,
     filter: `fields.category.contentID eq ${categoryId}`,
     sort: "fields.date desc",
   });
@@ -316,6 +317,7 @@ export default async function BlogPost({ postId, locale }: any) {
   const post = await getContentItem({
     contentID: postId,
     locale,
+    preview: isPreview,
   });
 
   // Fetch related content
@@ -323,6 +325,7 @@ export default async function BlogPost({ postId, locale }: any) {
     ? await getContentItem({
         contentID: post.fields.author.contentID,
         locale,
+        preview: isPreview,
       })
     : null;
 
@@ -330,6 +333,7 @@ export default async function BlogPost({ postId, locale }: any) {
     ? await getContentItem({
         contentID: post.fields.category.contentID,
         locale,
+        preview: isPreview,
       })
     : null;
 
@@ -464,6 +468,7 @@ export interface BlogPost {
 const posts = await getContentList<BlogPost>({
   referenceName: "posts",
   locale: "en-us",
+  preview: isPreview,
 });
 ```
 
