@@ -29,6 +29,15 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react", "@agility/nextjs"],
   },
 
+  async redirects() {
+    // The home page is the sitemap node /home, served at /. One URL per page:
+    // /home 308s to / (and its markdown twin to /index.md). See lib/cms/homePage.ts.
+    return [
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/home.md", destination: "/index.md", permanent: true },
+    ];
+  },
+
   async rewrites() {
     // *** Preview + deep links must survive a CDN cache hit. ***
     //

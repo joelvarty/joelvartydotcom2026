@@ -3,6 +3,11 @@ import { type ContentItem } from "@agility/content-fetch"
 import { type Metadata, type ResolvingMetadata } from "next"
 import ReactHtmlParser from "html-react-parser"
 import { getContentItem } from "@/lib/cms/getContentItem"
+import { generateAgilityMetadata } from "@agility/nextjs/geo"
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/config/site"
+import { publicUrl } from "@/lib/seo/buildPageJsonLd"
+import { toPublicPath } from "@/lib/cms/homePage"
+import type { SitemapNode } from "@/lib/types/SitemapNode"
 import type { JSX } from "react"
 
 /**
@@ -44,9 +49,11 @@ interface Props {
 	isPreview: boolean
 	isDevelopmentMode: boolean
 	parent: ResolvingMetadata
+	/** The flat sitemap, to build public URLs (the home node is served at `/`). */
+	sitemapFlat: { [path: string]: SitemapNode }
 }
 
-export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, parent }: Props): Promise<Metadata> => {
+export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, parent, sitemapFlat }: Props): Promise<Metadata> => {
 	const ogImages = (await parent).openGraph?.images || []
 
 	let metaDescription = agilityData.page?.seo?.metaDescription
@@ -103,9 +110,9 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, p
 	//#endregion
 
 	//#region *** resolve the "additional" meta tags ***
-	let metaHTML = agilityData.page?.seo?.metaHTML
+	const metaHTML = agilityData.page?.seo?.metaHTML
 
-	let otherMetaData: { [name: string]: string } = {}
+	const otherMetaData: { [name: string]: string } = {}
 
 	if (metaHTML) {
 		const additionalHeaderMarkup = ReactHtmlParser(metaHTML)
@@ -148,17 +155,60 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, isPreview, p
 	//#endregion
 
 	const pageTitle = agilityData.sitemapNode?.title
+	const path = agilityData.sitemapNode.path
+	const isHome = toPublicPath(path, sitemapFlat) === "/"
+	//the public URL: the home node (/home) is served at /
+	const url = publicUrl(path, sitemapFlat, locale)
+
+	//The GEO tab and the SEO fields, read by @agility/nextjs/geo: an editor's SEO
+	//title and canonical URL, robots, the GEO Summary as the description
+	//fallback, and the share image. On a post, the post's own seo/geo.
+	const geoMeta = generateAgilityMetadata({
+		page: agilityData.page,
+		item: agilityData.dynamicPageItem as ContentItem | undefined,
+		url,
+		locale,
+		title: pageTitle,
+	})
+
+	const isPost = (agilityData.dynamicPageItem as ContentItem | undefined)?.properties?.definitionName === "BlogPost"
+	//a category or series page: its own description, else say what it lists
+	const listingDescription = agilityData.sitemapNode.contentID && !isPost
+		? ((agilityData.dynamicPageItem as ContentItem | undefined)?.fields?.description as string | undefined) || `Posts by Joel Varty in ${pageTitle}.`
+		: undefined
+	const description = geoMeta.description || metaDescription || listingDescription || SITE_DESCRIPTION
+	const geoImages = geoMeta.openGraph?.images
+	const images = [...(geoImages ? ([] as unknown[]).concat(geoImages) : []), ...(ogImages as unknown[])] as typeof ogImages
+	const canonical = geoMeta.alternates?.canonical ?? url
+	const publishedDate = isPost ? (agilityData.dynamicPageItem as ContentItem).fields?.publishedDate as string | undefined : undefined
 
 	const metaData: Metadata = {
-		title: pageTitle,
-		description: metaDescription,
-		keywords: agilityData.page?.seo?.metaKeywords,
+		title: geoMeta.title ?? pageTitle,
+		description,
+		keywords: geoMeta.keywords ?? agilityData.page?.seo?.metaKeywords,
+		alternates: {
+			...geoMeta.alternates,
+			canonical,
+			//the page as clean markdown, for AI agents (see /api/page-md)
+			types: { "text/markdown": isHome ? `${url.replace(/\/$/, "")}/index.md` : `${url}.md` },
+		},
+		...(geoMeta.robots ? { robots: geoMeta.robots } : {}),
+		//openGraph and twitter replace the root layout's objects rather than merge
+		//with them, so the site-wide values are repeated here
 		openGraph: {
+			siteName: SITE_NAME,
+			locale: "en_US",
 			title: pageTitle,
-			images: ogImages,
+			description,
+			url: canonical as string,
+			images,
+			...(isPost ? { type: "article", publishedTime: publishedDate, authors: [`${SITE_URL}/about`] } : { type: "website" }),
 		},
 		twitter: {
+			card: "summary_large_image",
+			creator: "@joelvarty",
 			title: pageTitle,
+			description,
 		},
 		generator: `Agility CMS`,
 		other: otherMetaData

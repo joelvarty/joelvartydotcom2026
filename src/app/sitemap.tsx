@@ -1,61 +1,32 @@
-import { getSitemapFlat } from "@/lib/cms/getSitemapFlat"
-import { locales, defaultLocale } from "@/lib/i18n/config"
+import { getSiteIndex } from "@/lib/cms-content/getSiteIndex"
+import { locales } from "@/lib/i18n/config"
 import type { MetadataRoute } from "next"
 
 /**
- * Sitemap Generator
+ * sitemap.xml, from the published Agility sitemap (via getSiteIndex).
  *
- * Generates a sitemap from Agility CMS pages using getSitemapFlat()
- * Iterates through locales and generates entries for each visible page.
- * Published content only, through the cached getSitemapFlat primitive (the
- * publish webhook invalidates its tag). No `lastModified`: the sitemap nodes
- * carry no dates, and stamping every URL with "now" told crawlers that every
- * page changed on every build.
+ * - The home node is listed once, at `/` (never `/home`).
+ * - Pages hidden from the sitemap in Agility are left out.
+ * - Posts carry `lastModified` from the CMS. Other pages carry none: the sitemap
+ *   has no dates for them, and stamping "now" would claim every page changed on
+ *   every build.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const allSitemapEntries: MetadataRoute.Sitemap = []
-	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.joelvarty.com"
+	const entries: MetadataRoute.Sitemap = []
 
-	// Generate sitemap entries for each locale
 	for (const locale of locales) {
-		const sitemapData = await getSitemapFlat({
-			channelName: process.env.AGILITY_SITEMAP || "website",
-			languageCode: locale,
-			preview: false,
-		})
-
-		if (!sitemapData) continue
-
-		const localeEntries = Object.keys(sitemapData)
-			.filter((path) => {
-				const node = sitemapData[path]
-				// Skip folders and redirects
-				if (node.isFolder || node.redirect) {
-					return false
-				}
-				// Only include pages visible in sitemap
-				if (!node.visible?.sitemap) {
-					return false
-				}
-				return true
+		const index = await getSiteIndex(locale)
+		for (const page of index) {
+			if (!page.inSitemap) continue
+			//date only: the CMS timestamps carry no time zone
+			const lastModified = (page.modified || page.publishedDate)?.slice(0, 10)
+			entries.push({
+				url: page.url,
+				...(lastModified ? { lastModified } : {}),
+				priority: page.path === "/" ? 1.0 : page.isPost ? 0.7 : 0.8,
 			})
-			.map((path, index) => {
-				// For default locale, don't add locale prefix to URL
-				const localizedPath =
-					locale === defaultLocale ? path : `/${locale}${path}`
-
-				return {
-					url:
-						index === 0 && path === "/"
-							? baseUrl
-							: `${baseUrl}${localizedPath}`,
-					changeFrequency: "daily" as const,
-					priority: path === "/" ? 1.0 : 0.8,
-				}
-			})
-
-		allSitemapEntries.push(...localeEntries)
+		}
 	}
 
-	return allSitemapEntries
+	return entries
 }

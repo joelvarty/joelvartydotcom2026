@@ -134,6 +134,22 @@ export default function ClientPart({ data }: { data: any }) {
 - `FORCE_PUBLISHED=1 npm run dev` serves published content locally.
 - See `src/docs/07-caching-strategies.md` for details.
 
+## GEO / AEO (structured data and AI surfaces)
+
+- One JSON-LD `@graph` per page from `@agility/geo` (`src/lib/seo/buildPageJsonLd.ts`),
+  rendered once by the page route. Joel is the `Person` at `${SITE_URL}/#person`:
+  the WebSite's publisher and every BlogPosting's author. Who he is lives in
+  `src/config/site.ts`.
+- Add structured data for a content model in `src/lib/seo/contentModelMappings.ts`.
+  Reference shared entities by `@id` (`src/lib/seo/schema.ts`).
+- **Always render JSON-LD with `<JsonLd data={...} />`**, never `JSON.stringify`
+  in `dangerouslySetInnerHTML` (it doesn't escape `</script>`).
+- **The home page is `/`, never `/home`.** Build every public URL with
+  `toPublicPath` (`src/lib/cms/homePage.ts`).
+- `/llms.txt`, `/robots.txt`, `/sitemap.xml` and the `.md` twins share
+  `getSiteIndex`, which honours the GEO tab's llms.txt and AI-crawler settings.
+- See `src/docs/12-geo-structured-data.md`.
+
 ## Locales
 
 - Default locale (`en-us`) has clean URLs: `/about`
@@ -161,6 +177,7 @@ Reference documentation lives in `src/docs/`:
 | 09-whats-included | Feature checklist |
 | 10-mcp-server-setup | AI assistant MCP integration |
 | 11-linked-nested-content | Linked and nested content |
+| 12-geo-structured-data | JSON-LD entity graph, GEO tab, llms.txt, .md twins, robots.txt |
 
 ## Environment Variables
 

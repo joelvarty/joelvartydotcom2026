@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@agility/content-fetch": "^2.0.14",
+    "@agility/geo": "^0.1.2",
     "@agility/nextjs": "^16.1.0",
     "@next/third-parties": "^16.4.3",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
@@ -30,6 +31,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
+    "entities": "^6.0.1",
     "html-react-parser": "^5.2.11",
     "lucide-react": "^0.562.0",
     "marked": "^17.0.1",

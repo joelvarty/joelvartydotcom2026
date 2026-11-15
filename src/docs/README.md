@@ -24,6 +24,7 @@ Complete documentation for building websites with Agility CMS and Next.js. Optim
 - **[06-localization.md](./06-localization.md)** - Multi-language support
 - **[07-caching-strategies.md](./07-caching-strategies.md)** - Performance and caching
 - **[11-linked-nested-content.md](./11-linked-nested-content.md)** - Linked and nested content patterns
+- **[12-geo-structured-data.md](./12-geo-structured-data.md)** - JSON-LD entity graph, GEO tab, llms.txt, markdown twins, robots.txt
 
 ### Setup & Configuration
 - **[10-mcp-server-setup.md](./10-mcp-server-setup.md)** - Connect AI assistants to Agility CMS via MCP
