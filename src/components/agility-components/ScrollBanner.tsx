@@ -31,15 +31,16 @@
 "use client"
 
 import { useEffect, useRef, type ReactNode } from "react"
-import {
-	agilityImageUrl,
-	heroImageSrcSet,
-	HERO_IMAGE_FALLBACK_WIDTH,
-	HERO_IMAGE_SIZES,
-} from "@/lib/agility/image-utils"
+import { AgilityPic } from "@agility/nextjs"
+
+/**
+ * Banner widths for a full-bleed (100vw) image: small enough for phones, with
+ * larger steps for tablets/retina. AgilityPic caps them at the original width.
+ */
+const BANNER_WIDTHS = [640, 828, 1080, 1280, 1600, 2048, 2560]
 
 interface ScrollBannerProps {
-	image: { url: string; label: string }
+	image: { url: string; label: string; width?: number; height?: number }
 	heading: ReactNode
 	children: ReactNode
 }
@@ -78,21 +79,18 @@ export function ScrollBanner({ image, heading, children }: ScrollBannerProps) {
 				    photo never leaves a scrim band below it. */}
 				<div className="relative w-full overflow-hidden">
 					{/*
-					  Hero = LCP element. Rendered as a plain responsive <img> (not
-					  AgilityPic) so it can carry fetchPriority="high"; a matching
-					  <link rel="preload"> is emitted server-side in BlogDetails. The
-					  srcSet/sizes here MUST match the preload so the browser reuses the
-					  single fetch. eslint-disable-next-line @next/next/no-img-element:
-					  intentional — Agility CDN images don't go through next/image.
+					  Hero = LCP element. AgilityPic `priority` makes it eager with
+					  fetchpriority="high" and emits a preload built from the same
+					  srcSet/sizes, so the browser makes one request. This is a client
+					  component, so the preload goes into this page's server HTML only, not
+					  into the RSC payload (where a <Link> prefetch would act on it).
 					*/}
-					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img
-						src={agilityImageUrl(image.url, HERO_IMAGE_FALLBACK_WIDTH)}
-						srcSet={heroImageSrcSet(image.url)}
-						sizes={HERO_IMAGE_SIZES}
-						alt={image.label}
-						fetchPriority="high"
-						loading="eager"
+					<AgilityPic
+						image={image}
+						priority
+						widths={BANNER_WIDTHS}
+						sizes="100vw"
+						fallbackWidth={1280}
 						// Deliberately NOT decoding="async": for the LCP image that defers the
 						// decode/paint (it queued behind the gallery image decodes here and
 						// pushed LCP render delay to ~8s). "sync" decodes it up front.

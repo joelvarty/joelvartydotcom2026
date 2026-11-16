@@ -16,13 +16,6 @@ import { SeriesLink } from "./SeriesLink"
 import { SocialEmbed } from "@/components/embeds/SocialEmbed"
 import { embeddedYouTubeIds, youTubeId, youTubeWatchUrl } from "@/lib/video/youtube"
 import { ScrollBanner } from "./ScrollBanner"
-import { preload } from "react-dom"
-import {
-	agilityImageUrl,
-	heroImageSrcSet,
-	HERO_IMAGE_FALLBACK_WIDTH,
-	HERO_IMAGE_SIZES,
-} from "@/lib/agility/image-utils"
 
 /**
  * Interface defining the structure of the BlogDetails module fields.
@@ -229,18 +222,6 @@ const BlogDetails = async ({ module, languageCode, isPreview, dynamicPageItem, p
 	// embeds the same video.
 	const companionVideoId = youTubeId(post.fields.videoUrl)
 	const showCompanionVideo = companionVideoId !== null && !embeddedYouTubeIds(markdownContent).includes(companionVideoId)
-
-	// Preload the hero (LCP element) with high priority so it's fetched first on
-	// slow connections instead of competing with CSS/JS and gallery images.
-	// Must match the <img> srcSet/sizes in ScrollBanner so the fetch is reused.
-	if (post.fields.featuredImage) {
-		preload(agilityImageUrl(post.fields.featuredImage.url, HERO_IMAGE_FALLBACK_WIDTH), {
-			as: "image",
-			fetchPriority: "high",
-			imageSrcSet: heroImageSrcSet(post.fields.featuredImage.url),
-			imageSizes: HERO_IMAGE_SIZES,
-		})
-	}
 
 	// The heading overlaid on the photo banner (>= sm). It scrolls off the still photo.
 	const overlayHeading = (
