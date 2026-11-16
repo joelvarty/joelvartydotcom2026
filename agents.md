@@ -139,7 +139,8 @@ export default function ClientPart({ data }: { data: any }) {
 - One JSON-LD `@graph` per page from `@agility/geo` (`src/lib/seo/buildPageJsonLd.ts`),
   rendered once by the page route. Joel is the `Person` at `${SITE_URL}/#person`:
   the WebSite's publisher and every BlogPosting's author. Who he is lives in
-  `src/config/site.ts`.
+  `src/config/site.ts`; his social profiles (sameAs, header/footer links) in
+  `src/config/social.ts`.
 - Add structured data for a content model in `src/lib/seo/contentModelMappings.ts`.
   Reference shared entities by `@id` (`src/lib/seo/schema.ts`).
 - **Always render JSON-LD with `<JsonLd data={...} />`**, never `JSON.stringify`

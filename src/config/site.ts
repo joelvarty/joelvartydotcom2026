@@ -25,13 +25,5 @@ export const PERSON = {
 	knowsAbout: ["Headless CMS", "AI-native content", "Software architecture", "Next.js", "Leadership"],
 }
 
-/**
- * Profiles that are the same person (`sameAs`) and the "Connect" links in the
- * footer. Only list accounts that exist: a `sameAs` link that 404s weakens the
- * entity instead of strengthening it.
- */
-export const SOCIAL_PROFILES: { name: string; url: string }[] = [
-	{ name: "GitHub", url: "https://github.com/joelvarty" },
-	{ name: "LinkedIn", url: "https://www.linkedin.com/in/joelvarty" },
-	{ name: "Substack", url: "https://joelvarty.substack.com" },
-]
+// The social profiles (sameAs, header and footer links) live in ./social.ts.
+export { SOCIAL_PROFILES } from "./social"
