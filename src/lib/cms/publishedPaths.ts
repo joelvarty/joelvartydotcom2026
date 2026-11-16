@@ -14,6 +14,7 @@ const APP_PATHS = new Set([
 	"/sitemap.xml",
 	"/robots.txt",
 	"/blog/rss.xml",
+	"/llms.txt",
 	//MUST stay listed. The proxy builds its 404 body by fetching this page, and
 	//that fetch goes back through the proxy — if this path were not app-owned,
 	//the check would 404 it, which would fetch it again, and the request would

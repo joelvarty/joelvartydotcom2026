@@ -106,6 +106,16 @@ export async function proxy(request: NextRequest) {
 		const contentID = parseInt(contentIDStr)
 		const dynredirectUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}/api/dynamic-redirect?ContentID=${contentID}&slug=${encodeURIComponent(request.nextUrl.pathname)}`
 		return NextResponse.rewrite(dynredirectUrl)
+	} else if (ext === "md") {
+		/*****************************************
+		 * MARKDOWN TWINS FOR AI AGENTS (.md)    *
+		 *****************************************/
+		// GET /{page}.md -> /api/page-md/{page} (the home page is /index.md;
+		// next.config.ts redirects /home.md there). The path travels in the URL
+		// path, not a query param, because query strings added during a rewrite
+		// do not survive reliably. Listed in /llms.txt.
+		const mdPath = request.nextUrl.pathname.replace(/\.md$/, "")
+		return NextResponse.rewrite(new URL(`/api/page-md${mdPath}`, request.nextUrl.origin))
 	} else if ((!ext || ext.length === 0)) {
 		/**********************
 		 * CHECK FOR REDIRECT *

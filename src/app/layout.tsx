@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
+import { SITE_DESCRIPTION, SITE_URL } from "@/config/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,11 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Joel Varty",
     template: "%s | Joel Varty",
   },
-  description: "Personal website of Joel Varty - Developer, designer, and tech enthusiast.",
+  description: SITE_DESCRIPTION,
   keywords: ["Joel Varty", "developer", "web development", "Next.js", "Agility CMS"],
   authors: [{ name: "Joel Varty" }],
   creator: "Joel Varty",

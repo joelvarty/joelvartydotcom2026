@@ -48,6 +48,10 @@ The tag strings in `src/lib/cms/` and in the webhook are a contract: change them
 
 See [src/docs/07-caching-strategies.md](src/docs/07-caching-strategies.md) for full details.
 
+## GEO / AEO
+
+Every page carries one schema.org JSON-LD `@graph` (built with `@agility/geo`) with Joel as the central `Person`. The site also serves `/llms.txt`, a markdown twin of every page (`/{page}.md`, `/index.md` for home) and a `robots.txt` that allows AI crawlers by name. See [src/docs/12-geo-structured-data.md](src/docs/12-geo-structured-data.md).
+
 ## Documentation
 
 Detailed docs are in `src/docs/`:
@@ -60,6 +64,7 @@ Detailed docs are in `src/docs/`:
 - [06 - Localization](src/docs/06-localization.md)
 - [07 - Caching Strategies](src/docs/07-caching-strategies.md)
 - [08 - Common Components](src/docs/08-common-components.md)
+- [12 - GEO, Structured Data and AI Surfaces](src/docs/12-geo-structured-data.md)
 
 ## Deploy on Vercel
 

@@ -9,6 +9,8 @@ import type { Metadata, ResolvingMetadata } from "next"
 import { resolveAgilityMetaData } from "@/lib/cms-content/resolveAgilityMetaData"
 import { notFound } from "next/navigation"
 import { locales } from "@/lib/i18n/config"
+import { buildPageJsonLd } from "@/lib/seo/buildPageJsonLd"
+import { JsonLd } from "@/lib/seo/JsonLd"
 
 // NOTE: no `revalidate` / `runtime` route segment configs. Both are rejected
 // under `cacheComponents`. Freshness comes from cacheLife("days") on each read
@@ -61,10 +63,14 @@ export async function generateMetadata(
 	const agilityData = await getAgilityPage({ params })
 	if (!agilityData.page) return {}
 
+	//same cached read getAgilityPage made, so a cache hit, not a second fetch
+	const sitemapFlat = await getSitemapFlat({ channelName: sitemap, languageCode: locale, preview: isPreview }) as { [path: string]: SitemapNode }
+
 	return await resolveAgilityMetaData({
 		agilityData,
 		locale,
 		sitemap,
+		sitemapFlat,
 		isDevelopmentMode,
 		isPreview,
 		parent,
@@ -82,7 +88,16 @@ export default async function Page({ params }: PageProps) {
 	//get the search params from global data (since they are added in getAgilityPage)
 	const globalSearchParams = agilityData.globalData?.["searchParams"] || {}
 
+	// ONE schema.org @graph for the page: the WebSite and Joel (the Person), the
+	// WebPage + breadcrumbs, the editor's GEO tab JSON-LD, and content model
+	// mappings (a blog post becomes a BlogPosting). See lib/seo/buildPageJsonLd.ts.
+	const { locale, isPreview, sitemap: channelName } = await getAgilityContext((await params).locale)
+	const sitemapFlat = await getSitemapFlat({ channelName, languageCode: locale, preview: isPreview }) as { [path: string]: SitemapNode }
+	const jsonLd = buildPageJsonLd({ agilityData, sitemap: sitemapFlat, locale })
+
 	return (
+		<>
+		{jsonLd && <JsonLd data={jsonLd} />}
 		<div data-agility-page={agilityData.page?.pageID} data-agility-dynamic-content={agilityData.sitemapNode.contentID}>
 			{AgilityPageTemplate ? (
 				<AgilityPageTemplate {...agilityData} searchParams={globalSearchParams} />
@@ -90,5 +105,6 @@ export default async function Page({ params }: PageProps) {
 				<div>No template found for page template name: {agilityData.pageTemplateName}</div>
 			)}
 		</div>
+		</>
 	)
 }

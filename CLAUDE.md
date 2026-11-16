@@ -11,6 +11,7 @@ See [AGENTS.md](./AGENTS.md) for full coding guidelines and project structure.
 - **Pages**: `src/components/agility-pages/` - register in `index.ts`
 - **CMS helpers**: `src/lib/cms/` (getAgilityPage, getPage, getContentItem, getContentList, getSitemapFlat), all `"use cache"` + tag
 - **Routing**: Dynamic `[locale]/[...slug]` with rewrites, real 404s and cache headers in `src/proxy.ts`. New hand-written routes go in `APP_PATHS`/`APP_PREFIXES` in `src/lib/cms/publishedPaths.ts`
+- **GEO / JSON-LD**: one `@graph` per page via `@agility/geo` (`src/lib/seo/`); render with `<JsonLd>`; home page URL is always `/` (`toPublicPath`). See `src/docs/12-geo-structured-data.md`
 - **MCP Server**: Agility CMS MCP is pre-configured for direct CMS access
 
 ## Commands
