@@ -1,9 +1,8 @@
 import { AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
-import { PriorityImage } from "@/components/images/PriorityImage"
 
 /** Candidate widths for the priority card image (192px card at 1-3x, full-width phone card at 1-3x). */
-const CARD_IMAGE_WIDTHS = [192, 384, 576, 768, 960, 1200] as const
+const CARD_IMAGE_WIDTHS = [192, 384, 576, 768, 960, 1200]
 /**
  * The card image's rendered width: full width minus the 16px page gutters on
  * phones, `sm:w-48` (192px) from the sm breakpoint up.
@@ -79,14 +78,14 @@ export function BlogPostItem({
 			{featuredImage && (
 				<div className="shrink-0 w-full sm:w-48 sm:h-48 aspect-video sm:aspect-square overflow-hidden rounded-lg bg-muted">
 					{priority ? (
-						<PriorityImage
-							url={featuredImage.url}
-							alt={featuredImage.label}
+						// The LCP image: eager, fetchpriority="high" and a matching preload,
+						// with a w-descriptor srcSet sized to the card.
+						<AgilityPic
+							image={featuredImage}
+							priority
 							widths={CARD_IMAGE_WIDTHS}
 							sizes={CARD_IMAGE_SIZES}
 							fallbackWidth={400}
-							intrinsicWidth={featuredImage.width}
-							intrinsicHeight={featuredImage.height}
 							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
 						/>
 					) : (
