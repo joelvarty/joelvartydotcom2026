@@ -81,7 +81,29 @@ export function agilityImageUrl(url: string, width: number): string {
 	return `${url}?format=auto&w=${width}`
 }
 
-export function heroImageSrcSet(url: string): string {
-	return HERO_IMAGE_WIDTHS.map((w) => `${agilityImageUrl(url, w)} ${w}w`).join(", ")
+/**
+ * Responsive widths for an image, capped at its original width.
+ *
+ * Steps at or above `maxWidth` are dropped and replaced by `maxWidth` itself,
+ * so the largest candidate is the original and nothing asks the CDN to upscale.
+ */
+export function responsiveImageWidths(widths: readonly number[], maxWidth?: number): number[] {
+	if (!maxWidth || maxWidth <= 0) return [...widths]
+	const below = widths.filter((w) => w < maxWidth)
+	return below.length < widths.length ? [...below, maxWidth] : below
 }
+
+/** A w-descriptor srcSet for an Agility CDN image (`format=auto`), capped at `maxWidth`. */
+export function responsiveImageSrcSet(url: string, widths: readonly number[], maxWidth?: number): string {
+	return responsiveImageWidths(widths, maxWidth)
+		.map((w) => `${agilityImageUrl(url, w)} ${w}w`)
+		.join(", ")
+}
+
+export function heroImageSrcSet(url: string): string {
+	return responsiveImageSrcSet(url, HERO_IMAGE_WIDTHS)
+}
+
+/** Widths for a full-bleed (100vw) image, exported for PriorityImage callers. */
+export const FULL_BLEED_IMAGE_WIDTHS = HERO_IMAGE_WIDTHS
 
