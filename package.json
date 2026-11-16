@@ -20,7 +20,7 @@
   "dependencies": {
     "@agility/content-fetch": "^2.0.14",
     "@agility/geo": "^0.1.2",
-    "@agility/nextjs": "^16.2.0-beta.0",
+    "@agility/nextjs": "16.2.0-beta.1",
     "@next/third-parties": "^16.4.3",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
     "@radix-ui/react-dialog": "^1.1.15",
