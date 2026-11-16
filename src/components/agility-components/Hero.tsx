@@ -6,18 +6,20 @@
 
 import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps } from "@agility/nextjs"
+import { AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { PriorityImage } from "@/components/images/PriorityImage"
-import { FULL_BLEED_IMAGE_WIDTHS } from "@/lib/agility/image-utils"
 
 /**
  * The hero image is the page's LCP element (About, Uses), so both layouts render
- * it with PriorityImage: fetchpriority="high" plus a matching preload.
+ * it with AgilityPic `priority` + `widths`/`sizes`: fetchpriority="high", a
+ * w-descriptor srcSet and a matching preload.
  */
 
 /** Side-by-side image candidates (up to 576px wide at 1-3x). */
-const SIDE_IMAGE_WIDTHS = [384, 512, 640, 828, 1080, 1280, 1600] as const
+const SIDE_IMAGE_WIDTHS = [384, 512, 640, 828, 1080, 1280, 1600]
+/** Full-bleed image candidates. */
+const FULL_BLEED_WIDTHS = [640, 828, 1080, 1280, 1600, 2048, 2560, 3840]
 /**
  * Side-by-side image's rendered width: full width minus 16px gutters on phones;
  * capped at max-w-lg (512px) from sm; half the max-w-7xl grid (minus 32px
@@ -139,14 +141,12 @@ const Hero = async ({ module, languageCode, isPreview }: UnloadedModuleProps) =>
 									boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 12px 24px -8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)',
 								}}
 							>
-									<PriorityImage
-										url={heroImage.url}
-										alt={heroImage.label}
+									<AgilityPic
+										image={heroImage}
+										priority
 										widths={SIDE_IMAGE_WIDTHS}
 										sizes={SIDE_IMAGE_SIZES}
 										fallbackWidth={800}
-										intrinsicWidth={heroImage.width}
-										intrinsicHeight={heroImage.height}
 										className="h-auto w-full object-cover"
 									/>
 								</div>
@@ -166,14 +166,12 @@ const Hero = async ({ module, languageCode, isPreview }: UnloadedModuleProps) =>
 		>
 			{image ? (
 				<div className="absolute inset-0 z-0">
-					<PriorityImage
-						url={image.url}
-						alt={image.label}
-						widths={[...FULL_BLEED_IMAGE_WIDTHS, 3840]}
+					<AgilityPic
+						image={image}
+						priority
+						widths={FULL_BLEED_WIDTHS}
 						sizes="100vw"
 						fallbackWidth={1920}
-						intrinsicWidth={image.width}
-						intrinsicHeight={image.height}
 						className="h-full w-full object-cover"
 					/>
 					<div className="absolute inset-0 bg-background/60 dark:bg-background/80" />
