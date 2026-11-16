@@ -1,5 +1,14 @@
 import { AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
+import { PriorityImage } from "@/components/images/PriorityImage"
+
+/** Candidate widths for the priority card image (192px card at 1-3x, full-width phone card at 1-3x). */
+const CARD_IMAGE_WIDTHS = [192, 384, 576, 768, 960, 1200] as const
+/**
+ * The card image's rendered width: full width minus the 16px page gutters on
+ * phones, `sm:w-48` (192px) from the sm breakpoint up.
+ */
+const CARD_IMAGE_SIZES = "(min-width: 640px) 192px, calc(100vw - 32px)"
 
 export interface BlogPostItemProps {
 	contentID: number
@@ -10,6 +19,8 @@ export interface BlogPostItemProps {
 	featuredImage?: {
 		url: string
 		label: string
+		width?: number
+		height?: number
 	}
 	index?: number
 	/** Eagerly load + prioritize this card's image (use for the first, above-the-fold card so it isn't the lazily-loaded LCP). */
@@ -60,25 +71,39 @@ export function BlogPostItem({
 		<Link
 			key={contentID}
 			href={url}
-			className="group flex flex-col sm:flex-row gap-6 pb-8 border-b border-border animate-fade-in transition-all hover:border-primary/50 hover:translate-x-1"
-			style={{ animationDelay: `${index * 50}ms` }}
+			// The priority card holds the LCP image, so it skips the fade-in: starting at
+			// opacity 0 would hold back the LCP paint until the animation runs.
+			className={`group flex flex-col sm:flex-row gap-6 pb-8 border-b border-border ${priority ? "" : "animate-fade-in "}transition-all hover:border-primary/50 hover:translate-x-1`}
+			style={priority ? undefined : { animationDelay: `${index * 50}ms` }}
 		>
 			{featuredImage && (
 				<div className="shrink-0 w-full sm:w-48 sm:h-48 aspect-video sm:aspect-square overflow-hidden rounded-lg bg-muted">
-					<AgilityPic
-						image={featuredImage as any}
-						priority={priority}
-						fallbackWidth={400}
-						className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-						sources={[
-							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 800 },
-							{ media: "(min-width: 1280px)", width: 400 },
-							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
-							{ media: "(min-width: 640px)", width: 300 },
-							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
-							{ media: "(max-width: 639px)", width: 400 },
-						]}
-					/>
+					{priority ? (
+						<PriorityImage
+							url={featuredImage.url}
+							alt={featuredImage.label}
+							widths={CARD_IMAGE_WIDTHS}
+							sizes={CARD_IMAGE_SIZES}
+							fallbackWidth={400}
+							intrinsicWidth={featuredImage.width}
+							intrinsicHeight={featuredImage.height}
+							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+						/>
+					) : (
+						<AgilityPic
+							image={featuredImage as any}
+							fallbackWidth={400}
+							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+							sources={[
+								{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 800 },
+								{ media: "(min-width: 1280px)", width: 400 },
+								{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 600 },
+								{ media: "(min-width: 640px)", width: 300 },
+								{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
+								{ media: "(max-width: 639px)", width: 400 },
+							]}
+						/>
+					)}
 				</div>
 			)}
 			<div className="flex-1">

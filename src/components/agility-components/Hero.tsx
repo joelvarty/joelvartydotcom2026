@@ -6,9 +6,25 @@
 
 import { getContentItem } from "@/lib/cms/getContentItem"
 import { type UnloadedModuleProps } from "@agility/nextjs"
-import { AgilityPic } from "@agility/nextjs"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { PriorityImage } from "@/components/images/PriorityImage"
+import { FULL_BLEED_IMAGE_WIDTHS } from "@/lib/agility/image-utils"
+
+/**
+ * The hero image is the page's LCP element (About, Uses), so both layouts render
+ * it with PriorityImage: fetchpriority="high" plus a matching preload.
+ */
+
+/** Side-by-side image candidates (up to 576px wide at 1-3x). */
+const SIDE_IMAGE_WIDTHS = [384, 512, 640, 828, 1080, 1280, 1600] as const
+/**
+ * Side-by-side image's rendered width: full width minus 16px gutters on phones;
+ * capped at max-w-lg (512px) from sm; half the max-w-7xl grid (minus 32px
+ * padding and the 64px gap) from lg, which tops out at 576px.
+ */
+const SIDE_IMAGE_SIZES =
+	"(min-width: 1280px) 576px, (min-width: 1024px) calc(50vw - 64px), (min-width: 640px) 512px, calc(100vw - 32px)"
 
 /**
  * Interface defining the structure of the Hero module fields.
@@ -19,10 +35,14 @@ export interface HeroFields {
 	image?: {
 		url: string
 		label: string
+		width?: number
+		height?: number
 	}
 	heroImage?: {
 		url: string
 		label: string
+		width?: number
+		height?: number
 	}
 	ctaButton?: {
 		href: string
@@ -119,19 +139,15 @@ const Hero = async ({ module, languageCode, isPreview }: UnloadedModuleProps) =>
 									boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 12px 24px -8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)',
 								}}
 							>
-									<AgilityPic
-										image={heroImage as any}
-										priority
+									<PriorityImage
+										url={heroImage.url}
+										alt={heroImage.label}
+										widths={SIDE_IMAGE_WIDTHS}
+										sizes={SIDE_IMAGE_SIZES}
 										fallbackWidth={800}
+										intrinsicWidth={heroImage.width}
+										intrinsicHeight={heroImage.height}
 										className="h-auto w-full object-cover"
-										sources={[
-											{ media: "(min-width: 1024px) and (min-resolution: 2dppx)", width: 1600 },
-											{ media: "(min-width: 1024px)", width: 800 },
-											{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 1200 },
-											{ media: "(min-width: 640px)", width: 600 },
-											{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 800 },
-											{ media: "(max-width: 639px)", width: 400 },
-										]}
 									/>
 								</div>
 							</div>
@@ -150,19 +166,15 @@ const Hero = async ({ module, languageCode, isPreview }: UnloadedModuleProps) =>
 		>
 			{image ? (
 				<div className="absolute inset-0 z-0">
-					<AgilityPic
-						image={image as any}
-						priority
+					<PriorityImage
+						url={image.url}
+						alt={image.label}
+						widths={[...FULL_BLEED_IMAGE_WIDTHS, 3840]}
+						sizes="100vw"
 						fallbackWidth={1920}
+						intrinsicWidth={image.width}
+						intrinsicHeight={image.height}
 						className="h-full w-full object-cover"
-						sources={[
-							{ media: "(min-width: 1280px) and (min-resolution: 2dppx)", width: 3840 },
-							{ media: "(min-width: 1280px)", width: 1920 },
-							{ media: "(min-width: 640px) and (min-resolution: 2dppx)", width: 2560 },
-							{ media: "(min-width: 640px)", width: 1280 },
-							{ media: "(max-width: 639px) and (min-resolution: 2dppx)", width: 1920 },
-							{ media: "(max-width: 639px)", width: 960 },
-						]}
 					/>
 					<div className="absolute inset-0 bg-background/60 dark:bg-background/80" />
 				</div>
