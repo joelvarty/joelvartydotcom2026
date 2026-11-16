@@ -15,6 +15,8 @@ export interface IBlogPostMin {
 	featuredImage?: {
 		url: string
 		label: string
+		width?: number
+		height?: number
 	}
 	url: string
 	category?: {
